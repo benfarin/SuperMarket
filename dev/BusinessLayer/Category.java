@@ -14,10 +14,10 @@ public class Category {
 
     public Category(String name, List<Category> subCategories) {
         this.name = name;
+        this.subCategories = new LinkedList<>();
         this.subCategories = subCategories;
         this.discount = 0;
         this.discountDate = new Date();
-        this.subCategories = new LinkedList<>();
         this.products = new LinkedList<>();
     }
     public void addProduct(Product p){
@@ -58,8 +58,9 @@ public class Category {
             products.remove(p);
     }
 
-    public void setDiscount(int discount) {
+    public void setDiscount(int discount, Date discountDate) {
         this.discount = discount;
+        this.discountDate = discountDate;
     }
 
     public void setDiscountDate(Date discountDate) {
