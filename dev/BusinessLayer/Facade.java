@@ -7,5 +7,6 @@ public class Facade {
     public Facade() {
         this.repCnt = new ReportController();
         this.invCnt = new InventoryController();
+
     }
 }
