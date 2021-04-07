@@ -51,19 +51,23 @@ public class Service {
             }
         }
     }
-    public void productMenu(){
+
+    private void productMenu() {
         while (true) {
             System.out.println("\t\tProduct menu:\n\n" +
-                    "1)\tAdd product\n" +
-                    "2)\tUpdate product quantity\n" +
+                    "1)\tAdd category\n" +
+                    "2)\tUpdate product defective quantity\n" +
                     "3)\tUpdate product manufacture\n" +
                     "4)\tUpdate product price from supplier\n" +
                     "5)\tUpdate product category\n" +
                     "6)\tUpdate product price to costumer\n" +
                     "7)\tUpdate product minimum quantity\n" +
                     "8)\tUpdate product discount\n" +
-                    "9)\tUpdate product defective quantity\n" +
-                    "10)\tExit"
+                    "9)\tReduce quantity in storage\n" +
+                    "10)\tAdd to quantity in storage\n" +
+                    "11)\tAdd to quantity in store\n" +
+                    "12)\tReduce quantity in store\n" +
+                    "13)\tExit"
             );
 
             int choice = s.nextInt();
@@ -72,7 +76,7 @@ public class Service {
                     addProduct();
                     break;
                 case 2:
-                    updateQuantity();
+                    updateDefectiveQuantity();
                     break;
                 case 3:
                     updateManufacture();
@@ -93,8 +97,18 @@ public class Service {
                     updateDiscount();
                     break;
                 case 9:
-                    updateDefectiveQuantity();
+                    reduceStorageQuantity();
+                    break;
                 case 10:
+                    addStorageQuantity();
+                    break;
+                case 11:
+                    addStoreQuantity();
+                    break;
+                case 12:
+                    reduceStoreQuantity();
+                    break;
+                case 13:
                     return;
                 default:
                     System.out.println("Not a valid option, please try again.\n");
@@ -103,48 +117,160 @@ public class Service {
         }
     }
 
+    private void categoryMenu(){
+        while (true) {
+            System.out.println("\t\tProduct menu:\n\n" +
+                    "1)\tAdd subcategory\n" +
+                    "2)\tDelete subcategory\n" +
+                    "3)\tDelete product form category\n" +
+                    "4)\tSet category discount\n" +
+                    "5)\tUpdate category discount expiration date\n" +
+                    "6)\tExit"
+            );
+
+            int choice = s.nextInt();
+            switch (choice) {
+                case 1:
+                    addSub();
+                    break;
+                case 2:
+                    deleteSubCat();
+                    break;
+                case 3:
+                    deleteProdFromCat();
+                    break;
+                case 4:
+                    setCatDiscount();
+                    break;
+                case 5:
+                    setCatDiscountDate();
+                    break;
+                case 6:
+                    return;
+                default:
+                    System.out.println("Not a valid option, please try again.\n");
+                    break;
+            }
+        }
+    }
+
+    private void addSub() {
+        System.out.print("\nMain category name- ");
+        String mainCat = s.next();
+        System.out.println("\nSubcategory name- ");
+        String subCat = s.next();
+        System.out.println(facade.addSub(mainCat, subCat));
+    }
+    private void deleteProdFromCat() {
+        System.out.print("\nMain category name- ");
+        String mainCat = s.next();
+        System.out.print("\nProduct's name- ");
+        String product = s.next();
+        System.out.println(facade.addSub(mainCat, product));
+    }
+    private void setCatDiscountDate() {
+        System.out.print("\nCategory name- ");
+        String cat = s.next();
+        Date exDate = null;
+        while (exDate == null) {
+            try {
+                System.out.print("\nDiscount expiration date (DD/MM/YYYY)- ");
+                exDate = new SimpleDateFormat("dd/MM/yyyy").parse(s.next());
+            } catch (ParseException e) {
+                System.out.print("\nDate format incorrect, please try again. ");
+            }
+        }
+        System.out.println(facade.setCatDiscountDate(cat,exDate));
+    }
+    private void setCatDiscount() {
+        System.out.print("\nCategory name- ");
+        String cat = s.next();
+        System.out.print("\nDiscount percentage- ");
+        int discount = s.nextInt();
+        Date exDate = null;
+        while (exDate == null) {
+            try {
+                System.out.print("\nDiscount expiration date (DD/MM/YYYY)- ");
+                exDate = new SimpleDateFormat("dd/MM/yyyy").parse(s.next());
+            } catch (ParseException e) {
+                System.out.print("\nDate format incorrect, please try again. ");
+            }
+        }
+        System.out.println(facade.setCatDiscount(cat,discount,exDate));
+
+    }
+    private void deleteSubCat(){
+        System.out.print("\nMain category name- ");
+        String mainCat = s.next();
+        System.out.println("\nSubcategory name- ");
+        String subCat = s.next();
+        System.out.println(facade.deleteSubCat(mainCat, subCat));
+    }
+    private void reduceStoreQuantity() {
+        System.out.print("\nProduct's name- ");
+        String product = s.next();
+        System.out.println("\nReduce quantity by- ");
+        int quantity = s.nextInt();
+        System.out.println(facade.reduceStoreQuantity(product, quantity));
+    }
+    private void addStoreQuantity() {
+        System.out.print("\nProduct's name- ");
+        String product = s.next();
+        System.out.println("\nAdd to quantity- ");
+        int quantity = s.nextInt();
+        System.out.println(facade.reduceStoreQuantity(product, quantity));
+    }
+    private void addStorageQuantity() {
+        System.out.print("\nProduct's name- ");
+        String product = s.next();
+        System.out.println("\nAdd to quantity- ");
+        int quantity = s.nextInt();
+        System.out.println(facade.reduceStorageQuantity(product, quantity));
+    }
+    private void reduceStorageQuantity() {
+        System.out.print("\nProduct's name- ");
+        String product = s.next();
+        System.out.println("\nReduce quantity by- ");
+        int quantity = s.nextInt();
+        System.out.println(facade.reduceStorageQuantity(product, quantity));
+    }
     private void updateDefectiveQuantity() {
         System.out.print("\nProduct's name- ");
         String product = s.next();
         System.out.println("\nDefective item count- ");
         int quantity = s.nextInt();
-       // String result = facade.
+        System.out.println(facade.setDefectiveItems(product, quantity));
     }
-
     private void updateDiscount(){
         System.out.print("\nProduct's name- ");
         String product = s.next();
         System.out.print("\nDiscount percentage- ");
         int discount = s.nextInt();
-        boolean dateCorrect = false;
-        while (!dateCorrect) {
+        Date exDate = null;
+        while (exDate == null) {
             try {
                 System.out.print("\nDiscount expiration date (DD/MM/YYYY)- ");
-                Date exDate = new SimpleDateFormat("dd/MM/yyyy").parse(s.next());
-                dateCorrect = true;
+                exDate = new SimpleDateFormat("dd/MM/yyyy").parse(s.next());
             } catch (ParseException e) {
                 System.out.print("\nDate format incorrect, please try again. ");
             }
         }
-        // String result = facade.
+        System.out.println(facade.setProdDiscount(product,discount,exDate));
     }
-
     private void updateMinimumQuantity() {
         System.out.print("\nProduct's name- ");
         String product = s.next();
         System.out.print("\nMinimum quantity- ");
         int minQuantity = s.nextInt();
-        // String result = facade.
+        System.out.println(facade.setMinimum(product, minQuantity));
     }
-
     private void updatePriceToCustomer() {
         System.out.print("\nProduct's name- ");
         String product = s.next();
         System.out.print("\nPrice for costumers- ");
-        int minQuantity = s.nextInt();
-        // String result = facade.
+        double price = s.nextDouble();
+        System.out.println(facade.setPriceToCustomer(product, price));
     }
-
     private void updateProductCategory() {
         System.out.print("\nProduct's name- ");
         String product = s.next();
@@ -154,45 +280,47 @@ public class Service {
 
         // String result = facade.
     }
-
     private void updatePriceFromSupplier() {
         System.out.print("\nProduct's name- ");
         String product = s.next();
-        System.out.print("\nPrice supplier price- ");
-        int minQuantity = s.nextInt();
-        // String result = facade.
+        System.out.print("\nPrice from supplier- ");
+        double price = s.nextDouble();
+        System.out.println(facade.setPriceFromSupplier(product, price));
     }
-
     private void updateManufacture() {
         System.out.print("\nProduct's name- ");
         String product = s.next();
         System.out.print("\nManufacture name- ");
         String man = s.next();
         //todo : delete + add + edit ?
-
-        // String result = facade.
-    }
-
-    private void updateQuantity() {
-        System.out.print("Product's name- ");
-        String product = s.next();
-        System.out.print("\nQuantity- ");
-        int quantity = s.nextInt();
-        //todo: add + change ?
-
         // String result = facade.
     }
 
     private void addProduct() {
         System.out.print("Product's name- ");
         String product = s.next();
-        // String result = facade.
+        System.out.print("\nProduct's category- ");
+        String cat = s.next();
+        System.out.print("\nManufacture name- ");
+        String man = s.next();
+        System.out.print("\nPrice from supplier- ");
+        double supPrice = s.nextDouble();
+        System.out.print("\nPrice for costumers- ");
+        double cosPrice = s.nextDouble();
+        System.out.print("\nMinimum quantity- ");
+        int min = s.nextInt();
+        System.out.println(facade.addProduct(product,cat,man,supPrice,cosPrice,min));
     }
 
-    private void categoryMenu(){}
-    private void stockReport(){}
-    private void defectiveReport(){}
-    private void productHistory(){}
+    private void stockReport(){
+        //todo: System.out.println(facade.);
+    }
+    private void defectiveReport(){
+        //todo: System.out.println(facade.);
+    }
+    private void productHistory(){
+        //todo: System.out.println(facade.);
+    }
 
 
 
