@@ -12,7 +12,17 @@ public class InventoryController {
         this.products = new LinkedList<>();
         this.categories = new LinkedList<>();
     }
-
+    public Category addCategory(String name, List<String> subCatName){
+        List<Category> mySub = new LinkedList<>();
+        for(String s : subCatName){
+            Category subC = new Category(s,new LinkedList<>());
+            mySub.add(subC);
+        }
+        Category cat = new Category(name,mySub);
+        if(!categories.contains(cat))
+            categories.add(cat);
+        return cat;
+    }
     public Product getProduct (String name) {
         for (Product p : products) {
             if (p.getName().equals(name))
@@ -35,11 +45,11 @@ public class InventoryController {
             products.add(p);
     }
 
-    public void addCategory (String name, List<Category> subCategories) {
-        Category c = new Category(name,subCategories);
-        if (!categories.contains(c))
-            categories.add(c);
-    }
+//    public void addCategory (String name, List<Category> subCategories) {
+//        Category c = new Category(name,subCategories);
+//        if (!categories.contains(c))
+//            categories.add(c);
+//    }
 
     public void setPriceFromSupplier(String name,double priceFromSupplier) {
         Product p = getProduct(name);
@@ -51,7 +61,7 @@ public class InventoryController {
         p.setPriceToCustomer(priceToCustomer);
     }
 
-    public void setDiscount(String name,int discount, Date discountDate) {
+    public void setProdDiscount(String name,int discount, Date discountDate) {
         Product p = getProduct(name);
         p.setDiscount(discount,discountDate);
     }
@@ -105,11 +115,11 @@ public class InventoryController {
         Category cat = getCategory(name);
         cat.deleteProd(p);
     }
-    public void setDiscount(String name, int discount){
+    public void setCatDiscount(String name, int discount,Date discountDate){
         Category cat = getCategory(name);
-        cat.setDiscount(discount);
+        cat.setDiscount(discount,discountDate);
     }
-    public void setDiscountDate(String name, Date discountDate){
+    public void setCatDiscountDate(String name, Date discountDate){
         Category cat = getCategory(name);
         cat.setDiscountDate(discountDate);
     }
