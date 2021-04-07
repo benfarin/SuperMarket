@@ -19,7 +19,8 @@ public class Product {
     private Map<Double,Date> priceToCusHistory;
     private Map<Double,Date> priceFromSupHistory;
 
-    public Product(String name,Category category, String manufacture, double priceFromSupplier, double priceToCustomer, int minimum) {
+
+    public Product(String name, Category category, String manufacture, double priceFromSupplier, double priceToCustomer, int minimum) {
         this.name = name;
         this.manufacture = manufacture;
         this.priceFromSupplier = priceFromSupplier;
@@ -43,6 +44,14 @@ public class Product {
         this.priceFromSupplier = priceFromSupplier;
         Date today = new Date(System.currentTimeMillis());
         priceFromSupHistory.put(priceFromSupplier,today);
+    }
+
+    public int getDefectiveItem() {
+        return defectiveItem;
+    }
+
+    public String getManufacture() {
+        return manufacture;
     }
 
     public String getName() {

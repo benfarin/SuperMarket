@@ -19,9 +19,16 @@ public class StockReport extends Report {
 
     @Override
     public String exportReport() {
+        String s ="";
+        for (Category c : categories) {
+            s += "Category: "+c.getName()+"\n";
+            for (Product p : c.getProducts()){
+                s+= p.printProduct()+"\n";
+            }
+            s+="\n";
+        }
         return "StockReport:\n" +
                 "ID = " + Id +
-                "\nDate = " + date +
-                "\nCategories = " + categories;
+                "\nDate = " + date +"\n\n"+ s;
     }
 }
