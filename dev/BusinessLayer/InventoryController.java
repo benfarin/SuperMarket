@@ -50,6 +50,10 @@ public class InventoryController {
 //        if (!categories.contains(c))
 //            categories.add(c);
 //    }
+    public void setManufacture(String name, String manu){
+        Product p = getProduct(name);
+        p.setManufacture(manu);
+    }
 
     public void setPriceFromSupplier(String name,double priceFromSupplier) {
         Product p = getProduct(name);

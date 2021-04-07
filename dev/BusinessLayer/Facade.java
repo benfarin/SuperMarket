@@ -27,6 +27,13 @@ public class Facade {
 
     //-------------------------PRODUCT--------------------------
 
+    public String setManufacture(String prodName,String manu){
+        if(invCnt.getProduct(prodName) == null){
+            return "Can't reduce storage quantity because the product "+prodName+" does not exist\n";
+        }
+        invCnt.setManufacture(prodName,manu);
+        return "set "+ prodName+"'s manufacture to " + manu;
+    }
     public String setPriceFromSupplier(String prodName,double priceFromSupplier){
         if(invCnt.getProduct(prodName) == null){
             return "Can't reduce storage quantity because the product "+prodName+" does not exist\n";
@@ -90,6 +97,7 @@ public class Facade {
         if(invCnt.getProduct(prodName) == null){
             return "Can't reduce storage quantity because the product "+prodName+" does not exist\n";
         }
+        invCnt.reduceStorageQuantity(prodName,reduce);
         return "Reduced "+ reduce+" from " + prodName+" storage quantity";
     }
     public String setStoreQuantity(String prodName, int storeQuantity){

@@ -78,6 +78,10 @@ public class Product {
         this.discountDate = discountDate;
     }
 
+    public void setManufacture(String manufacture) {
+        this.manufacture = manufacture;
+    }
+
     public void setDefectiveItem(int defectiveItem) {
         this.defectiveItem = defectiveItem;
     }
