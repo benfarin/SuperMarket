@@ -9,4 +9,5 @@ public class OutgoingOrder {
     private HashMap items;
     private LocalDate deliveryDate;
     private double totalPrice;
+
 }

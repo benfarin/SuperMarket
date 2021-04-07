@@ -8,10 +8,10 @@ public class Product {
     private double price;
     private HashMap highAmountDiscount;
     private long supplierSerialNum;
-    private Supplier supplier;
+    private Entities.Supplier supplier;
 
 
-    public Product(String name, long storeCode, double price, HashMap highAmountDiscount, long supplierSerialNum, Supplier supplier) {
+    public Product(String name, long storeCode, double price, HashMap highAmountDiscount, long supplierSerialNum, Entities.Supplier supplier) {
         this.name = name;
         this.storeCode = storeCode;
         this.price = price;
@@ -60,11 +60,11 @@ public class Product {
         this.supplierSerialNum = supplierSerialNum;
     }
 
-    protected Supplier getSupplier() {
+    public Entities.Supplier getSupplier() {
         return supplier;
     }
 
-    protected void setSupplier(Supplier supplier) {
+    protected void setSupplier(Entities.Supplier supplier) {
         this.supplier = supplier;
     }
 
