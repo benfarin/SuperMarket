@@ -10,10 +10,14 @@ public class DefectiveReport extends Report {
 
     @Override
     public String exportReport() {
+        String s = "";
+        for (Product p : defectiveProducts)
+            s+= "Product: "+p.getName()+"\nManufacture: "+p.getManufacture()+"\nNumber of defective items: "+p.getDefectiveItem()+"\n";
+
         return "DefectiveReport:\n" +
                 "ID = " + Id +
                 "\nDate = " + date +
-                "\nDefective Products = " + defectiveProducts;
+                "\n\nDefective Products: \n"+s;
     }
 
     public DefectiveReport() {
