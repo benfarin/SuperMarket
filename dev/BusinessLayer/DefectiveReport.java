@@ -11,13 +11,16 @@ public class DefectiveReport extends Report {
     @Override
     public String exportReport() {
         String s = "";
-        for (Product p : defectiveProducts)
-            s+= "Product: "+p.getName()+"\nManufacture: "+p.getManufacture()+"\nNumber of defective items: "+p.getDefectiveItem()+"\n";
-
-        return "DefectiveReport:\n" +
+        int total = 0;
+        for (Product p : defectiveProducts) {
+            total += p.getDefectiveItem();
+            s += "Product: " + p.getName() + "\nManufacture: " + p.getManufacture() + "\nNumber of defective items: " + p.getDefectiveItem() + "\n";
+        }
+        String ret = "DefectiveReport:\n" +
                 "ID = " + Id +
                 "\nDate = " + date +
                 "\n\nDefective Products: \n"+s;
+        return ret +"\n"+ "Total defective products: \n"+total;
     }
 
     public DefectiveReport() {
@@ -33,6 +36,13 @@ public class DefectiveReport extends Report {
     public void deleteProd(Product p){
         if(defectiveProducts.contains(p))
             defectiveProducts.add(p);
+    }
+    public boolean isProdInRep(String prodName){
+        for(Product p : defectiveProducts){
+            if(prodName.equals(p.getName()))
+                return true;
+        }
+        return false;
     }
 
 }
