@@ -22,7 +22,7 @@ public class Facade {
             return "Can't add product because category does not exist\n"+"add category first";
         }
         Category prodCat = invCnt.getCategory(category);
-        Product p = new Product(name,prodCat,manufacture,priceFromSupplier,priceToCustomer,minimum);
+        invCnt.addProduct(name,prodCat,manufacture,priceFromSupplier,priceToCustomer,minimum);
         return "the product " + name + " successfully added";
     }
 
@@ -54,13 +54,17 @@ public class Facade {
             return "Can't reduce storage quantity because the product "+prodName+" does not exist\n";
         }
         invCnt.setProdDiscount(prodName,discount,discountDate);
-        return "set "+ prodName+"'s discount to " +discount+ "% until " + discountDate;
+        return "set "+ prodName+"'s discount to " +discount+ "% until " + discountDate+"\n";
     }
     public String setDefectiveItems (String prodName, int def){
         if(invCnt.getProduct(prodName) == null){
             return "Can't reduce storage quantity because the product "+prodName+" does not exist\n";
         }
         invCnt.setDefectiveItems(prodName,def);
+//        for(DefectiveReport defRep: repCnt.getDefReports()){ // if this prod in any reports it will add the amount
+//            if(defRep.isProdInRep(prodName))
+//
+//        }
         return "set "+ prodName+"'s defective items to " + def;
     }
     public String setMinimum(String prodName , int minimum) {
@@ -165,14 +169,14 @@ public class Facade {
             return "the category "+catName+" does not exist\n";
         }
         invCnt.setCatDiscount(catName,discount,discountDate);
-        return "set " +catName+ "'s discount to "+ discount + "until "+ discount;
+        return "set " +catName+ "'s discount to "+ discount + " until "+ discountDate.toString();
     }
     public String setCatDiscountDate(String catName, Date discountDate){
         if(invCnt.getCategory(catName)==null){
             return "the category "+catName+" does not exist\n";
         }
         invCnt.setCatDiscountDate(catName,discountDate);
-        return "set " +catName+ "'s discount date to "+ discountDate;
+        return "set " +catName+ "'s discount date to "+ discountDate.toString();
     }
     public String printCategory(String catName) {
         if (invCnt.getCategory(catName) == null)
@@ -192,7 +196,8 @@ public class Facade {
             cats.add(c);
         }
         repCnt.addStockReport(cats);
-        ret = ret.substring(0,ret.length()-1);
+        if(ret.length() > 1)
+            ret = ret.substring(0,ret.length()-2);
         return "Added stock report about the categories: " + ret;
     }
     public String addDefReport(List<String> products){

@@ -62,4 +62,12 @@ public class ReportController {
         DefectiveReport defRep = getDefReport(id);
         defRep.addProd(p);
     }
+
+    public List<DefectiveReport> getDefReports() {
+        return defReports;
+    }
+
+    public List<StockReport> getStockReports() {
+        return stockReports;
+    }
 }

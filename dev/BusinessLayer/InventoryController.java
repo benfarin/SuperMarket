@@ -17,6 +17,7 @@ public class InventoryController {
         for(String s : subCatName){
             Category subC = new Category(s,new LinkedList<>());
             mySub.add(subC);
+            categories.add(subC);
         }
         Category cat = new Category(name,mySub);
         if(!categories.contains(cat))

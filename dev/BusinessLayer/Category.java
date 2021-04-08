@@ -17,7 +17,7 @@ public class Category {
         this.subCategories = new LinkedList<>();
         this.subCategories = subCategories;
         this.discount = 0;
-        this.discountDate = new Date();
+        this.discountDate = null;
         this.products = new LinkedList<>();
     }
     public void addProduct(Product p){
@@ -65,25 +65,57 @@ public class Category {
 
     public void setDiscount(int discount, Date discountDate1) {
         Date today = new Date(System.currentTimeMillis());
+        if(this.discountDate == null)
+            this.discountDate = new Date();
         if(discountDate1 != null && discountDate1.after(today)) {
-            this.discount = discount;
+            if(discount>0)
+                this.discount = discount;
             this.discountDate = discountDate1;
+//            for(Category sub: subCategories){
+//                sub.setDiscount(this.discount,discountDate1);
+//            }
+            for(Product p : products){
+                p.addDiscount(this.discount);
+            }
         }
     }
 
     public void setDiscountDate(Date discountDate) {
         Date today = new Date(System.currentTimeMillis());
+        if(this.discountDate == null)
+            this.discountDate = new Date();
         if(discountDate != null && discountDate.after(today)) {
         this.discountDate = discountDate;
     }}
 
+    public void addDiscount(int discount){
+        this.discount+=discount;
+    }
 
     public String printCategory() {
+        String subCats ="";
+        for(Category c : subCategories){
+            subCats+=c.getName()+", ";
+        }
+        if(subCats.length()>1)
+            subCats = subCats.substring(0,subCats.length()-2);
+
+        String prods ="";
+        for(Product p : products){
+            prods+=p.getName()+", ";
+        }
+        if(prods.length()>1)
+            prods = prods.substring(0,prods.length()-2);
+
+        String s;
+        if (discountDate == null)
+            s = "-";
+        else s = discountDate.toString();
         return "Category:\n" +
                 "\nName = '" + name + '\'' +
-                "\nSubCategories = " + subCategories +
-                "\nProducts = " + products +
+                "\nSubCategories = [" + subCats +"]"+
+                "\nProducts = [" + prods +"]"+
                 "\nDiscount = " + discount +
-                "\nDiscount Date = " + discountDate;
+                "\nDiscount Date = " + s;
     }
 }
