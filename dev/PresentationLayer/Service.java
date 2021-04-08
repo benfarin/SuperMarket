@@ -66,7 +66,8 @@ public class Service {
                     "7)\tUpdate product minimum quantity\n" +
                     "8)\tUpdate product discount\n" +
                     "9)\tUpdate product defective quantity\n" +
-                    "10)\tExit"
+                    "10)\tDisplay product\n" +
+                    "11)\tExit"
             );
 
             int choice = s.nextInt();
@@ -97,7 +98,11 @@ public class Service {
                     break;
                 case 9:
                     updateDefectiveQuantity();
+                    break;
                 case 10:
+                    printProduct();
+                    break;
+                case 11:
                     return;
                 default:
                     System.out.println("Not a valid option, please try again.\n");
@@ -121,15 +126,18 @@ public class Service {
         System.out.print("\nDiscount percentage- ");
         int discount = s.nextInt();
         boolean dateCorrect = false;
+        Date disDate = new Date();
         while (!dateCorrect) {
             try {
                 System.out.print("\nDiscount expiration date (DD/MM/YYYY)- ");
                 Date exDate = new SimpleDateFormat("dd/MM/yyyy").parse(s.next());
+                disDate = exDate;
                 dateCorrect = true;
             } catch (ParseException e) {
                 System.out.print("\nDate format incorrect, please try again. ");
             }
         }
+        System.out.println(facade.setProdDiscount(product,discount,disDate));
         // String result = facade.
     }
 
@@ -279,6 +287,11 @@ public class Service {
         int add = s.nextInt();
         System.out.println(facade.reduceStorageQuantity(prodName,add));
     }
+    public void printProduct(){
+        System.out.print("Product's name- ");
+        String prodName = s.next();
+        System.out.println(facade.printProduct(prodName));
+    }
 
     private void categoryMenu(){
         while (true) {
@@ -288,7 +301,8 @@ public class Service {
                     "3)\tdelete sub=category\n" +
                     "4)\tset category discount\n" +
                     "5)\tset category discount date\n" +
-                    "6)\tExit"
+                    "6)\tDisplay category\n" +
+                    "7)\tExit"
             );
 
             int choice = s.nextInt();
@@ -309,6 +323,9 @@ public class Service {
                     setCatDiscDate();
                     break;
                 case 6:
+                    printCategory();
+                    break;
+                case 7:
                     return;
                 default:
                     System.out.println("Not a valid option, please try again.\n");
@@ -327,12 +344,141 @@ public class Service {
             subC.add(a[i]);
         System.out.println(facade.addCategory(catName,subC));
     }
-    private void addSubCat(){}
-    private void deleteSubCat(){}
-    private void setCatDiscount(){}
+    private void addSubCat(){
+        System.out.print("Main category's name- ");
+        String mainCat = s.next();
+        System.out.print("Sub category's name- ");
+        String subCat = s.next();
+
+        System.out.println(facade.addSub(mainCat,subCat));
+    }
+    private void deleteSubCat(){
+        System.out.print("Main category's name- ");
+        String mainCat = s.next();
+        System.out.print("Sub category's name- ");
+        String subCat = s.next();
+
+        System.out.println(facade.deleteSubCat(mainCat,subCat));
+    }
+    private void printCategory(){
+        System.out.print("Category's name- ");
+        String catName = s.next();
+        System.out.println(facade.printCategory(catName));
+    }
+    private void setCatDiscount(){
+        System.out.print("\nCategory's name- ");
+        String catName = s.next();
+        System.out.print("\nDiscount percentage- ");
+        int discount = s.nextInt();
+        boolean dateCorrect = false;
+        Date disDate = new Date();
+        while (!dateCorrect) {
+            try {
+                System.out.print("\nDiscount expiration date (DD/MM/YYYY)- ");
+                Date exDate = new SimpleDateFormat("dd/MM/yyyy").parse(s.next());
+                disDate = exDate;
+                dateCorrect = true;
+            } catch (ParseException e) {
+                System.out.print("\nDate format incorrect, please try again. ");
+            }
+        }
+        System.out.println(facade.setCatDiscount(catName,discount,disDate));
+    }
     private void setCatDiscDate(){}
-    private void stockReport(){}
-    private void defectiveReport(){}
+    private void stockReport(){
+        while (true) {
+            System.out.println("\t\tStock report menu:\n\n" +
+                    "1)\tadd Stock Report\n" +
+                    "2)\tadd category to stock report\n" +
+                    "3)\texport stock report\n" +
+                    "4)\tExit"
+            );
+
+            int choice = s.nextInt();
+            switch (choice) {
+                case 1:
+                    addStockRep();
+                    break;
+                case 2:
+                    addCatToStRep();
+                    break;
+                case 3:
+                    exportRep();
+                    break;
+                case 4:
+                    return;
+                default:
+                    System.out.println("Not a valid option, please try again.\n");
+                    break;
+            }
+        }
+
+    }
+    private void addStockRep(){
+        System.out.print("\nWhich categories to include in the report- ");
+        String catsNames = s.next();
+        String[] a = catsNames.split(",");
+        List<String> cats = new LinkedList<>();
+        for(int i = 0; i< a.length; i++)
+            cats.add(a[i]);
+        System.out.println(facade.addStockReport(cats));
+    }
+    private void addCatToStRep(){
+        System.out.print("\nReport's ID number- ");
+        int id = s.nextInt();
+        System.out.print("\nCategory's name- ");
+        String catName = s.next();
+        System.out.println(facade.addCatToStRep(id,catName));
+    }
+    private void exportRep(){
+        System.out.print("\nReport's ID number- ");
+        int id = s.nextInt();
+        System.out.println(facade.exportReport(id));
+    }
+    private void defectiveReport(){
+        while (true) {
+            System.out.println("\t\tStock report menu:\n\n" +
+                    "1)\tadd defective Report\n" +
+                    "2)\tadd product to defective report\n" +
+                    "3)\texport defective report\n" +
+                    "4)\tExit"
+            );
+
+            int choice = s.nextInt();
+            switch (choice) {
+                case 1:
+                    addDefRep();
+                    break;
+                case 2:
+                    addProdToDefRep();
+                    break;
+                case 3:
+                    exportRep();
+                    break;
+                case 4:
+                    return;
+                default:
+                    System.out.println("Not a valid option, please try again.\n");
+                    break;
+            }
+        }
+    }
+    private void  addDefRep(){
+        System.out.print("\nWhich product to include in the report- ");
+        String prodsNames = s.next();
+        String[] a = prodsNames.split(",");
+        List<String> prods = new LinkedList<>();
+        for(int i = 0; i< a.length; i++)
+            prods.add(a[i]);
+        System.out.println(facade.addDefReport(prods));
+    }
+    private void addProdToDefRep(){
+        System.out.print("\nReport's ID number- ");
+        int id = s.nextInt();
+        System.out.print("\nProduct's name- ");
+        String prodName = s.next();
+        System.out.println(facade.addProdToDefRep(id,prodName));
+    }
     private void productHistory(){}
 
 

@@ -1,6 +1,7 @@
 package BusinessLayer;
 
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Facade {
@@ -114,6 +115,12 @@ public class Facade {
         invCnt.setStorageQuantity(prodName,storageQuantity);
         return "Storage quantity changed to " + storageQuantity;
     }
+    public String printProduct(String prodName){
+        if(invCnt.getProduct(prodName) == null){
+            return "The product "+prodName+" does not exist\n";
+        }
+        return invCnt.printProduct(prodName);
+    }
 
     //-------------------------CATEGORY--------------------------
 
@@ -166,5 +173,65 @@ public class Facade {
         invCnt.setCatDiscountDate(catName,discountDate);
         return "set " +catName+ "'s discount date to "+ discountDate;
     }
+    public String printCategory(String catName) {
+        if (invCnt.getCategory(catName) == null)
+            return "the category " + catName + " does not exist\n";
+        return invCnt.printCategory(catName);
+    }
+    //-------------------Report--------------------
+    public String addStockReport(List<String> categories){
+        List<Category> cats = new LinkedList<>();
+        String ret = new String();
+        for(String s : categories) {
+            ret = ret+s+", ";
+            Category c = invCnt.getCategory(s);
+            if(c == null){
+                return "the category "+s+" does not exist\n";
+            }
+            cats.add(c);
+        }
+        repCnt.addStockReport(cats);
+        ret = ret.substring(0,ret.length()-1);
+        return "Added stock report about the categories: " + ret;
+    }
+    public String addDefReport(List<String> products){
+        List<Product> prods = new LinkedList<>();
+        String ret = new String();
+        for(String s : products) {
+            ret = ret+s+", ";
+            Product p = invCnt.getProduct(s);
+            if(p == null){
+                return "the product "+s+" does not exist\n";
+            }
+            prods.add(p);
+        }
+        repCnt.addDefReport(prods);
+        ret = ret.substring(0,ret.length()-1);
+        return "Added defective report about the product: " + ret;
+    }
+    public String addCatToStRep(int id, String category){
+        if(repCnt.getStoReport(id) == null)
+            return "The report "+id+ " does not exist\n";
 
+        Category c = invCnt.getCategory(category);
+        if(c==null)
+            return "the category "+category+" does not exist\n";
+        repCnt.addCatToStRep(id,c);
+        return "Added the category " + category+ " to "+ id + " report";
+    }
+    public String addProdToDefRep(int id, String product){
+        if(repCnt.getDefReport(id) == null)
+            return "The report "+id+ " does not exist\n";
+
+        Product p = invCnt.getProduct(product);
+        if(p==null)
+            return "the product "+product+" does not exist\n";
+        repCnt.addProdToDefRep(id,p);
+        return "Added the product " + product+ " to "+ id + " report";
+    }
+    public String exportReport(int id){
+        if(repCnt.getStoReport(id) == null)
+            return "The report "+id+ " does not exist\n";
+       return repCnt.exportReport(id);
+    }
 }

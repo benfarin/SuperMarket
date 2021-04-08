@@ -107,6 +107,12 @@ public class InventoryController {
         Product p = getProduct(name);
         p.setStorageQuantity(storageQuantity);
     }
+
+    public String printProduct(String name){
+        Product p = getProduct(name);
+        return p.printProduct();
+
+    }
     public void addSub(String name,Category c){
         Category cat = getCategory(name);
         cat.addSub(c);
@@ -126,6 +132,10 @@ public class InventoryController {
     public void setCatDiscountDate(String name, Date discountDate){
         Category cat = getCategory(name);
         cat.setDiscountDate(discountDate);
+    }
+    public String printCategory(String name){
+        Category cat = getCategory(name);
+        return cat.printCategory();
     }
 
 }
