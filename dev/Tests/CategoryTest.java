@@ -2,6 +2,7 @@ package Tests;
 
 import BusinessLayer.Category;
 import BusinessLayer.Product;
+import org.junit.Before;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,16 +17,15 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CategoryTest {
-
-    private Category mainCategory;
-    private Category subCategory1;
-    private Category subCategory2;
-    private Category subCategory3;
-    List<Category> catList;
+    private static Category mainCategory;
+    private static Category subCategory1;
+    private static Category subCategory2;
+    private static Category subCategory3;
+    static List<Category> catList;
 
 
     @BeforeAll
-    void setUp() {
+    static void setUp() {
         subCategory1 = new Category("Low-fat", new LinkedList<>());
         subCategory2 = new Category("Milk", new LinkedList<>());
         subCategory3 = new Category("Dairy-free", new LinkedList<>());
