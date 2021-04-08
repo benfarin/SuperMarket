@@ -17,7 +17,7 @@ public class Category {
         this.subCategories = new LinkedList<>();
         this.subCategories = subCategories;
         this.discount = 0;
-        this.discountDate = new Date();
+        this.discountDate = null;
         this.products = new LinkedList<>();
     }
     public void addProduct(Product p){
@@ -79,11 +79,25 @@ public class Category {
 
 
     public String printCategory() {
+        String sub = "";
+        for(Category cat : subCategories){
+            sub+= cat.name + ", ";
+        }
+        sub = sub.substring(0,sub.length()-2);
+        String prod = "";
+        for(Product p : products){
+            prod+= p.getName() + ", ";
+        }
+        prod = prod.substring(0,prod.length()-2);
+        String date;
+        if (discountDate == null)
+            date = "-";
+        else date = discountDate.toString();
         return "Category:\n" +
                 "\nName = '" + name + '\'' +
-                "\nSubCategories = " + subCategories +
-                "\nProducts = " + products +
+                "\nSubCategories = " + sub +
+                "\nProducts = " + prod +
                 "\nDiscount = " + discount +
-                "\nDiscount Date = " + discountDate;
+                "\nDiscount Date = " + date;
     }
 }

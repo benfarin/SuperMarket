@@ -1,6 +1,8 @@
 package PresentationLayer;
 
+import BusinessLayer.Category;
 import BusinessLayer.Facade;
+import BusinessLayer.Product;
 
 import java.sql.Array;
 import java.text.ParseException;
@@ -19,6 +21,7 @@ public class Service {
     }
 
     public void startMenu() {
+
         while (true) {
             System.out.println("\t\tSuper-Li's inventory department\n\n" +
                     "1)\tProduct menu\n" +
