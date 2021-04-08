@@ -298,7 +298,7 @@ public class Service {
             System.out.println("\t\tCategory menu:\n\n" +
                     "1)\tAdd category\n" +
                     "2)\tadd sub-category\n" +
-                    "3)\tdelete sub=category\n" +
+                    "3)\tdelete sub-category\n" +
                     "4)\tset category discount\n" +
                     "5)\tset category discount date\n" +
                     "6)\tDisplay category\n" +
