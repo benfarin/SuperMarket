@@ -56,6 +56,10 @@ public class ReportController {
             if (dRep != null)
                 return dRep.exportReport();
         }
-        return "The report is not exist";
+        return "The report does not exist";
+    }
+    public void addProdToDefRep(int id, Product p){
+        DefectiveReport defRep = getDefReport(id);
+        defRep.addProd(p);
     }
 }
