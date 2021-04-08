@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Service {
-    public static Scanner s = new Scanner(System.in);
+    public static Scanner s = new Scanner(System.in).useDelimiter("\n");
     Facade facade;
 
     public Service(){

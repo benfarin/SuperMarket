@@ -144,8 +144,11 @@ public class Product {
     public int getDiscount() {
         return discount;
     }
-    public String displayProdHistory(){
+    public String displayPriceToCusHistory(){
         return this.priceToCusHistory.toString();
+    }
+    public String displayPriceFromSupHistory(){
+        return this.priceFromSupHistory.toString();
     }
 
     public int getStorageQuantity() {
