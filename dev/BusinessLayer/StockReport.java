@@ -17,6 +17,10 @@ public class StockReport extends Report {
             this.categories.add(category);
     }
 
+    public List<Category> getCategories() {
+        return categories;
+    }
+
     @Override
     public String exportReport() {
         String s ="";

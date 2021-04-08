@@ -42,6 +42,11 @@ public class Category {
     }
 
     public int getDiscount() {
+        Date today = new Date(System.currentTimeMillis());
+        if(this.discountDate != null && discountDate.before(today)) {
+            discount = 0;
+            this.discountDate = null;
+        }
         return discount;
     }
 
@@ -58,14 +63,20 @@ public class Category {
             products.remove(p);
     }
 
-    public void setDiscount(int discount, Date discountDate) {
-        this.discount = discount;
-        this.discountDate = discountDate;
+    public void setDiscount(int discount, Date discountDate1) {
+        Date today = new Date(System.currentTimeMillis());
+        if(discountDate1 != null && discountDate1.after(today)) {
+            this.discount = discount;
+            this.discountDate = discountDate1;
+        }
     }
 
     public void setDiscountDate(Date discountDate) {
+        Date today = new Date(System.currentTimeMillis());
+        if(discountDate != null && discountDate.after(today)) {
         this.discountDate = discountDate;
-    }
+    }}
+
 
     public String printCategory() {
         return "Category:\n" +
