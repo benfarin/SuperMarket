@@ -120,9 +120,9 @@ public class InventoryController {
         p.setStoreQuantity(storeQuantity);
     }
 
-    public void setStorageQuantity(String name, int storageQuantity){
+    public boolean setStorageQuantity(String name, int storageQuantity){
         Product p = getProduct(name);
-        p.setStorageQuantity(storageQuantity);
+       return p.setStorageQuantity(storageQuantity);
     }
 
     public String printProduct(String name){
