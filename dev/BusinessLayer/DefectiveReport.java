@@ -14,13 +14,13 @@ public class DefectiveReport extends Report {
         int total = 0;
         for (Product p : defectiveProducts) {
             total += p.getDefectiveItem();
-            s += "Product: " + p.getName() + "\nManufacture: " + p.getManufacture() + "\nNumber of defective items: " + p.getDefectiveItem() + "\n";
+            s += "\nProduct: " + p.getName() + "\nManufacture: " + p.getManufacture() + "\nNumber of defective items: " + p.getDefectiveItem() + "\n";
         }
         String ret = "DefectiveReport:\n" +
                 "ID = " + Id +
                 "\nDate = " + date +
                 "\n\nDefective Products: \n"+s;
-        return ret +"\n"+ "Total defective products: \n"+total;
+        return ret +"\n"+ "Total defective products: "+total+"\n";
     }
 
     public DefectiveReport() {

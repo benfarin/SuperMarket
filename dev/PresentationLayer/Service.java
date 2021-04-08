@@ -406,7 +406,7 @@ public class Service {
                     addCatToStRep();
                     break;
                 case 3:
-                    exportRep();
+                    exportStoRep();
                     break;
                 case 4:
                     return;
@@ -433,10 +433,10 @@ public class Service {
         String catName = s.next();
         System.out.println(facade.addCatToStRep(id,catName));
     }
-    private void exportRep(){
+    private void exportStoRep(){
         System.out.print("\nReport's ID number- ");
         int id = s.nextInt();
-        System.out.println(facade.exportReport(id));
+        System.out.println(facade.exportStockReport(id));
     }
     private void defectiveReport(){
         while (true) {
@@ -456,7 +456,7 @@ public class Service {
                     addProdToDefRep();
                     break;
                 case 3:
-                    exportRep();
+                    exportDefRep();
                     break;
                 case 4:
                     return;
@@ -481,6 +481,11 @@ public class Service {
         System.out.print("\nProduct's name- ");
         String prodName = s.next();
         System.out.println(facade.addProdToDefRep(id,prodName));
+    }
+    private void exportDefRep(){
+        System.out.print("\nReport's ID number- ");
+        int id = s.nextInt();
+        System.out.println(facade.exportDefReport(id));
     }
     private void productHistory(){}
 

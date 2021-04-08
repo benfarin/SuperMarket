@@ -7,6 +7,7 @@ import java.util.List;
 public class Category {
 
     private String name;
+    private Category supCategory;
     private List<Category> subCategories;
     private List<Product> products;
     private int discount;
@@ -19,14 +20,23 @@ public class Category {
         this.discount = 0;
         this.discountDate = null;
         this.products = new LinkedList<>();
+        this.supCategory = null;
     }
     public void addProduct(Product p){
-        if(!products.contains(p))
+        if(!products.contains(p)) {
             products.add(p);
+            if(this.supCategory != null)
+                this.supCategory.addProduct(p);
+        }
+
+    }
+    public void addSup(Category c){
+        this.supCategory = c;
     }
     public void addSub(Category c){
         if(!subCategories.contains(c))
             subCategories.add(c);
+        c.addSup(this);
     }
 
     public String getName() {

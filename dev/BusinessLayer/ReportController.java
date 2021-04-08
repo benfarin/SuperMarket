@@ -33,12 +33,15 @@ public class ReportController {
         StockReport sto = new StockReport();
         for (Category c : categories)
             sto.addCategory(c);
+        this.stockReports.add(sto);
     }
 
-    public void addDefReport(List<Product> products) {
+    public DefectiveReport addDefReport(List<Product> products) {
         DefectiveReport def = new DefectiveReport();
         for (Product p : products)
             def.addProd(p);
+        this.defReports.add(def);
+        return def;
     }
 
     public void addCatToStRep(int id, Category category) {
