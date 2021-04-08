@@ -11,7 +11,6 @@ public class Facade {
     public Facade() {
         this.repCnt = new ReportController();
         this.invCnt = new InventoryController();
-
     }
     public String addCategory (String name, List<String> subCategories){
         invCnt.addCategory(name,subCategories);
