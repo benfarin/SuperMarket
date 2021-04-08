@@ -150,6 +150,9 @@ public class Product {
     public String displayPriceFromSupHistory(){
         return this.priceFromSupHistory.toString();
     }
+    public void addDiscount(int discount){
+        this.discount+=discount;
+    }
 
     public int getStorageQuantity() {
         return storageQuantity;

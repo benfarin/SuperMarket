@@ -65,39 +65,57 @@ public class Category {
 
     public void setDiscount(int discount, Date discountDate1) {
         Date today = new Date(System.currentTimeMillis());
+        if(this.discountDate == null)
+            this.discountDate = new Date();
         if(discountDate1 != null && discountDate1.after(today)) {
-            this.discount = discount;
+            if(discount>0)
+                this.discount = discount;
             this.discountDate = discountDate1;
+//            for(Category sub: subCategories){
+//                sub.setDiscount(this.discount,discountDate1);
+//            }
+            for(Product p : products){
+                p.addDiscount(this.discount);
+            }
         }
     }
 
     public void setDiscountDate(Date discountDate) {
         Date today = new Date(System.currentTimeMillis());
+        if(this.discountDate == null)
+            this.discountDate = new Date();
         if(discountDate != null && discountDate.after(today)) {
         this.discountDate = discountDate;
     }}
 
+    public void addDiscount(int discount){
+        this.discount+=discount;
+    }
 
     public String printCategory() {
-        String sub = "";
-        for(Category cat : subCategories){
-            sub+= cat.name + ", ";
+        String subCats ="";
+        for(Category c : subCategories){
+            subCats+=c.getName()+", ";
         }
-        sub = sub.substring(0,sub.length()-2);
-        String prod = "";
+        if(subCats.length()>1)
+            subCats = subCats.substring(0,subCats.length()-2);
+
+        String prods ="";
         for(Product p : products){
-            prod+= p.getName() + ", ";
+            prods+=p.getName()+", ";
         }
-        prod = prod.substring(0,prod.length()-2);
-        String date;
+        if(prods.length()>1)
+            prods = prods.substring(0,prods.length()-2);
+
+        String s;
         if (discountDate == null)
-            date = "-";
-        else date = discountDate.toString();
+            s = "-";
+        else s = discountDate.toString();
         return "Category:\n" +
                 "\nName = '" + name + '\'' +
-                "\nSubCategories = " + sub +
-                "\nProducts = " + prod +
+                "\nSubCategories = [" + subCats +"]"+
+                "\nProducts = [" + prods +"]"+
                 "\nDiscount = " + discount +
-                "\nDiscount Date = " + date;
+                "\nDiscount Date = " + s;
     }
 }

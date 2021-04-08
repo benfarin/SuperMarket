@@ -26,8 +26,8 @@ public class Service {
             System.out.println("\t\tSuper-Li's inventory department\n\n" +
                     "1)\tProduct menu\n" +
                     "2)\tCategory menu\n" +
-                    "3)\tDisplay stock report\n" +
-                    "4)\tDisplay defective report\n" +
+                    "3)\tStock report menu\n" +
+                    "4)\tDefective report\n" +
                     "5)\tDisplay product price history\n" +
                     "6)\tExit"
             );
@@ -241,7 +241,7 @@ public class Service {
         String manufacture = s.next();
         System.out.print("Product's price from supplier- ");
         double priceFromSupplier = s.nextDouble();
-        System.out.print("Product's price from supplier- ");
+        System.out.print("Product's price to customer- ");
         double priceToCustomer = s.nextDouble();
         System.out.print("Product's minimum quantity in storage- ");
         int minimum = s.nextInt();
