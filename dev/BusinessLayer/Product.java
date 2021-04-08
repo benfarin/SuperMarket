@@ -1,6 +1,7 @@
 package BusinessLayer;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 public class Product {
@@ -21,6 +22,8 @@ public class Product {
 
 
     public Product(String name, Category category, String manufacture, double priceFromSupplier, double priceToCustomer, int minimum) {
+        priceToCusHistory = new HashMap<>();
+        priceFromSupHistory = new HashMap<>();
         this.name = name;
         this.manufacture = manufacture;
         this.priceFromSupplier = priceFromSupplier;
@@ -41,9 +44,11 @@ public class Product {
     }
 
     public void setPriceFromSupplier(double priceFromSupplier) {
-        this.priceFromSupplier = priceFromSupplier;
-        Date today = new Date(System.currentTimeMillis());
-        priceFromSupHistory.put(priceFromSupplier,today);
+        if(priceFromSupplier > 0) {
+            this.priceFromSupplier = priceFromSupplier;
+            Date today = new Date(System.currentTimeMillis());
+            priceFromSupHistory.put(priceFromSupplier, today);
+        }
     }
 
     public int getDefectiveItem() {
@@ -59,9 +64,11 @@ public class Product {
     }
 
     public void setPriceToCustomer(double priceToCustomer) {
-        this.priceToCustomer = priceToCustomer;
-        Date today = new Date(System.currentTimeMillis());
-        priceToCusHistory.put(priceToCustomer,today);
+        if (priceToCustomer > 0) {
+            this.priceToCustomer = priceToCustomer;
+            Date today = new Date();
+            priceToCusHistory.put(priceToCustomer, today);
+        }
     }
 
     public double getPriceToCustomer() {
@@ -74,8 +81,13 @@ public class Product {
     }
 
     public void setDiscount(int discount, Date discountDate) {
-        this.discount = discount;
-        this.discountDate = discountDate;
+        if(discount > 0) {
+            Date today = new Date(System.currentTimeMillis());
+            if (discountDate.after(today)) {
+                this.discount = discount;
+                this.discountDate = discountDate;
+            }
+        }
     }
 
     public void setManufacture(String manufacture) {
@@ -83,27 +95,32 @@ public class Product {
     }
 
     public void setDefectiveItem(int defectiveItem) {
-        this.defectiveItem = defectiveItem;
+        if(defectiveItem > 0) {
+            this.defectiveItem = defectiveItem;
+        }
     }
 
-    public void setMinimum(int minimum) {
-        this.minimum = minimum;
+    public boolean setMinimum(int minimum) {
+        if(minimum > 0 ) {
+            this.minimum = minimum;
+        }
+        return alertStorageQuantity();
     }
 
     public void addStoreQuantity(int add) {
         this.storeQuantity += add;
     }
-    public boolean reduceStoreQuantity(int reduce) {
+    public void reduceStoreQuantity(int reduce) {
         this.storeQuantity -= reduce;
-        return alertQuantity();
     }
     public void addStorageQuantity(int add) {
         this.storageQuantity += add;
     }
-    public void reduceStorageQuantity(int reduce) {
+    public boolean reduceStorageQuantity(int reduce) {
         this.storageQuantity -= reduce;
+        return alertStorageQuantity();
     }
-    public boolean alertQuantity(){
+    public boolean alertStorageQuantity(){
         return storageQuantity <= minimum;
     }
 
@@ -111,12 +128,28 @@ public class Product {
         this.storeQuantity = storeQuantity;
     }
 
-    public void setStorageQuantity(int storageQuantity) {
+    public boolean setStorageQuantity(int storageQuantity) {
         this.storageQuantity = storageQuantity;
+        return alertStorageQuantity();
+    }
+
+    public int getMinimum() {
+        return minimum;
     }
 
     public Category getCategory() {
         return category;
+    }
+
+    public int getDiscount() {
+        return discount;
+    }
+    public String displayProdHistory(){
+        return this.priceToCusHistory.toString();
+    }
+
+    public int getStorageQuantity() {
+        return storageQuantity;
     }
 
     public String printProduct() {

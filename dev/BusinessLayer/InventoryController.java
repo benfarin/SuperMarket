@@ -83,9 +83,9 @@ public class InventoryController {
         p.addStoreQuantity(add);
     }
 
-    public boolean reduceStoreQuantity(String name, int reduce){
+    public void reduceStoreQuantity(String name, int reduce){
         Product p = getProduct(name);
-        return p.reduceStoreQuantity(reduce);
+        p.reduceStoreQuantity(reduce);
     }
 
     public void addStorageQuantity(String name, int add){
@@ -93,9 +93,9 @@ public class InventoryController {
         p.addStorageQuantity(add);
     }
 
-    public void reduceStorageQuantity(String name, int reduce){
+    public boolean reduceStorageQuantity(String name, int reduce){
         Product p = getProduct(name);
-        p.reduceStorageQuantity(reduce);
+        return p.reduceStorageQuantity(reduce);
     }
 
     public void setStoreQuantity(String name, int storeQuantity){

@@ -81,9 +81,6 @@ public class Facade {
         if(invCnt.getProduct(prodName) == null){
             return "Can't reduce storage quantity because the product "+prodName+" does not exist\n";
         }
-        if(invCnt.reduceStoreQuantity(prodName,reduce)){
-            // invite this product from Suppliers!!!!!!
-        }
         return "Reduced "+ reduce+" from " + prodName+" store quantity";
 
     }
@@ -98,7 +95,11 @@ public class Facade {
         if(invCnt.getProduct(prodName) == null){
             return "Can't reduce storage quantity because the product "+prodName+" does not exist\n";
         }
-        invCnt.reduceStorageQuantity(prodName,reduce);
+        if(invCnt.reduceStorageQuantity(prodName,reduce)){
+            // invite this product from Suppliers!!!!!!
+            System.out.println("ALARM: " + prodName + " product's storage quantity below minimum\n");
+
+        }
         return "Reduced "+ reduce+" from " + prodName+" storage quantity";
     }
     public String setStoreQuantity(String prodName, int storeQuantity){
