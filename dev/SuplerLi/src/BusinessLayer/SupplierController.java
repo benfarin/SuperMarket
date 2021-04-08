@@ -1,4 +1,4 @@
-package SuplerLi.src.Entities;
+package BusinessLayer;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -7,10 +7,10 @@ import java.util.List;
 
 
 public class SupplierController {
-    private HashMap<Integer, Entities.Supplier> supplier; // the int key as a id_supplier
+    private HashMap<Integer, BusinessLayer.Supplier> supplier; // the int key as a id_supplier
     Scanner io = new Scanner(System.in);
 
-    public SupplierController(HashMap<Integer, Entities.Supplier> sup) {
+    public SupplierController(HashMap<Integer, BusinessLayer.Supplier> sup) {
         supplier = sup;
     }
 
@@ -100,7 +100,7 @@ public class SupplierController {
         System.out.println("Insert  a Bank Account:");
         String bank = io.next();
 
-        Entities.Supplier sup = new Entities.Supplier(id, company, name, Contacts, payment, bank);
+        BusinessLayer.Supplier sup = new BusinessLayer.Supplier(id, company, name, Contacts, payment, bank);
         supplier.put(id,sup);
         System.out.println("Supplier was Successfully added , you may add a Contract");
     }

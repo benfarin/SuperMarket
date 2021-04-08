@@ -1,4 +1,4 @@
-package  Entities;
+package BusinessLayer;
 
 import java.util.HashMap;
 import java.util.Scanner;
@@ -7,7 +7,7 @@ public class Contract {
 
     private String daysOfSupply;
     private boolean needsDelivery;
-    HashMap<Integer, Integer> totalPriceDiscount;
+    HashMap<Integer, Integer> totalPriceDiscount; //TODO: Change the price to Double
 
     public Contract(String days, boolean delivery) {
         daysOfSupply = days;

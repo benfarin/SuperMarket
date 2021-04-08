@@ -1,4 +1,4 @@
-package Entities;
+package BusinessLayer;
 
 import java.util.HashMap;
 
@@ -6,16 +6,16 @@ public class Product {
     private String name;
     private long storeCode;
     private double price;
-    private HashMap highAmountDiscount;
+    private HashMap<Integer, Double> highAmountDiscount;
     private long supplierSerialNum;
-    private Entities.Supplier supplier;
+    private BusinessLayer.Supplier supplier;
 
 
-    public Product(String name, long storeCode, double price, HashMap highAmountDiscount, long supplierSerialNum, Entities.Supplier supplier) {
+    public Product(String name, long storeCode, double price, HashMap<Integer, Double> highAmountDiscount, long supplierSerialNum, BusinessLayer.Supplier supplier) {
         this.name = name;
         this.storeCode = storeCode;
         this.price = price;
-        this.highAmountDiscount = highAmountDiscount;
+        this.highAmountDiscount = highAmountDiscount; //TODO: do the correct assignment here for the new hashmap of discounts AND constructor for empty HighAmountDiscount
         this.supplierSerialNum = supplierSerialNum;
         this.supplier = supplier;
     }
@@ -44,11 +44,11 @@ public class Product {
         this.price = price;
     }
 
-    protected HashMap getHighAmountDiscount() {
+    protected HashMap<Integer, Double> getHighAmountDiscount() {
         return highAmountDiscount;
     }
 
-    protected void setHighAmountDiscount(HashMap highAmountDiscount) {
+    protected void setHighAmountDiscount(HashMap<Integer, Double> highAmountDiscount) {
         this.highAmountDiscount = highAmountDiscount;
     }
 
@@ -60,11 +60,11 @@ public class Product {
         this.supplierSerialNum = supplierSerialNum;
     }
 
-    public Entities.Supplier getSupplier() {
+    public BusinessLayer.Supplier getSupplier() {
         return supplier;
     }
 
-    protected void setSupplier(Entities.Supplier supplier) {
+    protected void setSupplier(BusinessLayer.Supplier supplier) {
         this.supplier = supplier;
     }
 

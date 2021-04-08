@@ -1,21 +1,21 @@
-package SuplerLi.src.Entities;
-
-import Entities.OutgoingOrder;
+package BusinessLayer;
 
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.List;
 
-public class Item_Order_Controoler {
-    private HashMap<Integer, List<Entities.Product>> products; // the int key as a id_supplier
-    private HashMap<Integer, Entities.OutgoingOrder> orders; // every order is identified by the id (the key) of the supplier
+public class Item_Order_Controller {
+    private HashMap<Integer, List<BusinessLayer.Product>> products; // the int key as a id_product
+    private HashMap<Long, BusinessLayer.OutgoingOrder> orders; // every order is identified by the id (the key) of the supplier
 
     Scanner io = new Scanner(System.in);
 
-    public Item_Order_Controoler() {
-        products = new HashMap<Integer, List<Entities.Product>>();
-        orders = new HashMap<Integer,  Entities.OutgoingOrder>();
 
+    public Item_Order_Controller() {
+        products = new HashMap<Integer, List<BusinessLayer.Product>>();
+        orders = new HashMap<Long,  BusinessLayer.OutgoingOrder>();
+
+        //TODO: Fill products in the constructor here or with new controller
     }
 
     public void ItemOrderMenu() {
@@ -63,7 +63,7 @@ public class Item_Order_Controoler {
         int id_product = io.nextInt();
         System.out.println("enter an Amount");
         int amount = io.nextInt();
-        List<Entities.Product> prod= products.get(id_product);
+        List<BusinessLayer.Product> prod= products.get(id_product);
         if(prod!=null)
         {
             min=prod.get(0).getSupplier().getContract().getTotalPriceDiscount(amount);
@@ -75,8 +75,13 @@ public class Item_Order_Controoler {
                 min=suspect_min;
             }
         }
-        Entities.OutgoingOrder order = new OutgoingOrder();
+
+        //TODO: If order exists we don't have to create a new instance of it
+
+        BusinessLayer.OutgoingOrder order = new OutgoingOrder();
         orders.put(id_supplier_min,order);
+
+
 
     }
 

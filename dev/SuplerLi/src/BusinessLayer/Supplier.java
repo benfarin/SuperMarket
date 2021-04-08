@@ -1,7 +1,6 @@
-package Entities;
+package BusinessLayer;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -16,7 +15,7 @@ public class Supplier {
 
 
 
-    private Entities.Contract contract;
+    private BusinessLayer.Contract contract;
 
     public Supplier(int id_supplier, long id_company, String name, List<String> contacts, String paymentMethod, String bankAccount) {
         this.id_supplier = id_supplier;
@@ -107,17 +106,17 @@ public class Supplier {
 
         }
     }
-    public Entities.Contract getContract() {
+    public BusinessLayer.Contract getContract() {
         return contract;
     }
-      private Entities.Contract addContract(){
+      private BusinessLayer.Contract addContract(){
         if( contract!=null) {
             System.out.println("this supplier already has a Contract");
             return contract;
         }
         else {
             Scanner io = new Scanner(System.in);
-            Entities.Contract new_contract=null;
+            BusinessLayer.Contract new_contract=null;
             System.out.println("Insert Days of Supply:");
             String  days = io.next();
             System.out.println("Is needed delivery? ");
@@ -141,7 +140,7 @@ public class Supplier {
                 System.out.println("y/n");
                 y_discount = io.next();
             }
-            new_contract=new Entities.Contract(days,NeedDelivery,totalPriceDiscount);
+            new_contract=new BusinessLayer.Contract(days,NeedDelivery,totalPriceDiscount);
             return new_contract;
         }
 
