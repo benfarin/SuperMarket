@@ -29,28 +29,28 @@ public class Facade {
 
     public String setManufacture(String prodName,String manu){
         if(invCnt.getProduct(prodName) == null){
-            return "Can't reduce storage quantity because the product "+prodName+" does not exist\n";
+            return "The product "+prodName+" does not exist\n";
         }
         invCnt.setManufacture(prodName,manu);
         return "set "+ prodName+"'s manufacture to " + manu+"\n";
     }
     public String setPriceFromSupplier(String prodName,double priceFromSupplier){
         if(invCnt.getProduct(prodName) == null){
-            return "Can't reduce storage quantity because the product "+prodName+" does not exist\n";
+            return "The product "+prodName+" does not exist\n";
         }
         invCnt.setPriceFromSupplier(prodName,priceFromSupplier);
         return "set "+ prodName+"'s price from supplier to " + priceFromSupplier+"\n";
     }
     public String setPriceToCustomer(String prodName , double priceToCustomer){
         if(invCnt.getProduct(prodName) == null){
-            return "Can't reduce storage quantity because the product "+prodName+" does not exist\n";
+            return "The product "+prodName+" does not exist\n";
         }
         invCnt.setPriceToCustomer(prodName,priceToCustomer);
         return "set "+ prodName+"'s price to costumer to " + priceToCustomer+"\n";
     }
     public String setProdDiscount(String prodName,int discount, Date discountDate){
         if(invCnt.getProduct(prodName) == null){
-            return "Can't reduce storage quantity because the product "+prodName+" does not exist\n";
+            return "The product "+prodName+" does not exist\n";
         }
         invCnt.setProdDiscount(prodName,discount,discountDate);
         return "set "+ prodName+"'s discount to " +discount+ "% until " + discountDate+"\n";
@@ -130,6 +130,19 @@ public class Facade {
         }
         return invCnt.printProduct(prodName);
     }
+    public String displayPFSHistory(String prodName){
+        if(invCnt.getProduct(prodName) == null){
+            return "The product "+prodName+" does not exist\n";
+        }
+        return invCnt.displayPFSHistory(prodName);
+    }
+    public String displayPTCHistory(String prodName){
+        if(invCnt.getProduct(prodName) == null){
+            return "The product "+prodName+" does not exist\n";
+        }
+        return invCnt.displayPTCHistory(prodName);
+    }
+
 
     //-------------------------CATEGORY--------------------------
 

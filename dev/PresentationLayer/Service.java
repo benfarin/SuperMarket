@@ -28,8 +28,7 @@ public class Service {
                     "2)\tCategory menu\n" +
                     "3)\tStock report menu\n" +
                     "4)\tDefective report\n" +
-                    "5)\tDisplay product price history\n" +
-                    "6)\tExit"
+                    "5)\tExit"
             );
 
             int choice = s.nextInt();
@@ -47,9 +46,6 @@ public class Service {
                     defectiveReport();
                     break;
                 case 5:
-                    productHistory();
-                    break;
-                case 6:
                     return;
                 default:
                     System.out.println("Not a valid option, please try again.\n");
@@ -70,7 +66,9 @@ public class Service {
                     "8)\tUpdate product discount\n" +
                     "9)\tUpdate product defective quantity\n" +
                     "10)\tDisplay product\n" +
-                    "11)\tExit"
+                    "11)\tDisplay product price from suppler history\n" +
+                    "12)\tDisplay product price to customer history\n" +
+                    "13)\tExit"
             );
 
             int choice = s.nextInt();
@@ -106,6 +104,12 @@ public class Service {
                     printProduct();
                     break;
                 case 11:
+                    productPFSHistory();
+                    break;
+                case 12:
+                    productPTCHistory();
+                    break;
+                case 13:
                     return;
                 default:
                     System.out.println("Not a valid option, please try again.\n");
@@ -487,7 +491,16 @@ public class Service {
         int id = s.nextInt();
         System.out.println(facade.exportDefReport(id));
     }
-    private void productHistory(){}
+    private void productPFSHistory(){
+        System.out.print("Product's name- ");
+        String prodName = s.next();
+        System.out.println(facade.displayPFSHistory(prodName));
+    }
+    private void productPTCHistory(){
+        System.out.print("Product's name- ");
+        String prodName = s.next();
+        System.out.println(facade.displayPTCHistory(prodName));
+    }
 
 
 

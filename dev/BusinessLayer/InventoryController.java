@@ -154,5 +154,13 @@ public class InventoryController {
         Category cat = getCategory(name);
         return cat.printCategory();
     }
+    public String displayPFSHistory(String prodName){
+        Product p = getProduct(prodName);
+       return p.displayPriceFromSupHistory();
+    }
+    public String displayPTCHistory(String prodName){
+        Product p = getProduct(prodName);
+        return p.displayPriceToCusHistory();
+    }
 
 }

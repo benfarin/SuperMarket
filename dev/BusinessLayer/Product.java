@@ -27,8 +27,10 @@ public class Product {
         this.name = name;
         this.manufacture = manufacture;
         this.priceFromSupplier = priceFromSupplier;
+        priceFromSupHistory.put(priceFromSupplier, new Date());
         this.category = category;
         this.priceToCustomer = priceToCustomer;
+        priceToCusHistory.put(priceToCustomer, new Date());
         this.minimum = minimum;
         this.storageQuantity= 0;
         this.storeQuantity = 0;
@@ -145,10 +147,20 @@ public class Product {
         return discount;
     }
     public String displayPriceToCusHistory(){
-        return this.priceToCusHistory.toString();
+        String s ="\nThe price to customer history of "+this.name+":\n";
+        for (Map.Entry<Double,Date> entry : priceToCusHistory.entrySet()){
+            s+="price = " + entry.getKey() +
+                    ", Date = " + entry.getValue()+"\n";
+        }
+        return s;
     }
     public String displayPriceFromSupHistory(){
-        return this.priceFromSupHistory.toString();
+        String s ="\nThe price from supplier history of "+this.name+":\n";
+        for (Map.Entry<Double,Date> entry : priceFromSupHistory.entrySet()){
+            s+="price = " + entry.getKey() +
+                    ", Date = " + entry.getValue()+"\n";
+        }
+        return s;
     }
     public void addDiscount(int discount){
         this.discount+=discount;
