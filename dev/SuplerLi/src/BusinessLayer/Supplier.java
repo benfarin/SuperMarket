@@ -7,20 +7,18 @@ import java.util.Scanner;
 
 
 public class Supplier {
-    private  BusinessLayer.SupplierController supplierController;
-    private int id_supplier;
-    private long id_company;
+    private Integer id_supplier;
+    private Long id_company;
     private String name;
     private List<String> contacts;
     private String paymentMethod;
     private String bankAccount;
     private  HashMap<Long, BusinessLayer.Product> products; // do we want hold the product himself? or the id?
-
-
-
     private BusinessLayer.Contract contract;
 
-    public Supplier(int id_supplier, long id_company, String name, List<String> contacts, String paymentMethod, String bankAccount, BusinessLayer.SupplierController supllier_controller) {
+
+
+    public Supplier(Integer id_supplier, Long id_company, String name, List<String> contacts, String paymentMethod, String bankAccount) {
         this.id_supplier = id_supplier;
         this.id_company = id_company;
         this.name = name;
@@ -28,8 +26,10 @@ public class Supplier {
         this.paymentMethod = paymentMethod;
         this.bankAccount = bankAccount;
         this.contract= addContract();
-        this.supplierController = supllier_controller;
-        products=new HashMap<Long, BusinessLayer.Product>();
+        this.products=new HashMap<Long, BusinessLayer.Product>();
+    }
+    public HashMap<Long, Product> getProducts() {
+        return products;
     }
 
     public int getId_supplier() {

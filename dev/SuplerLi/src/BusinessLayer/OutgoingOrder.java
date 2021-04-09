@@ -10,6 +10,7 @@ public class OutgoingOrder {
     private HashMap<Long,Integer> items; //  the key is the id_tem ,  the value is the amount.
     private LocalDate deliveryDate;
     private double totalPrice;
+
     public  OutgoingOrder(Integer sup,LocalDate delivery_Date){
         id=static_id;
         static_id++;

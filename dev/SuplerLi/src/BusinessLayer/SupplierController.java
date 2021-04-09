@@ -1,5 +1,7 @@
 package BusinessLayer;
 
+import sun.awt.image.ImageWatched;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Scanner;
@@ -84,7 +86,7 @@ public class SupplierController {
         int id = io.nextInt();
 
         System.out.println("Insert  a Company Num:");
-        int company = io.nextInt();
+        Long company = io.nextLong();
 
         System.out.println("Insert  a name:");
         String name = io.next();
@@ -103,6 +105,17 @@ public class SupplierController {
         BusinessLayer.Supplier sup = new BusinessLayer.Supplier(id, company, name, Contacts, payment, bank);
         supplier.put(id,sup);
         System.out.println("Supplier was Successfully added , you may add a Contract");
+    }
+
+    // This method returns a LIST of all products currently available by known suppliers
+    public LinkedList<Product> getAllProducts(){
+        LinkedList<Product> result = new LinkedList<>();
+        for (Supplier sup: supplier.values()) {
+            for (Product prod: sup.getProducts().values() ) {
+                result.add(prod);
+            }
+        }
+        return result;
     }
 }
 

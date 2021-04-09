@@ -4,19 +4,19 @@ import java.util.HashMap;
 
 public class Product {
     private String name;
-    private long storeCode;
-    private double price;
+    private Long storeCode;
+    private Double price;
     private HashMap<Integer, Double> highAmountDiscount;
-    private long supplierSerialNum;
+    private Long supplierSerialNum;
     private BusinessLayer.Supplier supplier;
 
 
-    public Product(String name, long storeCode, double price, HashMap<Integer, Double> highAmountDiscount, BusinessLayer.Supplier supplier, BusinessLayer.Item_Order_Controller itemOrdercontroller) {
+    public Product(String name, Long storeCode, Double price, HashMap<Integer, Double> highAmountDiscount, Long supplierSerialNum, BusinessLayer.Supplier supplier) {
         this.name = name;
         this.storeCode = storeCode;
         this.price = price;
         this.highAmountDiscount = highAmountDiscount; //TODO: do the correct assignment here for the new hashmap of discounts AND constructor for empty HighAmountDiscount
-        //this.supplierSerialNum = supplierSerialNum; // why do we need this?
+        this.supplierSerialNum = supplierSerialNum; // why do we need this?
         this.supplier = supplier;
     }
     public  void  AddDiscount(){ // need be fill by creating new item from Supplier
@@ -30,19 +30,19 @@ public class Product {
         this.name = name;
     }
 
-    protected long getStoreCode() {
+    protected Long getStoreCode() {
         return storeCode;
     }
 
-    protected void setStoreCode(long storeCode) {
+    protected void setStoreCode(Long storeCode) {
         this.storeCode = storeCode;
     }
 
-    protected double getPrice() {
+    protected Double getPrice() {
         return price;
     }
 
-    protected void setPrice(double price) {
+    protected void setPrice(Double price) {
         this.price = price;
     }
 
@@ -54,11 +54,11 @@ public class Product {
         this.highAmountDiscount = highAmountDiscount;
     }
 
-    protected long getSupplierSerialNum() {
+    protected Long getSupplierSerialNum() {
         return supplierSerialNum;
     }
 
-    protected void setSupplierSerialNum(long supplierSerialNum) {
+    protected void setSupplierSerialNum(Long supplierSerialNum) {
         this.supplierSerialNum = supplierSerialNum;
     }
 

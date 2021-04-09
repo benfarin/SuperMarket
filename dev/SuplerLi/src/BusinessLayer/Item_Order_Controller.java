@@ -1,21 +1,41 @@
 package BusinessLayer;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.List;
 
 public class Item_Order_Controller {
-    private HashMap<Integer, List<BusinessLayer.Product>> products; // the int key as a id_product
+    // INT is the StoreCode for the product, LIST is for all the products from different suppliers under same code
+    private HashMap<Long, List<BusinessLayer.Product>> products;
     private HashMap<Integer, BusinessLayer.OutgoingOrder> orders; // every order is identified by the id (the key) of the supplier
 
     Scanner io = new Scanner(System.in);
 
+// We create an instance of this controller when we need to CREATE a new order or CHANGE existing order, then it closes.
+    public Item_Order_Controller(LinkedList<Product> allProductsList, LinkedList<OutgoingOrder> allOrdersList) {
+        products = new HashMap<>();
+        //LinkedList<Product> allProductsList = supplierController.getAllProducts();
+        for (Product prod: allProductsList ) {
+            Long currStoreCode = prod.getStoreCode();
+            if (!products.containsKey(currStoreCode)) { // If the product ISN'T in the map of products we create a new list of all similar products from different suppliers
+                products.put(currStoreCode, new LinkedList<>());
+            }
+            products.get(currStoreCode).add(prod);
 
-    public Item_Order_Controller() {
-        products = new HashMap<Integer, List<BusinessLayer.Product>>();
-        orders = new HashMap<Integer, BusinessLayer.OutgoingOrder>();
+        }
 
-        //TODO: Fill products in the constructor here or with new controller
+        orders = new HashMap<>();
+        for (OutgoingOrder order: allOrdersList ) {
+//            long currOrderID = order
+//            if (!products.containsKey(currStoreCode)) { // If the product ISN'T in the map of products we create a new list of all similar products from different suppliers
+//                products.put(currStoreCode, new LinkedList<>());
+//            }
+//            products.get(currStoreCode).add(prod);
+//
+        }
+
+        //TODO: Fill all the previous orders.
     }
 
     public void ItemOrderMenu() {
