@@ -17,20 +17,20 @@ public class Service {
     WorkersController WorkersCntrl;
 
     public Service(){
-        s = new Scanner(System.in).useDelimiter("\n");
+        s = new Scanner(System.in);//.useDelimiter("\n");
         this.ShiftCntrl = new ShiftController();
         this.WorkersCntrl = new WorkersController();
     }
 
     public void startMenu() {
         while (true) {
-            System.out.println("\t\tSuper-Li's Workers department\n\n" +
+            System.out.println("Super-Li's Workers department\n\n" +
             "1)\tInitialize data\n" +
             "2)\tLogin\n" +
             "3)\tExit"
             );
 
-            int choice = s.nextInt();
+            int choice = Integer.parseInt(s.next());
             switch (choice) {
                 case 1:
                     Initialize();
@@ -56,10 +56,10 @@ public class Service {
             "1)\tTry Again\n" +
             "2)\tReturn to Previous Menu\n" +
             "3)\tExit");
-    	    op = s.nextInt();
+    	    op = Integer.parseInt(s.next());
             if (op == 1){
                 System.out.println("Please enter your ID:\n");
-    	        ID = s.nextInt();
+    	        ID = Integer.parseInt(s.next());
 			}
             if (op == 2){
                 startMenu();
@@ -77,7 +77,7 @@ public class Service {
             "1)\tManager\n" +
             "2)\tCashier \n" +
             "3)\t StorageWorker");
-    	    int role=s.nextInt();
+    	    int role=Integer.parseInt(s.next());
             // the roles Id is the number to choose
     	    while(!WorkersCntrl.workerHasRole(w, role)){
                 System.out.println("This role does not match this worker\n" +
@@ -136,7 +136,7 @@ public class Service {
             "5)\tDelete Constraint\n" +
             "6)\tDelete Constraint\n" +
             "7)\tExit\n");
-            int op = s.nextInt();
+            int op = Integer.parseInt(s.next());
             if (op == 1)
                 printWorkerShifts(w);
             else if (op == 2)
@@ -216,13 +216,13 @@ public class Service {
             "2)\tShift Date\n" +
             "3)\tShiftType (Morning Shift/Evening Shift\n" +
             "4)\tExit" );
-            int op = s.nextInt();
+            int op = Integer.parseInt(s.next());
 
             if (op == 1){
                 System.out.println("The constraint is one-time or regularly?\n" +
                 "1)\tOne-Time\n" +
                 "2)\tRegularly\n");
-    	        op = s.nextInt();
+    	        op = Integer.parseInt(s.next());
                 boolean isTemp = true;
                 if (op == 2)
                     isTemp = false;
@@ -241,7 +241,7 @@ public class Service {
                 System.out.println("What is the shift type of the constraint?" +
                 "1)\tMorning Shift\n" + 
                 "2)\tEvening Shift\n");
-    	        shiftType = s.nextInt();
+    	        shiftType = Integer.parseInt(s.next());
                 c.setShiftType(shiftType);
             }
             else if (op == 4){
@@ -286,10 +286,10 @@ public class Service {
             "1)\tWorkers Menu\n" +
             "2)\tShifts Menu\n" +
             "3)\tExit\n");
-            int op = s.nextInt();
+            int op = Integer.parseInt(s.next());
             if (op == 1) {
                 System.out.println("Enter worker id:");
-                int id = s.nextInt();
+                int id = Integer.parseInt(s.next());
                 ManagerWorkerMenu(WorkersCntrl.getWorker(id));
             }
             else if (op == 2)
@@ -313,7 +313,7 @@ public class Service {
             "7)\tRemove Role From Worker\n" +
             "8)\tRemove Worker\n" +
             "9)\tReturn\n");
-            int op = s.nextInt();
+            int op = Integer.parseInt(s.next());
             if (op == 1)
                 printWorkerShifts(w);
             else if (op == 2)
@@ -390,7 +390,7 @@ public class Service {
             "5)\tWorker Salary\n" +
             "6)\tWorker Leaving Date\n" +
             "7)\tExit\n");
-            int op = s.nextInt();
+            int op = Integer.parseInt(s.next());
 
             if (op == 1){
                 System.out.println("Enter new name");
@@ -419,7 +419,7 @@ public class Service {
             "3)\tAdd Shift\n" +
             "4)\tReturn\n" +
             "5)\tExit\n");
-            int op = s.nextInt();
+            int op = Integer.parseInt(s.next());
 
             if (op == 1) {
                 createShift();
@@ -546,7 +546,7 @@ public class Service {
             "2)\tShift Workers\n" +
             "3)\tShift Roles\n" +
             "4)\tReturn\n");
-            int op = s.nextInt();
+            int op = Integer.parseInt(s.next());
 
             if (op == 1) {
                 System.out.println("Enter new Manager id");
@@ -579,19 +579,19 @@ public class Service {
                     "1)\tAdd Role To Shift\n" +
                     "2)\tRemove Role From Shift\n" +
                     "3)\tReturn\n");
-            int op = s.nextInt();
+            int op = Integer.parseInt(s.next());
 
             if (op == 1) {
                 System.out.println("Enter role id to add");
-                int id = s.nextInt();
+                int id = Integer.parseInt(s.next());
                 System.out.println("Enter amount to add");
-                int amount = s.nextInt();
+                int amount = Integer.parseInt(s.next());
                 ShiftCntrl.addRoleToShift(sh, id, amount);
             } else if (op == 2) {
                 System.out.println("Enter role id to remove");
-                int id = s.nextInt();
+                int id = Integer.parseInt(s.next());
                 System.out.println("Enter amount to add");
-                int amount = s.nextInt();
+                int amount = Integer.parseInt(s.next());
                 ShiftCntrl.removeRoleToShift(sh, id, amount);
             } else if (op == 3) {
                 break;
@@ -615,13 +615,13 @@ public class Service {
             "1)\tAdd Worker To Shift\n" +
             "2)\tRemove Worker From Shift\n" +
             "3)\tReturn\n");
-            int op = s.nextInt();
+            int op = Integer.parseInt(s.next());
 
             if (op == 1) {
                 System.out.println("Enter worker id to add");
-                int id = s.nextInt();
+                int id = Integer.parseInt(s.next());
                 System.out.println("Enter role id");
-                int roleId = s.nextInt();
+                int roleId = Integer.parseInt(s.next());
                 Worker w = WorkersCntrl.getWorker(id);
                 while (WorkersCntrl.workerHasRole(w, roleId)){
                     System.out.println("This worker don't have this role, please enter role id to remove, enter 0 to return back");
@@ -635,7 +635,7 @@ public class Service {
                 ShiftCntrl.addWorkerToShift(sh, id, roleId);
             } else if (op == 2) {
                 System.out.println("Enter worker id to add");
-                int id = s.nextInt();
+                int id = Integer.parseInt(s.next());
 
                 ShiftCntrl.removeWorkerFrom(sh, id);
             } else if (op == 3) {
