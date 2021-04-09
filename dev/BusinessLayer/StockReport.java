@@ -10,16 +10,6 @@ public class StockReport extends Report {
     public StockReport(){
         super();
         this.categories = new LinkedList<>();
-        Category subCategory1 = new Category("Low-fat", new LinkedList<>());
-        Category subCategory2 = new Category("Milk", new LinkedList<>());
-        Category subCategory3 = new Category("Dairy-free", new LinkedList<>());
-        Category mainCategory = new Category("Dairy", new LinkedList<>());
-        mainCategory.addSub(subCategory1);
-        mainCategory.addSub(subCategory2);
-        mainCategory.addSub(subCategory3);
-        Product p = new Product("milk",mainCategory,"Maabarot",2.90,4.10,20);
-        Product p1 = new Product("milk low fat",subCategory2,"Maabarot",2.90,4.10,20);
-
     }
 
     public void addCategory(Category category){
