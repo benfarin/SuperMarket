@@ -11,15 +11,17 @@ public class Product {
     private BusinessLayer.Supplier supplier;
 
 
-    public Product(String name, long storeCode, double price, HashMap<Integer, Double> highAmountDiscount, long supplierSerialNum, BusinessLayer.Supplier supplier) {
+    public Product(String name, long storeCode, double price, HashMap<Integer, Double> highAmountDiscount, BusinessLayer.Supplier supplier, BusinessLayer.Item_Order_Controller itemOrdercontroller) {
         this.name = name;
         this.storeCode = storeCode;
         this.price = price;
         this.highAmountDiscount = highAmountDiscount; //TODO: do the correct assignment here for the new hashmap of discounts AND constructor for empty HighAmountDiscount
-        this.supplierSerialNum = supplierSerialNum;
+        //this.supplierSerialNum = supplierSerialNum; // why do we need this?
         this.supplier = supplier;
     }
-
+    public  void  AddDiscount(){ // need be fill by creating new item from Supplier
+        
+    }
     protected String getName() {
         return name;
     }

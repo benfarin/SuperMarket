@@ -1,23 +1,26 @@
 package BusinessLayer;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
 
 public class Supplier {
+    private  BusinessLayer.SupplierController supplierController;
     private int id_supplier;
     private long id_company;
     private String name;
     private List<String> contacts;
     private String paymentMethod;
     private String bankAccount;
+    private  HashMap<Long, BusinessLayer.Product> products; // do we want hold the product himself? or the id?
 
 
 
     private BusinessLayer.Contract contract;
 
-    public Supplier(int id_supplier, long id_company, String name, List<String> contacts, String paymentMethod, String bankAccount) {
+    public Supplier(int id_supplier, long id_company, String name, List<String> contacts, String paymentMethod, String bankAccount, BusinessLayer.SupplierController supllier_controller) {
         this.id_supplier = id_supplier;
         this.id_company = id_company;
         this.name = name;
@@ -25,6 +28,8 @@ public class Supplier {
         this.paymentMethod = paymentMethod;
         this.bankAccount = bankAccount;
         this.contract= addContract();
+        this.supplierController = supllier_controller;
+        products=new HashMap<Long, BusinessLayer.Product>();
     }
 
     public int getId_supplier() {
@@ -106,6 +111,34 @@ public class Supplier {
 
         }
     }
+/*
+    private void AddNewItem() {
+        Scanner io = new Scanner(System.in);
+        System.out.println("Enter an Store Code");
+            long store_code = io.nextInt();
+            if(products.containsKey(store_code))
+        {
+            System.out.println(" Store Code: "+ store_code+"  is still exist");
+            return;
+        }
+            else {
+                System.out.println("Enter Name");
+                String name= io.next();
+                System.out.println("Enter Id product"); // the supplier which get here need know the ID product 
+                long id= io.nextInt();
+                System.out.println("Enter Price");
+                double price= io.nextInt();
+                System.out.println("Enter ");
+                long id= io.nextInt();
+                
+                
+
+            }
+        
+    }
+    */
+ 
+
     public BusinessLayer.Contract getContract() {
         return contract;
     }

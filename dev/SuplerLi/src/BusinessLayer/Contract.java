@@ -25,15 +25,13 @@ public class Contract {
 
     }
 
-    public int getTotalPriceDiscount(int amount) {
-        int min = 0;
+    public double getTotalPriceDiscount(double amount,double price) {
+        int min_key=0;
         for (Integer key : totalPriceDiscount.keySet()) {
-            if (amount < key) {
-                min = (1 - totalPriceDiscount.get(key)) * amount;
-            } else
-                break;
+            if(key<amount&&min_key<key)
+                min_key=key;
         }
-        return min;
+        return min_key*amount*price;
     }
 
     public Contract(String days, boolean delivery, HashMap<Integer, Integer> discounts) {
