@@ -54,21 +54,17 @@ public class SupplierController {
             }
         }
     }
-
-    private void ShowContract() {
-        int id_sup;
-        System.out.println("Enter an ID Supplier");
-        id_sup = io.nextInt();
-        try {
-            System.out.println(supplier.get(id_sup).getContract());
-        } catch (Exception e) { // need be change accordingly the service responses
-            System.out.println("ID supplier  " + id_sup + " is not exist");
-            ShowContract();
-        }
-
+    public boolean IsSupplierExistInSystem(int id_sup){
+        return supplier.containsKey(id_sup);
+    }
+     public void Addcontact(int id_sup,String contact){
+            supplier.get(id_sup).Addcontact(contact);
+     }
+    public BusinessLayer.Contract ShowContract(int id_sup) {
+        return supplier.get(id_sup).showContract();
     }
 
-    private void DeleteSupplier() {
+    public void DeleteSupplier() {
         System.out.println("Insert a Supplier ID");
         int id = io.nextInt();
         try {
@@ -81,32 +77,10 @@ public class SupplierController {
         System.out.println("Supplier " + id + " Deleted!");
     }
 
-    private void AddSupplier() {
-        System.out.println("Insert  an ID:");
-        int id = io.nextInt();
-
-        System.out.println("Insert  a Company Num:");
-        Long company = io.nextLong();
-
-        System.out.println("Insert  a name:");
-        String name = io.next();
-
-        System.out.println("Insert Contact:");
-        String contact = io.next();
-        List<String> Contacts = new LinkedList<>();
-        Contacts.add(contact);
-
-        System.out.println("Insert Payment Method:");
-        String payment = io.next();
-
-        System.out.println("Insert  a Bank Account:");
-        String bank = io.next();
-
+    public void AddSupplier(int id,long company,String name,List<String> Contacts,String payment,String bank) {
         BusinessLayer.Supplier sup = new BusinessLayer.Supplier(id, company, name, Contacts, payment, bank);
         supplier.put(id,sup);
-        System.out.println("Supplier was Successfully added , you may add a Contract");
     }
-
     // This method returns a LIST of all products currently available by known suppliers
     public LinkedList<Product> getAllProducts(){
         LinkedList<Product> result = new LinkedList<>();
@@ -117,6 +91,15 @@ public class SupplierController {
         }
         return result;
     }
+
+    public BusinessLayer.Supplier ShowSupInformation(int id_sup) {
+        return supplier.get(id_sup);
+    }
+
+    public List<String> showContacts(int id_sup) {
+        return supplier.get(id_sup).showContacts();
+    }
+
 }
 
 

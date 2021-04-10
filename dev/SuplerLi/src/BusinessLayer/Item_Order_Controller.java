@@ -10,13 +10,12 @@ public class Item_Order_Controller {
     private HashMap<Long, List<BusinessLayer.Product>> products;
     private HashMap<Integer, BusinessLayer.OutgoingOrder> orders; // every order is identified by the id (the key) of the supplier
 
-    Scanner io = new Scanner(System.in);
 
 // We create an instance of this controller when we need to CREATE a new order or CHANGE existing order, then it closes.
-    public Item_Order_Controller(LinkedList<Product> allProductsList, LinkedList<OutgoingOrder> allOrdersList) {
-        products = new HashMap<>();
+    public Item_Order_Controller(LinkedList<BusinessLayer.Product> allProductsList, LinkedList<BusinessLayer.Product> allOrdersList) {
+        products = new HashMap<Long, List<BusinessLayer.Product>>();
         //LinkedList<Product> allProductsList = supplierController.getAllProducts();
-        for (Product prod: allProductsList ) {
+        for (BusinessLayer.Product prod: allProductsList ) {
             Long currStoreCode = prod.getStoreCode();
             if (!products.containsKey(currStoreCode)) { // If the product ISN'T in the map of products we create a new list of all similar products from different suppliers
                 products.put(currStoreCode, new LinkedList<>());
@@ -26,7 +25,7 @@ public class Item_Order_Controller {
         }
 
         orders = new HashMap<>();
-        for (OutgoingOrder order: allOrdersList ) {
+        for (BusinessLayer.OutgoingOrder order: allOrdersList ) {
 //            long currOrderID = order
 //            if (!products.containsKey(currStoreCode)) { // If the product ISN'T in the map of products we create a new list of all similar products from different suppliers
 //                products.put(currStoreCode, new LinkedList<>());
@@ -38,52 +37,15 @@ public class Item_Order_Controller {
         //TODO: Fill all the previous orders.
     }
 
-    public void ItemOrderMenu() {
-        while (true) {
-            System.out.println("*** Item Order menu ***");
-            System.out.println("Please select an option:");
-            System.out.println("1) Add New Order ");
-            System.out.println("2)  Show Orders for a supplier");
-            System.out.println("3) Exit ");
 
 
-            int op = io.nextInt();
-
-            switch (op) {
-                case 1: {
-                    AddNewOrder();
-                    break;
-                }
-                case 2 : {
-                    ShowOrder();
-                    break;
-                }
-                case 3: {
-                    return;
-                }
-                default: {
-                    System.out.println("Selection Unrecognized");
-                    break;
-                }
-
-            }
-        }
+    public  boolean IsProductExistInSystem(int id_product){
+        return  products.containsKey(id_product);
     }
-
-    private void ShowOrder() {
-        System.out.println("Insert an Id Supplier");
-        int id = io.nextInt();
-        System.out.println(orders.get(id));
-    }
-
-    private void AddNewOrder() {
+    void AddNewOrder(int id_product, int amount) { // need add arguments to facade
         double min=0;
         int id_supplier_min=0;
         int index = 0 ; 
-        System.out.println("enter an ID prod"); // the id may be changein the future  by entering num product, manufacturer, and gramp_roduct and make a hash code convert to this integer
-        int id_product = io.nextInt();
-        System.out.println("enter an Amount");
-        int amount = io.nextInt();
         List<BusinessLayer.Product> prod= products.get(id_product);
         if(prod!=null)
         {
@@ -108,4 +70,19 @@ public class Item_Order_Controller {
         
     }
 
+    public boolean IsOrderExistInSystem(int id_order) {
+        return orders.containsKey(id_order);
+    }
+    public BusinessLayer.OutgoingOrder ShowOrder(int id_order){
+        for (BusinessLayer.OutgoingOrder order: orders){
+            if (order.IdOrder()==id_order){
+                return order;
+            }
+        }
+        return null;
+    }
+
+    public BusinessLayer.OutgoingOrder ShowOrderBySupplier(int id_sup) {
+        return orders.get(id_sup);
+    }
 }

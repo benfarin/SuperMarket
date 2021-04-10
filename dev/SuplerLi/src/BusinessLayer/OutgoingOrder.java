@@ -31,5 +31,8 @@ public class OutgoingOrder {
         System.out.println("product: "+id_item+"  was added successfully to order number:  "+id+"by the supplier num: "+ supplier_id);
 
     }
+    public long IdOrder(){
+        return id;
+    }
 
 }

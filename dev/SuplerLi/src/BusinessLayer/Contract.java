@@ -15,13 +15,13 @@ public class Contract {
 
     }
 
-    public void AddPriceDiscount() {
-        Scanner io = new Scanner(System.in);
-        System.out.println("Enter an amount for precent discount");
-        int amount = io.nextInt();
-        System.out.println("Enter an amount for precent discount");
-        int percent = io.nextInt();
-        totalPriceDiscount.put(amount, percent);
+    public void AddPriceDiscount(int amount,int precent) { // TODO:need be add to the facade by the arguments
+//        Scanner io = new Scanner(System.in);
+//        System.out.println("Enter an amount for precent discount");
+//        int amount = io.nextInt();
+//        System.out.println("Enter an amount for precent discount");
+//        int percent = io.nextInt();
+        totalPriceDiscount.put(amount, precent);
 
     }
 
