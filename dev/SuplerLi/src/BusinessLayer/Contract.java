@@ -9,10 +9,10 @@ public class Contract {
     private boolean needsDelivery;
     HashMap<Integer, Integer> totalPriceDiscount;
 
-    public Contract(String days, boolean delivery) {
+    public Contract(String days, boolean delivery, HashMap<Integer, Integer> discounts) {
         daysOfSupply = days;
         needsDelivery = delivery;
-
+        totalPriceDiscount = discounts;
     }
 
     public void AddPriceDiscount(int amount,int precent) { // TODO:need be add to the facade by the arguments
@@ -24,32 +24,46 @@ public class Contract {
         totalPriceDiscount.put(amount, precent);
 
     }
-
     public double getTotalPriceDiscount(double amount,double price) {
+        if(totalPriceDiscount!=null) {
+            int min_key = 0;
+            for (Integer key : totalPriceDiscount.keySet()) {
+                if (key < amount && min_key < key)
+                    min_key = key;
+            }
+            if (min_key!=0){
+                return(1 - (totalPriceDiscount.get(min_key) * 0.01)) * amount * price;
+            }
+            else {
+                return amount*price;
+            }
+        }
+        else {
+            return amount*price;
+        }
+    }
+    /*public double getTotalPriceDiscount(double amount,double price) {
         int min_key=0;
         for (Integer key : totalPriceDiscount.keySet()) {
             if(key<amount&&min_key<key)
                 min_key=key;
         }
-        return min_key*amount*price;
-    }
+        return (1-(totalPriceDiscount.get(min_key)*0.01))*amount*price; // TODO: change from niv
+    }*/ // old version of getTotalPriceDiscount
 
-    public Contract(String days, boolean delivery, HashMap<Integer, Integer> discounts) {
-        daysOfSupply = days;
-        needsDelivery = delivery;
-        totalPriceDiscount = discounts;
-    }
+
 
     public String toString() {
-        System.out.println("days of supply is:  " + daysOfSupply);
+        String s;
+        s="days of supply is:\t" + daysOfSupply+"\n";
         if (needsDelivery)
-            System.out.println(" Need Delivery");
+            s+=" Need Delivery\n";
         else
-            System.out.println("need Delivery");
+            s+="Does NOT need Delivery\n";
         for (int i = 0; i < totalPriceDiscount.size(); i++) { // printing all the discounts
-            System.out.println(totalPriceDiscount.keySet().toArray()[i] + "  :  " + totalPriceDiscount.get(totalPriceDiscount.keySet().toArray()[i]));
+            s+=totalPriceDiscount.keySet().toArray()[i] + "\t:\t" + totalPriceDiscount.get(totalPriceDiscount.keySet().toArray()[i])+"\n";
         }
-        return ""; //TODO: This might need to return a String and not print directly
+        return s;
     }
 }
 

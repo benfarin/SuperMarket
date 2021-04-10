@@ -78,7 +78,7 @@ import java.util.Scanner;
 
         private void  ShowOrderByIdOrder() {
             System.out.println("enter an ID Order");
-            int id_order = io.nextInt();
+            long id_order = io.nextLong();
             BusinessLayer.OutgoingOrder order=facade.ShowOrder(id_order);
             if(order==null){
                 System.out.println("Order:\t"+id_order+"\tisn't Exist");
@@ -101,8 +101,8 @@ import java.util.Scanner;
 
         private void AddNewOrder() {
             System.out.println("enter an ID prod"); // the id may be changein the future  by entering num product, manufacturer, and gramp_roduct and make a hash code convert to this integer
-            int id_product = io.nextInt();
-            if (facade.IsProductExistInSystem(id_product)){
+            long id_product = io.nextLong();
+            if (!facade.IsProductExistInSystem(id_product)){
                 System.out.println("there is no products with id\t"+id_product);
                 return;
             }
@@ -119,7 +119,8 @@ import java.util.Scanner;
                 System.out.println("4) Show Contacts of supplier ");
                 System.out.println("5) Add New Supplier ");
                 System.out.println("6) Delete Supplier");
-                System.out.println("7) Back to main Menu");
+            System.out.println("7) Add a contract to an existing supplier");
+                System.out.println("8) Back to main Menu");
                 int op = io.nextInt();
                 switch (op) {
                     case 1: {
@@ -148,13 +149,22 @@ import java.util.Scanner;
                         break;
 
                     }
-                    case 7: {
+                    case 7:{
+                        System.out.println("Enter supplier ID to add a contract");
+                        Integer supplier_id=io.nextInt();
+                        AddSupplierContract(supplier_id);
+                    }
+                    case 8: {
                         return;
                     }
 
 
                 }
             }
+
+        private void AddSupplierContract(Integer supplier_id) {
+            facade.AddSupplierContract(supplier_id);
+        }
 
         private void DeleteSupplier() {
             //TODO: Complete this

@@ -14,7 +14,7 @@ public class Product {
     public Product(String name, Long storeCode, Double price, HashMap<Integer, Double> highAmountDiscount, Long supplierSerialNum, BusinessLayer.Supplier supplier) {
         this.name = name;
         this.storeCode = storeCode;
-        this.price = price;
+        this.price = price; // This is how much the SUPPLIER demands for 1 unit of the product
         this.highAmountDiscount = highAmountDiscount; //TODO: do the correct assignment here for the new hashmap of discounts AND constructor for empty HighAmountDiscount
         this.supplierSerialNum = supplierSerialNum; // why do we need this?
         this.supplier = supplier;

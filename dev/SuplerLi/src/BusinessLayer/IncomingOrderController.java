@@ -38,46 +38,57 @@ public class IncomingOrderController {
 
 
 
-    public  boolean IsProductExistInSystem(int id_product){
+    public  boolean IsProductExistInSystem(Long id_product){
         return  products.containsKey(id_product);
     }
-    void AddNewOrder(int id_product, int amount) { // need add arguments to facade
+
+    /**
+     *
+     * @param id_product
+     * @param amount
+     */
+    void AddNewOrder(Long id_product, int amount) { // need add arguments to facade
         double min=0;
         int id_supplier_min=0;
-        int index = 0 ; 
-        List<BusinessLayer.Product> prod = products.get(id_product);
-        if(prod!=null)
-        {
-            min=prod.get(0).getSupplier().getContract().getTotalPriceDiscount(amount,prod.get(0).getPrice());
-        }
-        
-        for (int i=1;i<prod.size();i++){
-            double suspect_min = prod.get(i).getSupplier().getContract().getTotalPriceDiscount(amount,prod.get(i).getPrice());
-            if(min>suspect_min){
-                id_supplier_min = prod.get(i).getSupplier().getId_supplier();
-                min=suspect_min;
-                index = i;
+        int index = 0;
+
+        LinkedList<Product> prod = products.get(id_product);
+        if(prod!=null) {
+            min = prod.getFirst().getSupplier().getContract().getTotalPriceDiscount(amount, prod.getFirst().getPrice());
+            for (int i = 1; i < prod.size(); i++) {
+                double suspect_min = prod.get(i).getSupplier().getContract().getTotalPriceDiscount(amount, prod.get(i).getPrice());
+                if (min > suspect_min) {
+                    id_supplier_min = prod.get(i).getSupplier().getId_supplier();
+                    min = suspect_min;
+                    index = i;
+                }
             }
+            if (!orders.containsKey(id_supplier_min)) {
+                BusinessLayer.OutgoingOrder order = new BusinessLayer.OutgoingOrder(id_supplier_min, null);
+                orders.put(id_supplier_min, order);
+            }
+            orders.get(id_supplier_min).AddItem(prod.get(index).getStoreCode(), amount, min);
+
+            //TODO: If order exists we don't have to create a new instance of it
         }
-        if(!orders.containsKey(id_supplier_min)){
-            BusinessLayer.OutgoingOrder order = new BusinessLayer.OutgoingOrder(id_supplier_min,null);
-            orders.put(id_supplier_min,order);
-        }
-        orders.get(id_supplier_min).AddItem(prod.get(index).getStoreCode(),amount,min);
-        
-        //TODO: If order exists we don't have to create a new instance of it
-        
     }
 
     public boolean IsOrderExistInSystem(int id_order) {
         return orders.containsKey(id_order);
     }
 
-    public BusinessLayer.OutgoingOrder ShowOrder(int id_order){
-        if (orders.containsKey(id_order))
-            return orders.get(id_order);
-        else
-            return null;
+    /**
+     * This will return an existing order based on the STATIC auto generated order ID
+     * @param id_order
+     * @return
+     */
+    public BusinessLayer.OutgoingOrder ShowOrder(Long id_order){
+        for (OutgoingOrder order : orders.values()) {
+            if (order.getId()==id_order)
+                return order;
+
+        }
+        return null;
 //        for (BusinessLayer.OutgoingOrder order: orders){
 //            if (order.IdOrder()==id_order){
 //                return order;

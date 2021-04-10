@@ -60,6 +60,9 @@ public class SupplierController {
      public void AddContact(int id_sup, String contact){
             supplier.get(id_sup).AddContact(contact);
      }
+    public void AddSupplierContract(int supplier_id){
+        supplier.get(supplier_id).addContract();
+    }
 
     public BusinessLayer.Contract ShowContract(int id_sup) {
         return supplier.get(id_sup).showContract();
@@ -80,6 +83,7 @@ public class SupplierController {
 
     public void AddSupplier(int id,long company,String name,List<String> Contacts,String payment,String bank) {
         BusinessLayer.Supplier sup = new BusinessLayer.Supplier(id, company, name, Contacts, payment, bank);
+
         supplier.put(id,sup);
     }
     // This method returns a LIST of all products currently available by known suppliers

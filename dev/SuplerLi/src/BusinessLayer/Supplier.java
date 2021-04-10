@@ -35,6 +35,9 @@ public class Supplier {
         return products;
     }
 
+
+    public void setContract(Contract newContract) { this.contract = newContract; }
+
     public int getId_supplier() {
         return id_supplier;
     }
@@ -118,42 +121,42 @@ public class Supplier {
 
  
 
-    public BusinessLayer.Contract getContract() {
-        return contract;
-    }
-      private BusinessLayer.Contract addContract(String days,Boolean NeedDelivery,HashMap<Integer, Integer> totalPriceDiscount){
-        if( contract!=null) {
+    public Contract getContract() { return contract; }
+
+    protected Contract addContract(){
+       if( contract!=null) {
             System.out.println("this supplier already has a Contract");
             return contract;
         }
-        else {
-//            Scanner io = new Scanner(System.in);
-//            BusinessLayer.Contract new_contract=null;
-//            System.out.println("Insert Days of Supply:");
-//            String  days = io.next();
-//            System.out.println("Is needed delivery? ");
-//            System.out.println("y/n");
-//            String delivery = io.next();
-//            boolean NeedDelivery;
-//            NeedDelivery=delivery.compareTo("y")==0;
-//            HashMap<Integer,Integer> totalPriceDiscount = new HashMap<Integer, Integer>();
-//            System.out.println("Do you want enter discount?");
-//            System.out.println("y/n");
-//            String y_discount = io.next();
-//            int amount;
-//            int precent;
-//            while (y_discount.compareTo("y")==0){
-//                System.out.println("enter amount products: ");
-//                amount= io.nextInt();
-//                System.out.println("enter the discount percent for amount: "+ amount);
-//                precent=io.nextInt();
-//                totalPriceDiscount.put(amount,precent);
-//                System.out.println("Do you want enter more discounts?");
-//                System.out.println("y/n");
-//                y_discount = io.next();
-//                
-//            }
-            BusinessLayer.Contract new_contract = new BusinessLayer.Contract(days, NeedDelivery, totalPriceDiscount);
+       else {
+            Scanner io = new Scanner(System.in);
+            Contract new_contract;
+            System.out.println("Insert Days of Supply:");
+            String  days = io.next();
+            System.out.println("Is needed delivery? ");
+            System.out.println("y/n");
+            String delivery = io.next();
+            boolean NeedDelivery;
+            NeedDelivery=delivery.compareTo("y")==0;
+            HashMap<Integer,Integer> totalPriceDiscount = new HashMap<Integer, Integer>();
+            System.out.println("Do you want enter a PRICE BASED discount?");
+            System.out.println("y/n");
+            String y_discount = io.next();
+            int amount;
+            int precent;
+            while (y_discount.compareTo("y")==0){
+                System.out.println("enter amount products: ");
+                amount= io.nextInt();
+                System.out.println("enter the discount percent for amount: "+ amount);
+                precent=io.nextInt();
+                totalPriceDiscount.put(amount,precent);
+                System.out.println("Do you want enter more discounts?");
+                System.out.println("y/n");
+                y_discount = io.next();
+
+            }
+            new_contract = new Contract(days, NeedDelivery, totalPriceDiscount);
+            setContract(new_contract);
             return new_contract;
         }
 
@@ -165,7 +168,7 @@ public class Supplier {
         contacts.add(new_contact);
     }
 
-    public BusinessLayer.Contract showContract() {
+    public Contract showContract() {
         return contract;
     }
      public List<String> showContacts() {

@@ -4,10 +4,11 @@ import java.util.HashMap;
 import java.time.*;
 
 public class OutgoingOrder {
-    private  static  Long static_id;
+    private  static  Long static_id= new Long(0);
     private Long id;
     private Integer supplier_id;
     private HashMap<Long,Integer> items; //  the key is the id_tem ,  the value is the amount.
+    //TODO: nim: I think Key needs to be the supplierSerialNum (because this order goes to them). Or maybe the product object and value=amount
     private LocalDate deliveryDate;
     private double totalPrice;
 
@@ -19,7 +20,10 @@ public class OutgoingOrder {
         deliveryDate = delivery_Date;
         totalPrice = 0;
     }
-    public void AddItem(Long id_item,int amount , double price){
+
+    public Long getId() {return id;}
+
+    public void AddItem(Long id_item, int amount , double price){
         if(items.containsKey(id_item)){
             items.put(id_item,items.get(id_item)+amount);
             totalPrice+=price;
@@ -28,11 +32,18 @@ public class OutgoingOrder {
             items.put(id_item,amount);
             totalPrice+=price;
         }
-        System.out.println("product: "+id_item+"  was added successfully to order number:  "+id+"by the supplier num: "+ supplier_id);
+        System.out.println("product #"+id_item+" was added successfully to order #: "+id+" by the supplier #"+ supplier_id);
 
     }
-    public long IdOrder(){
-        return id;
-    }
 
+    @Override
+    public String toString() {
+        return "OutgoingOrder{" +
+                "id=" + id +
+                ", supplier_id=" + supplier_id +
+                ", items=" + items +
+                ", deliveryDate=" + deliveryDate +
+                ", totalPrice=" + totalPrice +
+                '}';
+    }
 }
