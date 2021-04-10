@@ -1,9 +1,5 @@
-package SuplerLi.src.PresentationLayer;
+package PresentationLayer;
 
-import java.sql.Array;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
@@ -13,13 +9,16 @@ import java.util.Scanner;
         BusinessLayer.Facade facade;
 
         public Service(){
+
             this.facade = new BusinessLayer.Facade();
+            startMenu();
+
         }
 
         public void startMenu() {
 
             while (true) {
-                System.out.println("\t\tSuper-Li's inventory department\n\n" +
+                System.out.println(
                         "1)\tSupplier Menu\n" +
                         "2)\tOrder Menu\n" +
                         "3)\tExit"
@@ -79,10 +78,10 @@ import java.util.Scanner;
 
         private void  ShowOrderByIdOrder() {
             System.out.println("enter an ID Order");
-            int id_sup = io.nextInt();
-            BusinessLayer.OutgoingOrder order=facade.ShowOrderBySupplier(id_sup);
+            int id_order = io.nextInt();
+            BusinessLayer.OutgoingOrder order=facade.ShowOrder(id_order);
             if(order==null){
-                System.out.println("Order:\t"+id_sup+"\tisn't Exist");
+                System.out.println("Order:\t"+id_order+"\tisn't Exist");
             }
             else {
                 System.out.println(order);
@@ -103,7 +102,7 @@ import java.util.Scanner;
         private void AddNewOrder() {
             System.out.println("enter an ID prod"); // the id may be changein the future  by entering num product, manufacturer, and gramp_roduct and make a hash code convert to this integer
             int id_product = io.nextInt();
-            if (!facade.IsProductExistInSystem(id_product)){
+            if (facade.IsProductExistInSystem(id_product)){
                 System.out.println("there is no products with id\t"+id_product);
                 return;
             }
@@ -124,7 +123,7 @@ import java.util.Scanner;
                 int op = io.nextInt();
                 switch (op) {
                     case 1: {
-                        Addcontact();
+                        AddContact();
                         break;
                     }
                     case 2: {
@@ -158,12 +157,13 @@ import java.util.Scanner;
             }
 
         private void DeleteSupplier() {
+            //TODO: Complete this
         }
 
         private void AddNewSupplier() {
             System.out.println("Insert  an ID:");
             int id = io.nextInt();
-            if(!facade.IsSupplierExistInSystem(id)){
+            if(facade.IsSupplierExistInSystem(id)){
                 System.out.println("Supplier number:\t"+id+"\t is Exist in System");
                 return;
 
@@ -221,13 +221,13 @@ import java.util.Scanner;
                 System.out.println(facade.ShowContract(id_sup));
             }
         }
-        private void Addcontact() { //done
+        private void AddContact() { //done
             System.out.println("what is the ID Supplier");
             int id_sup= io.nextInt();
             if (facade.IsSupplierExistInSystem(id_sup)) {
                 System.out.println("write the contact information");
                 String new_contact = io.next();
-                facade.Addcontact(id_sup, new_contact);
+                facade.AddContact(id_sup, new_contact);
             }
             else {
                 System.out.println("id number:\t"+id_sup+" isn't exist");

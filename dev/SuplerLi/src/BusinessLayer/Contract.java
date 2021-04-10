@@ -7,7 +7,7 @@ public class Contract {
 
     private String daysOfSupply;
     private boolean needsDelivery;
-    HashMap<Integer, Integer> totalPriceDiscount; //TODO: Change the price to Double
+    HashMap<Integer, Integer> totalPriceDiscount;
 
     public Contract(String days, boolean delivery) {
         daysOfSupply = days;
@@ -49,6 +49,7 @@ public class Contract {
         for (int i = 0; i < totalPriceDiscount.size(); i++) { // printing all the discounts
             System.out.println(totalPriceDiscount.keySet().toArray()[i] + "  :  " + totalPriceDiscount.get(totalPriceDiscount.keySet().toArray()[i]));
         }
+        return ""; //TODO: This might need to return a String and not print directly
     }
 }
 

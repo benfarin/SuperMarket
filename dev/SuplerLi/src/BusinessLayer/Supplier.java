@@ -18,6 +18,7 @@ public class Supplier {
 
 
 
+
     public Supplier(Integer id_supplier, Long id_company, String name, List<String> contacts, String paymentMethod, String bankAccount) {
         this.id_supplier = id_supplier;
         this.id_company = id_company;
@@ -25,9 +26,11 @@ public class Supplier {
         this.contacts = contacts;
         this.paymentMethod = paymentMethod;
         this.bankAccount = bankAccount;
-        this.contract= addContract();
+        this.contract= null; //addContract();
         this.products=new HashMap<Long, BusinessLayer.Product>();
     }
+
+
     public HashMap<Long, Product> getProducts() {
         return products;
     }
@@ -158,7 +161,7 @@ public class Supplier {
     }
 
 
-    public void Addcontact(String new_contact ) {
+    public void AddContact(String new_contact ) {
         contacts.add(new_contact);
     }
 

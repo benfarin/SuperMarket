@@ -1,7 +1,5 @@
 package BusinessLayer;
 
-import sun.awt.image.ImageWatched;
-
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Scanner;
@@ -16,13 +14,13 @@ public class SupplierController {
         supplier = sup;
     }
 
-    public void SupplierMenu() {
+    /*public void SupplierMenu() {
         while (true) {
             System.out.println("*** Supplier menu ***");
             System.out.println("Please select an option:");
             System.out.println("1) Add New Supplier ");
             System.out.println("2) Delete Supplier");
-            System.out.println("3) Supplier Menu");
+            System.out.println("3) Show Contract");
             System.out.println("4) Exit ");
 
 
@@ -39,7 +37,9 @@ public class SupplierController {
                     break;
                 }
                 case 3: {
-                    ShowContract();
+                    System.out.println("Enter supplier ID to see their contract");
+                    int supID = io.nextInt();
+                    ShowContract(supID);
                     break;
                 }
 
@@ -53,13 +53,14 @@ public class SupplierController {
 
             }
         }
-    }
+    }*/
     public boolean IsSupplierExistInSystem(int id_sup){
         return supplier.containsKey(id_sup);
     }
-     public void Addcontact(int id_sup,String contact){
-            supplier.get(id_sup).Addcontact(contact);
+     public void AddContact(int id_sup, String contact){
+            supplier.get(id_sup).AddContact(contact);
      }
+
     public BusinessLayer.Contract ShowContract(int id_sup) {
         return supplier.get(id_sup).showContract();
     }

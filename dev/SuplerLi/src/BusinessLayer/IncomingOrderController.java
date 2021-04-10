@@ -2,19 +2,18 @@ package BusinessLayer;
 
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Scanner;
 import java.util.List;
 
-public class Item_Order_Controller {
+public class IncomingOrderController {
     // INT is the StoreCode for the product, LIST is for all the products from different suppliers under same code
-    private HashMap<Long, List<BusinessLayer.Product>> products;
+    private HashMap<Long, LinkedList<Product>> products;
     private HashMap<Integer, BusinessLayer.OutgoingOrder> orders; // every order is identified by the id (the key) of the supplier
 
 
 // We create an instance of this controller when we need to CREATE a new order or CHANGE existing order, then it closes.
-    public Item_Order_Controller(LinkedList<BusinessLayer.Product> allProductsList, LinkedList<BusinessLayer.Product> allOrdersList) {
-        products = new HashMap<Long, List<BusinessLayer.Product>>();
-        //LinkedList<Product> allProductsList = supplierController.getAllProducts();
+    public IncomingOrderController(LinkedList<BusinessLayer.Product> allProductsList, LinkedList<BusinessLayer.OutgoingOrder> allOrdersList) {
+        products = new HashMap<Long, LinkedList<Product>>();
+
         for (BusinessLayer.Product prod: allProductsList ) {
             Long currStoreCode = prod.getStoreCode();
             if (!products.containsKey(currStoreCode)) { // If the product ISN'T in the map of products we create a new list of all similar products from different suppliers
@@ -46,7 +45,7 @@ public class Item_Order_Controller {
         double min=0;
         int id_supplier_min=0;
         int index = 0 ; 
-        List<BusinessLayer.Product> prod= products.get(id_product);
+        List<BusinessLayer.Product> prod = products.get(id_product);
         if(prod!=null)
         {
             min=prod.get(0).getSupplier().getContract().getTotalPriceDiscount(amount,prod.get(0).getPrice());
@@ -73,13 +72,18 @@ public class Item_Order_Controller {
     public boolean IsOrderExistInSystem(int id_order) {
         return orders.containsKey(id_order);
     }
+
     public BusinessLayer.OutgoingOrder ShowOrder(int id_order){
-        for (BusinessLayer.OutgoingOrder order: orders){
-            if (order.IdOrder()==id_order){
-                return order;
-            }
-        }
-        return null;
+        if (orders.containsKey(id_order))
+            return orders.get(id_order);
+        else
+            return null;
+//        for (BusinessLayer.OutgoingOrder order: orders){
+//            if (order.IdOrder()==id_order){
+//                return order;
+//            }
+//        }
+
     }
 
     public BusinessLayer.OutgoingOrder ShowOrderBySupplier(int id_sup) {
