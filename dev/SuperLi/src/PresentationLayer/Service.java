@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Scanner;
 
     public class Service {
-        public static Scanner io = new Scanner(System.in).useDelimiter("\n");
+        public static Scanner io = new Scanner(System.in);
         BusinessLayer.Facade facade;
 
         public Service(){
