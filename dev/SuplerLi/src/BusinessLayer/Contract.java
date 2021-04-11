@@ -14,6 +14,11 @@ public class Contract {
         needsDelivery = delivery;
         totalPriceDiscount = discounts;
     }
+    public Contract(String days, boolean delivery){
+        daysOfSupply = days;
+        needsDelivery = delivery;
+        totalPriceDiscount = new HashMap<Integer, Integer>();
+    }
 
     public void AddPriceDiscount(int amount,int precent) { // TODO:need be add to the facade by the arguments
 //        Scanner io = new Scanner(System.in);

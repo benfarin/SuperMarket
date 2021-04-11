@@ -167,8 +167,16 @@ import java.util.Scanner;
         }
 
         private void DeleteSupplier() {
-            //TODO: Complete this
+            System.out.println("Insert  an ID:");
+            int id = io.nextInt();
+            if (!facade.IsSupplierExistInSystem(id)) {
+                System.out.println("Supplier number:\t" + id + "\t is not Exist in System");
+                return;
+            }
+            facade.DeleteSupplier(id);
+            System.out.println("Supplier " + id + " Deleted!");
         }
+
 
         private void AddNewSupplier() {
             System.out.println("Insert  an ID:");
@@ -196,11 +204,7 @@ import java.util.Scanner;
             String bank = io.next();
             facade.AddNewSupplier(id,company,name,Contacts,payment,bank);
             System.out.println("Supplier was Successfully added , you may add a Contract");
-
-
-
         }
-
         private void showContacts() { //done
             System.out.println("what is the ID Supplier");
             int id_sup = io.nextInt();

@@ -26,11 +26,9 @@ public class Supplier {
         this.contacts = contacts;
         this.paymentMethod = paymentMethod;
         this.bankAccount = bankAccount;
-        this.contract= null; //addContract();
+        this.contract= new Contract(null,false,new HashMap<Integer,Integer>()); //addContract();
         this.products=new HashMap<Long, BusinessLayer.Product>();
     }
-
-
     public HashMap<Long, Product> getProducts() {
         return products;
     }

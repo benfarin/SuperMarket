@@ -7,6 +7,9 @@ public class OutgoingOrder {
     private  static  Long static_id= new Long(0);
     private Long id;
     private Integer supplier_id;
+    public HashMap<Long, Integer> getItems() {
+        return items;
+    }
     private HashMap<Long,Integer> items; //  the key is the id_tem ,  the value is the amount.
     //TODO: nim: I think Key needs to be the supplierSerialNum (because this order goes to them). Or maybe the product object and value=amount
     private LocalDate deliveryDate;
@@ -20,6 +23,7 @@ public class OutgoingOrder {
         deliveryDate = delivery_Date;
         totalPrice = 0;
     }
+
 
     public Long getId() {return id;}
 
@@ -45,5 +49,9 @@ public class OutgoingOrder {
                 ", deliveryDate=" + deliveryDate +
                 ", totalPrice=" + totalPrice +
                 '}';
+    }
+
+    public double getTotalPrice() {
+        return totalPrice;
     }
 }

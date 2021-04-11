@@ -6,7 +6,7 @@ public class Product {
     private String name;
     private Long storeCode;
     private Double price;
-    private HashMap<Integer, Double> highAmountDiscount;
+    private HashMap<Integer, Double> highAmountDiscount; //  the key is the amount the value is the precent of discount
     private Long supplierSerialNum;
     private BusinessLayer.Supplier supplier;
 
@@ -16,12 +16,14 @@ public class Product {
         this.storeCode = storeCode;
         this.price = price; // This is how much the SUPPLIER demands for 1 unit of the product
         this.highAmountDiscount = highAmountDiscount; //TODO: do the correct assignment here for the new hashmap of discounts AND constructor for empty HighAmountDiscount
-        this.supplierSerialNum = supplierSerialNum; // why do we need this?
+        this.supplierSerialNum = supplierSerialNum;
         this.supplier = supplier;
     }
-    public  void  AddDiscount(){ // need be fill by creating new item from Supplier
-        
+
+    public void AddDiscount() { // need be fill by creating new item from Supplier
+
     }
+
     protected String getName() {
         return name;
     }
@@ -70,5 +72,16 @@ public class Product {
         this.supplier = supplier;
     }
 
-
+    public double GetCheapestPrice(int amount) {
+        double min = this.price * amount;
+        if (highAmountDiscount != null) {
+            for (Integer key : highAmountDiscount.keySet()) {
+                if (key <= amount) {
+                    if (highAmountDiscount.get(key) * 0.01 * amount * price < min)
+                        min = highAmountDiscount.get(key) * 0.01 * amount * price;
+                }
+            }
+        }
+        return min;
+    }
 }

@@ -102,6 +102,10 @@ public class Facade {
         supplierController.AddSupplierContract(supplier_id);
     }
 
+    public void DeleteSupplier(int id) {
+        supplierController.DeleteSupplier(id);
+    }
+
 
     //TODO: Implement the facade like this one: https://www.geeksforgeeks.org/facade-design-pattern-introduction/
 
