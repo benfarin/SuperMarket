@@ -67,7 +67,7 @@ public class IncomingOrderController {
      * @param id_product
      * @param amount
      */
-     public void AddNewOrder(Long id_product, int amount) { // need add arguments to facade
+     public void AddNewOrder(int id_product, int amount) { // need add arguments to facade
         double min=0;
         int id_supplier_min=0;
         int index = 0;
