@@ -1,4 +1,4 @@
-package PresentationLayer;
+package PresentationLayer.Inventory;
 
 import BusinessLayer.Facade;
 
