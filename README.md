@@ -2,8 +2,8 @@
  ~~~~~~~~~~~~~~~~~~~~~
  Inventory & Suppliers 
  ~~~~~~~~~~~~~~~~~~~~~
- Hila Klein 205781917
- Eylon Sade 206174435
- Rotem Cohen 209014570
- Niv Ben Farin 312178171
- Nimrod Burg 206283913
+ Hila Klein 205781917\n
+ Eylon Sade 206174435\n
+ Rotem Cohen 209014570\n
+ Niv Ben Farin 312178171\n
+ Nimrod Burg 206283913\n
