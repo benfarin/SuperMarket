@@ -1,8 +1,7 @@
 package Tests;
 
-import BusinessLayer.Product;
-import BusinessLayer.Supplier;
-import BusinessLayer.SupplierController;
+import BusinessLayer.Suppliers.Supplier;
+import BusinessLayer.Suppliers.SupplierController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

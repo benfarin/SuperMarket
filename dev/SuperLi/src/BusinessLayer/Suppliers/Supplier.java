@@ -1,6 +1,5 @@
-package BusinessLayer;
+package BusinessLayer.Suppliers;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
@@ -13,8 +12,8 @@ public class Supplier {
     private List<String> contacts;
     private String paymentMethod;
     private String bankAccount;
-    private  HashMap<Long, BusinessLayer.Product> products; // do we want hold the product himself? or the id?
-    private BusinessLayer.Contract contract;
+    private  HashMap<Long, Product> products; // do we want hold the product himself? or the id?
+    private Contract contract;
 
 
 
@@ -27,7 +26,7 @@ public class Supplier {
         this.paymentMethod = paymentMethod;
         this.bankAccount = bankAccount;
         this.contract= new Contract(null,false,new HashMap<Integer,Integer>()); //addContract();
-        this.products=new HashMap<Long, BusinessLayer.Product>();
+        this.products=new HashMap<Long, Product>();
     }
     public HashMap<Long, Product> getProducts() {
         return products;

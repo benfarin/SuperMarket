@@ -1,20 +1,19 @@
-package BusinessLayer;
+package BusinessLayer.Suppliers;
 
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 
 public class IncomingOrderController {
     // INT is the StoreCode for the product, LIST is for all the products from different suppliers under same code
     private HashMap<Long, LinkedList<Product>> products;
-    private HashMap<Integer, BusinessLayer.OutgoingOrder> orders; // every order is identified by the id (the key) of the supplier
+    private HashMap<Integer, OutgoingOrder> orders; // every order is identified by the id (the key) of the supplier
 
 
 // We create an instance of this controller when we need to CREATE a new order or CHANGE existing order, then it closes.
-    public IncomingOrderController(LinkedList<BusinessLayer.Product> allProductsList, LinkedList<BusinessLayer.OutgoingOrder> allOrdersList) {
+    public IncomingOrderController(LinkedList<Product> allProductsList, LinkedList<OutgoingOrder> allOrdersList) {
         products = new HashMap<Long, LinkedList<Product>>();
 
-        for (BusinessLayer.Product prod : allProductsList) {
+        for (Product prod : allProductsList) {
             Long currStoreCode = prod.getStoreCode();
             if (!products.containsKey(currStoreCode)) { // If the product ISN'T in the map of products we create a new list of all similar products from different suppliers
                 products.put(currStoreCode, new LinkedList<>());
@@ -25,7 +24,7 @@ public class IncomingOrderController {
 
         orders = new HashMap<>();
     }
-//        for (BusinessLayer.OutgoingOrder order: allOrdersList ) {
+//        for (BusinessLayer.Suppliers.OutgoingOrder order: allOrdersList ) {
 //            long currOrderID = order
 //            if (!products.containsKey(currStoreCode)) { // If the product ISN'T in the map of products we create a new list of all similar products from different suppliers
 //                products.put(currStoreCode, new LinkedList<>());
@@ -86,7 +85,7 @@ public class IncomingOrderController {
                 }
             }
             if (!orders.containsKey(id_supplier_min)) {
-                BusinessLayer.OutgoingOrder order = new BusinessLayer.OutgoingOrder(id_supplier_min, null);
+                OutgoingOrder order = new OutgoingOrder(id_supplier_min, null);
                 orders.put(id_supplier_min, order);
             }
             orders.get(id_supplier_min).AddItem(prod.get(index).getStoreCode(), amount, min);
@@ -102,14 +101,14 @@ public class IncomingOrderController {
      * @param id_order
      * @return
      */
-    public BusinessLayer.OutgoingOrder ShowOrder(Long id_order){
+    public OutgoingOrder ShowOrder(Long id_order){
         for (OutgoingOrder order : orders.values()) {
             if (order.getId().equals(id_order))
                 return order;
 
         }
         return null;
-//        for (BusinessLayer.OutgoingOrder order: orders){
+//        for (BusinessLayer.Suppliers.OutgoingOrder order: orders){
 //            if (order.IdOrder()==id_order){
 //                return order;
 //            }
@@ -117,7 +116,7 @@ public class IncomingOrderController {
 
     }
 
-    public BusinessLayer.OutgoingOrder ShowOrderBySupplier(int id_sup) {
+    public OutgoingOrder ShowOrderBySupplier(int id_sup) {
         return orders.get(id_sup);
     }
 }

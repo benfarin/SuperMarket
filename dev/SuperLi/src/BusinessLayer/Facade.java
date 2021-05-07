@@ -1,12 +1,14 @@
 package BusinessLayer;
 
+import BusinessLayer.Suppliers.*;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
 public class Facade {
     IncomingOrderController incoming_order_controller;
-    BusinessLayer.SupplierController supplierController;
+    SupplierController supplierController;
 
     public Facade(){
         // Need to get: HashMap<Integer, Supplier>initialSupplierMap, LinkedList<OutgoingOrder> allOrdersList
@@ -52,7 +54,7 @@ public class Facade {
         moshe.setContract(contractMoshe);
 
 
-        supplierController = new BusinessLayer.SupplierController(initialSupplierMap);
+        supplierController = new SupplierController(initialSupplierMap);
         incoming_order_controller = new IncomingOrderController(supplierController.getAllProducts(), allOrdersList);
     }
 
@@ -74,7 +76,7 @@ public class Facade {
 
     public List<String> showContacts(int id_sup) { return supplierController.showContacts(id_sup); }
 
-    public BusinessLayer.OutgoingOrder ShowOrder(Long id_order){ return incoming_order_controller.ShowOrder(id_order); }
+    public OutgoingOrder ShowOrder(Long id_order){ return incoming_order_controller.ShowOrder(id_order); }
 
     public boolean IsProductExistInSystem(Long id_product){ return incoming_order_controller.IsProductExistInSystem(id_product); }
     public void AddNewOrder(Long id_product, Integer amount) {
@@ -85,7 +87,7 @@ public class Facade {
         return incoming_order_controller.IsOrderExistInSystem(id_order);
     }
 
-    public BusinessLayer.OutgoingOrder ShowOrderBySupplier(int id_sup) {
+    public OutgoingOrder ShowOrderBySupplier(int id_sup) {
         return  incoming_order_controller.ShowOrderBySupplier(id_sup);
     }
 

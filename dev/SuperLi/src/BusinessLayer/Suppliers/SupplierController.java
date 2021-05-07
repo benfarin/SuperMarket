@@ -1,4 +1,4 @@
-package BusinessLayer;
+package BusinessLayer.Suppliers;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -7,10 +7,10 @@ import java.util.List;
 
 
 public class SupplierController {
-    private HashMap<Integer, BusinessLayer.Supplier> supplier; // the int key as a id_supplier
+    private HashMap<Integer, Supplier> supplier; // the int key as a id_supplier
     Scanner io = new Scanner(System.in);
 
-    public SupplierController(HashMap<Integer, BusinessLayer.Supplier> sup) {
+    public SupplierController(HashMap<Integer, Supplier> sup) {
         supplier = sup;
     }
 
@@ -24,7 +24,7 @@ public class SupplierController {
         supplier.get(supplier_id).addContract();
     }
 
-    public BusinessLayer.Contract ShowContract(int id_sup) {
+    public Contract ShowContract(int id_sup) {
         return supplier.get(id_sup).showContract();
     }
 
@@ -33,7 +33,7 @@ public class SupplierController {
     }
 
     public void AddSupplier(int id,long company,String name,List<String> Contacts,String payment,String bank) {
-        BusinessLayer.Supplier sup = new BusinessLayer.Supplier(id, company, name, Contacts, payment, bank);
+        Supplier sup = new Supplier(id, company, name, Contacts, payment, bank);
         supplier.put(id,sup);
     }
     // This method returns a LIST of all products currently available by known suppliers
@@ -45,7 +45,7 @@ public class SupplierController {
         return result;
     }
 
-    public BusinessLayer.Supplier ShowSupInformation(int id_sup) {
+    public Supplier ShowSupInformation(int id_sup) {
         return supplier.get(id_sup);
     }
 

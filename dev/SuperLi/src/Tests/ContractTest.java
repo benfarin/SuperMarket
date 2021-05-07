@@ -1,6 +1,6 @@
 package Tests;
 
-import BusinessLayer.Contract;
+import BusinessLayer.Suppliers.Contract;
 import org.junit.Before;
 import org.junit.Test;
 

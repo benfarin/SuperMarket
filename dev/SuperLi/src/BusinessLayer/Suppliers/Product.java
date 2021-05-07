@@ -1,4 +1,4 @@
-package BusinessLayer;
+package BusinessLayer.Suppliers;
 
 import java.util.HashMap;
 
@@ -8,10 +8,10 @@ public class Product {
     private Double price;
     private HashMap<Integer, Double> highAmountDiscount; //  the key is the amount the value is the precent of discount
     private Long supplierSerialNum;
-    private BusinessLayer.Supplier supplier;
+    private Supplier supplier;
 
 
-    public Product(String name, Long storeCode, Double price, HashMap<Integer, Double> highAmountDiscount, Long supplierSerialNum, BusinessLayer.Supplier supplier) {
+    public Product(String name, Long storeCode, Double price, HashMap<Integer, Double> highAmountDiscount, Long supplierSerialNum, Supplier supplier) {
         this.name = name;
         this.storeCode = storeCode;
         this.price = price; // This is how much the SUPPLIER demands for 1 unit of the product
@@ -64,11 +64,11 @@ public class Product {
         this.supplierSerialNum = supplierSerialNum;
     }
 
-    public BusinessLayer.Supplier getSupplier() {
+    public Supplier getSupplier() {
         return supplier;
     }
 
-    protected void setSupplier(BusinessLayer.Supplier supplier) {
+    public void setSupplier(Supplier supplier) {
         this.supplier = supplier;
     }
 

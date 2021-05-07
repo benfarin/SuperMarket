@@ -1,13 +1,8 @@
 package Tests;
 
-import BusinessLayer.OutgoingOrder;
-import BusinessLayer.Supplier;
-import org.junit.Assert;
-import org.junit.Before;
+import BusinessLayer.Suppliers.OutgoingOrder;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
-
-import java.util.LinkedList;
 
 import static org.junit.Assert.*;
 

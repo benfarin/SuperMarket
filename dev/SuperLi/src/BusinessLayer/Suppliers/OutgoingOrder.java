@@ -1,4 +1,4 @@
-package BusinessLayer;
+package BusinessLayer.Suppliers;
 
 import java.util.HashMap;
 import java.time.*;

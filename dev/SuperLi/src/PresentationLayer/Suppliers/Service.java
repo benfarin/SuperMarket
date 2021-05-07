@@ -1,4 +1,6 @@
-package PresentationLayer;
+package PresentationLayer.Suppliers;
+
+import BusinessLayer.Suppliers.OutgoingOrder;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -86,7 +88,7 @@ import java.util.Scanner;
         private void  ShowOrderByIdOrder() {
             System.out.println("enter an ID Order");
             long id_order = io.nextLong();
-            BusinessLayer.OutgoingOrder order=facade.ShowOrder(id_order);
+            OutgoingOrder order=facade.ShowOrder(id_order);
             if(order==null){
                 System.out.println("Order:\t"+id_order+"\tisn't Exist");
             }
