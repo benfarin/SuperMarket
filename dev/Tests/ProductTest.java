@@ -1,7 +1,7 @@
 package Tests;
 
-import BusinessLayer.Category;
-import BusinessLayer.Product;
+import BusinessLayer.Inventory.Category;
+import BusinessLayer.Inventory.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -1,5 +1,7 @@
 package BusinessLayer;
 
+import BusinessLayer.Inventory.*;
+
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -60,10 +62,12 @@ public class Facade {
             return "Can't reduce storage quantity because the product "+prodName+" does not exist\n";
         }
         invCnt.setDefectiveItems(prodName,def);
-//        for(DefectiveReport defRep: repCnt.getDefReports()){ // if this prod in any reports it will add the amount
-//            if(defRep.isProdInRep(prodName))
-//
-//        }
+        for(DefectiveReport defRep: repCnt.getDefReports()){ // if this prod in any reports it will add the amount
+            if(defRep.isProdInRep(prodName)){
+                //CALL SUPPLIER
+            }
+
+        }
         return "set "+ prodName+"'s defective items to " + def+"\n";
     }
     public String setMinimum(String prodName , int minimum) {

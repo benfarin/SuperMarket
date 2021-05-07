@@ -1,11 +1,7 @@
 package Tests;
 
-import BusinessLayer.Category;
-import BusinessLayer.Product;
-import org.junit.Before;
-import org.junit.jupiter.api.AfterEach;
+import BusinessLayer.Inventory.Category;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.text.ParseException;
