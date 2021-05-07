@@ -1,25 +1,23 @@
 package BusinessLayer;
 
-<<<<<<< HEAD
 import BusinessLayer.Inventory.*;
 
 import java.util.Date;
-=======
 import BusinessLayer.Suppliers.*;
 
 import java.util.HashMap;
->>>>>>> 312178171_206283913
 import java.util.LinkedList;
 import java.util.List;
 
 public class Facade {
-<<<<<<< HEAD
     private InventoryController invCnt;
     private ReportController repCnt;
+    IncomingOrderController incoming_order_controller;
+    SupplierController supplierController;
 
     public Facade() {
-        this.repCnt = new ReportController();
-        this.invCnt = new InventoryController();
+
+        initialize();
     }
     public String addCategory (String name, List<String> subCategories){
         invCnt.addCategory(name,subCategories);
@@ -276,22 +274,15 @@ public class Facade {
             return "The report "+id+ " does not exist\n";
         return repCnt.exportReport(id);
     }
-=======
-    IncomingOrderController incoming_order_controller;
-    SupplierController supplierController;
 
-    public Facade(){
-        // Need to get: HashMap<Integer, Supplier>initialSupplierMap, LinkedList<OutgoingOrder> allOrdersList
-        initialize();
-    }
 
     private void initialize(){
-        Product one = new Product("milk 3%", new Long(123123), 5.9, null, new Long(82723), null);
-        Product two = new Product("Honey", new Long(34622), 5.9, null, new Long(34644), null);
-        Product three = new Product("Chocolate", new Long(67933), 5.0, null, new Long(122352), null);
-        Product four = new Product("Chocolate", new Long(67933), 7.5, null, new Long(2623643), null);
-        Product five = new Product("Banana", new Long(57423), 10.3, null, new Long(234), null);
-        Product six = new Product("Eggs L", new Long(52321), 22.0, null, new Long(2311), null);
+        ProductPerSup one = new ProductPerSup("milk 3%", new Long(123123), 5.9, null, new Long(82723), null);
+        ProductPerSup two = new ProductPerSup("Honey", new Long(34622), 5.9, null, new Long(34644), null);
+        ProductPerSup three = new ProductPerSup("Chocolate", new Long(67933), 5.0, null, new Long(122352), null);
+        ProductPerSup four = new ProductPerSup("Chocolate", new Long(67933), 7.5, null, new Long(2623643), null);
+        ProductPerSup five = new ProductPerSup("Banana", new Long(57423), 10.3, null, new Long(234), null);
+        ProductPerSup six = new ProductPerSup("Eggs L", new Long(52321), 22.0, null, new Long(2311), null);
 
         Supplier moshe = new Supplier(12, new Long(13524), "Moshe Inc", new LinkedList<>(), "Cash", "" );
         Supplier itzik = new Supplier(5, new Long(124), "Itzik & Sons", new LinkedList<>(), "Shotef+60", "1358223" );
@@ -322,10 +313,12 @@ public class Facade {
         contractItzik.AddPriceDiscount(40, 10);
         itzik.setContract(contractItzik);
         moshe.setContract(contractMoshe);
-
-
         supplierController = new SupplierController(initialSupplierMap);
         incoming_order_controller = new IncomingOrderController(supplierController.getAllProducts(), allOrdersList);
+//..............INV..............
+        this.repCnt = new ReportController();
+        this.invCnt = new InventoryController();
+
     }
 
     public void AddContact(int id_sup, String new_contact) {
@@ -377,7 +370,4 @@ public class Facade {
         supplierController.DeleteSupplier(id);
     }
 
-
-
->>>>>>> 312178171_206283913
 }

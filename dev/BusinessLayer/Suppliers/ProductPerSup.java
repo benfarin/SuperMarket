@@ -2,7 +2,7 @@ package BusinessLayer.Suppliers;
 
 import java.util.HashMap;
 
-public class Product {
+public class ProductPerSup {
     private String name;
     private Long storeCode;
     private Double price;
@@ -11,7 +11,7 @@ public class Product {
     private Supplier supplier;
 
 
-    public Product(String name, Long storeCode, Double price, HashMap<Integer, Double> highAmountDiscount, Long supplierSerialNum, Supplier supplier) {
+    public ProductPerSup(String name, Long storeCode, Double price, HashMap<Integer, Double> highAmountDiscount, Long supplierSerialNum, Supplier supplier) {
         this.name = name;
         this.storeCode = storeCode;
         this.price = price; // This is how much the SUPPLIER demands for 1 unit of the product

@@ -5,15 +5,15 @@ import java.util.LinkedList;
 
 public class IncomingOrderController {
     // INT is the StoreCode for the product, LIST is for all the products from different suppliers under same code
-    private HashMap<Long, LinkedList<Product>> products;
+    private HashMap<Long, LinkedList<ProductPerSup>> products;
     private HashMap<Integer, OutgoingOrder> orders; // every order is identified by the id (the key) of the supplier
 
 
 // We create an instance of this controller when we need to CREATE a new order or CHANGE existing order, then it closes.
-    public IncomingOrderController(LinkedList<Product> allProductsList, LinkedList<OutgoingOrder> allOrdersList) {
-        products = new HashMap<Long, LinkedList<Product>>();
+    public IncomingOrderController(LinkedList<ProductPerSup> allProductsList, LinkedList<OutgoingOrder> allOrdersList) {
+        products = new HashMap<Long, LinkedList<ProductPerSup>>();
 
-        for (Product prod : allProductsList) {
+        for (ProductPerSup prod : allProductsList) {
             Long currStoreCode = prod.getStoreCode();
             if (!products.containsKey(currStoreCode)) { // If the product ISN'T in the map of products we create a new list of all similar products from different suppliers
                 products.put(currStoreCode, new LinkedList<>());
@@ -47,7 +47,7 @@ public class IncomingOrderController {
         }
 
         for(Long productStoreCode : orders.get(supplier_id).getItems().keySet()){
-            for(Product prod : products.get(productStoreCode)){
+            for(ProductPerSup prod : products.get(productStoreCode)){
                 if (prod.getSupplier().getId_supplier()==supplier_id)
                     prodCounter++;
                     s+=prodCounter+". "+prod.getSupplierSerialNum()+"\t"+prod.getName()+"\t"+prod.getStoreCode()+"\n";
@@ -72,7 +72,7 @@ public class IncomingOrderController {
         int id_supplier_min=0;
         int index = 0;
 
-        LinkedList<Product> prod = products.get(id_product);
+        LinkedList<ProductPerSup> prod = products.get(id_product);
         if(prod!=null) {
             min = prod.getFirst().getSupplier().getContract().getTotalPriceDiscount(amount, prod.getFirst().GetCheapestPrice(amount));
             id_supplier_min=prod.getFirst().getSupplier().getId_supplier();

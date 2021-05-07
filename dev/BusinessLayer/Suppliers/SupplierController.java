@@ -37,8 +37,8 @@ public class SupplierController {
         supplier.put(id,sup);
     }
     // This method returns a LIST of all products currently available by known suppliers
-    public LinkedList<Product> getAllProducts(){
-        LinkedList<Product> result = new LinkedList<>();
+    public LinkedList<ProductPerSup> getAllProducts(){
+        LinkedList<ProductPerSup> result = new LinkedList<>();
         for (Supplier sup: supplier.values()) {
             result.addAll(sup.getProducts().values());
         }
