@@ -131,7 +131,8 @@ public class Facade {
         }
         String s ="";
         if(invCnt.setStorageQuantity(prodName,storageQuantity)){
-            //if quantity below minimum call the supplier
+            Product p = invCnt.getProduct(prodName);
+            AddNewOrder(p.getId(),4*p.getMinimum());
             s = "*** WARNING!!! "+ prodName+"'s storage quantity is under the minimum ***\n";
         }
         return "Storage quantity changed to " + storageQuantity+"\n"+s;
