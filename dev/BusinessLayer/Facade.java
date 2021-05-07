@@ -3,16 +3,21 @@ package BusinessLayer;
 import BusinessLayer.Inventory.*;
 
 import java.util.Date;
+import BusinessLayer.Suppliers.*;
+
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
 public class Facade {
     private InventoryController invCnt;
     private ReportController repCnt;
+    IncomingOrderController incoming_order_controller;
+    SupplierController supplierController;
 
     public Facade() {
-        this.repCnt = new ReportController();
-        this.invCnt = new InventoryController();
+
+        initialize();
     }
     public String addCategory (String name, List<String> subCategories){
         invCnt.addCategory(name,subCategories);
@@ -106,8 +111,9 @@ public class Facade {
         }
         String s = "";
         if(invCnt.reduceStorageQuantity(prodName,reduce)){
-                //if quantity below minimum call the supplier
-                s = "*** WARNING!!! "+ prodName+"'s storage quantity is under the minimum ***\n";
+            Product p = invCnt.getProduct(prodName);
+            AddNewOrder((long) p.getId(),4*p.getMinimum());
+                s = "*** WARNING!!! "+ prodName+"'s storage quantity is under the minimum ***\nsend order to supplier\n";
             }
 
         return "Reduced "+ reduce+" from " + prodName+" storage quantity\n"+s;
@@ -125,7 +131,8 @@ public class Facade {
         }
         String s ="";
         if(invCnt.setStorageQuantity(prodName,storageQuantity)){
-            //if quantity below minimum call the supplier
+            Product p = invCnt.getProduct(prodName);
+            AddNewOrder((long) p.getId(),4*p.getMinimum());
             s = "*** WARNING!!! "+ prodName+"'s storage quantity is under the minimum ***\n";
         }
         return "Storage quantity changed to " + storageQuantity+"\n"+s;
@@ -269,4 +276,100 @@ public class Facade {
             return "The report "+id+ " does not exist\n";
         return repCnt.exportReport(id);
     }
+
+
+    private void initialize(){
+        ProductPerSup one = new ProductPerSup("milk 3%", new Long(123123), 5.9, null, new Long(82723), null);
+        ProductPerSup two = new ProductPerSup("Honey", new Long(34622), 5.9, null, new Long(34644), null);
+        ProductPerSup three = new ProductPerSup("Chocolate", new Long(67933), 5.0, null, new Long(122352), null);
+        ProductPerSup four = new ProductPerSup("Chocolate", new Long(67933), 7.5, null, new Long(2623643), null);
+        ProductPerSup five = new ProductPerSup("Banana", new Long(57423), 10.3, null, new Long(234), null);
+        ProductPerSup six = new ProductPerSup("Eggs L", new Long(52321), 22.0, null, new Long(2311), null);
+
+        Supplier moshe = new Supplier(12, new Long(13524), "Moshe Inc", new LinkedList<>(), "Cash", "" );
+        Supplier itzik = new Supplier(5, new Long(124), "Itzik & Sons", new LinkedList<>(), "Shotef+60", "1358223" );
+
+        //HashMap<Integer, Supplier>initialSupplierMap, LinkedList<OutgoingOrder> allOrdersList
+
+        HashMap<Integer, Supplier> initialSupplierMap = new HashMap<>();
+        LinkedList<OutgoingOrder> allOrdersList = new LinkedList<>();
+        initialSupplierMap.put(12, moshe);
+        initialSupplierMap.put(5, itzik);
+
+        moshe.getProducts().put(new Long(123123), one);
+        moshe.getProducts().put(new Long(67933), three);
+        itzik.getProducts().put(new Long(67933), four);
+        itzik.getProducts().put(new Long(34622), two);
+        itzik.getProducts().put(new Long(57423), five);
+        itzik.getProducts().put(new Long(52321), six);
+        one.setSupplier(moshe);
+        two.setSupplier(itzik);
+        three.setSupplier(moshe);
+        four.setSupplier(itzik);
+        five.setSupplier(itzik);
+        six.setSupplier(itzik);
+
+        Contract contractMoshe= new Contract("Friday", false, new HashMap<>());
+        contractMoshe.AddPriceDiscount(50, 5);
+        Contract contractItzik= new Contract("Sunday", false, new HashMap<>());
+        contractItzik.AddPriceDiscount(40, 10);
+        itzik.setContract(contractItzik);
+        moshe.setContract(contractMoshe);
+        supplierController = new SupplierController(initialSupplierMap);
+        incoming_order_controller = new IncomingOrderController(supplierController.getAllProducts(), allOrdersList);
+//..............INV..............
+        this.repCnt = new ReportController();
+        this.invCnt = new InventoryController();
+
+    }
+
+    public void AddContact(int id_sup, String new_contact) {
+        supplierController.AddContact(id_sup,new_contact);
+    }
+
+    public boolean IsSupplierExistInSystem(int id_sup) {
+        return supplierController.IsSupplierExistInSystem(id_sup);
+    }
+
+    public Contract ShowContract(int id_sup) {
+        return supplierController.ShowContract(id_sup);
+    }
+
+    public Supplier ShowSupInformation(int id_sup) {
+        return supplierController.ShowSupInformation(id_sup);
+    }
+
+    public List<String> showContacts(int id_sup) { return supplierController.showContacts(id_sup); }
+
+    public OutgoingOrder ShowOrder(Long id_order){ return incoming_order_controller.ShowOrder(id_order); }
+
+    public boolean IsProductExistInSystem(Long id_product){ return incoming_order_controller.IsProductExistInSystem((long) id_product); }
+    public void AddNewOrder(Long id_product, Integer amount) {
+        incoming_order_controller.AddNewOrder(id_product,amount);
+    }
+
+    public boolean IsOrderExistInSystem(int id_order) {
+        return incoming_order_controller.IsOrderExistInSystem(id_order);
+    }
+
+    public OutgoingOrder ShowOrderBySupplier(int id_sup) {
+        return  incoming_order_controller.ShowOrderBySupplier(id_sup);
+    }
+
+    public void AddNewSupplier(int id, Long company, String name, List<String> contacts, String payment, String bank) {
+        supplierController.AddSupplier(id,company,name,contacts,payment,bank);
+    }
+
+    public void AddSupplierContract(int supplier_id){
+        supplierController.AddSupplierContract(supplier_id);
+    }
+
+    public String printProductSerialNumber(Integer supplier_id){
+        return incoming_order_controller.printProductsSerialNumbers(supplier_id);
+    }
+
+    public void DeleteSupplier(int id) {
+        supplierController.DeleteSupplier(id);
+    }
+
 }
