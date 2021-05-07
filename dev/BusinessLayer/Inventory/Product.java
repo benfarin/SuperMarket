@@ -1,4 +1,6 @@
-package BusinessLayer;
+package BusinessLayer.Inventory;
+
+import BusinessLayer.Inventory.Category;
 
 import java.util.Date;
 import java.util.HashMap;

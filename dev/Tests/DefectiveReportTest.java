@@ -1,9 +1,8 @@
 package Tests;
 
-import BusinessLayer.Category;
-import BusinessLayer.DefectiveReport;
-import BusinessLayer.Product;
-import org.junit.jupiter.api.BeforeEach;
+import BusinessLayer.Inventory.Category;
+import BusinessLayer.Inventory.DefectiveReport;
+import BusinessLayer.Inventory.Product;
 import org.junit.jupiter.api.Test;
 
 import java.util.LinkedList;

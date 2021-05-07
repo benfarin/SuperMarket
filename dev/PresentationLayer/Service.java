@@ -1,19 +1,14 @@
 package PresentationLayer;
 
-import BusinessLayer.Category;
 import BusinessLayer.Facade;
-import BusinessLayer.Product;
 
-import java.sql.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Service {
-    public static Scanner s = new Scanner(System.in).useDelimiter("\n");
+    public static Scanner s = new Scanner(System.in);
+//            .useDelimiter("\n");
     Facade facade;
 
     public Service(){
@@ -21,8 +16,7 @@ public class Service {
     }
 
     public void startMenu() {
-
-        while (true) {
+        do {
             System.out.println("\t\tSuper-Li's inventory department\n\n" +
                     "1)\tProduct menu\n" +
                     "2)\tCategory menu\n" +
@@ -30,28 +24,28 @@ public class Service {
                     "4)\tDefective report\n" +
                     "5)\tExit"
             );
-
-            int choice = s.nextInt();
-            switch (choice) {
-                case 1:
-                    productMenu();
-                    break;
-                case 2:
-                    categoryMenu();
-                    break;
-                case 3:
-                    stockReport();
-                    break;
-                case 4:
-                    defectiveReport();
-                    break;
-                case 5:
-                    return;
-                default:
-                    System.out.println("Not a valid option, please try again.\n");
-                    break;
-            }
+                int choice = s.nextInt();
+                switch (choice) {
+                    case 1:
+                        productMenu();
+                        break;
+                    case 2:
+                        categoryMenu();
+                        break;
+                    case 3:
+                        stockReport();
+                        break;
+                    case 4:
+                        defectiveReport();
+                        break;
+                    case 5:
+                        return;
+                    default:
+                        System.out.println("Not a valid option, please try again.\n");
+                        break;
+                }
         }
+        while (true) ;
     }
     public void productMenu(){
         while (true) {
