@@ -6,12 +6,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class Service {
+public class InvService {
     public static Scanner s = new Scanner(System.in);
 //            .useDelimiter("\n");
     Facade facade;
 
-    public Service(){
+    public InvService(){
         this.facade = new Facade();
     }
 
