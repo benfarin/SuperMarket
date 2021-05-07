@@ -7,14 +7,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
-    public class Service {
+    public class SupService {
         public static Scanner io = new Scanner(System.in);
         BusinessLayer.Facade facade;
 
-        public Service(){
+        public SupService(){
 
             this.facade = new BusinessLayer.Facade();
-            startMenu();
 
         }
 
@@ -47,7 +46,7 @@ import java.util.Scanner;
             while (true) {
                 System.out.println("*** Item Order menu ***");
                 System.out.println("Please select an option:");
-                System.out.println("1) Add New Order ");
+                System.out.println("1)  Add New Order ");
                 System.out.println("2)  Show Order by Id Order");
                 System.out.println("3)  Show Order for a Supplier");
                 System.out.println("4)  Print supplier serial numbers for existing order");
