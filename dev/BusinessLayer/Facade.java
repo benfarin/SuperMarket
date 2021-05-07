@@ -266,6 +266,15 @@ public class Facade {
         repCnt.addProdToDefRep(id,p);
         return "Added the product " + product+ " to "+ id + " report\n";
     }
+    public void sendOrder(){
+        HashMap<Integer, Integer> order = new HashMap<>();
+        order = repCnt.sendReport();
+        for(Integer i : order.keySet())
+            if(order.get(i) > 0){
+                //todo
+                incoming_order_controller.AddNewOrder(Long.valueOf(i),order.get(i));
+        }
+    }
     public String exportStockReport(int id){
         if(repCnt.getStoReport(id) == null)
             return "The report "+id+ " does not exist\n";

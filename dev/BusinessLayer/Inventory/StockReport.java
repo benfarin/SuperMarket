@@ -1,5 +1,6 @@
 package BusinessLayer.Inventory;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -34,4 +35,5 @@ public class StockReport extends Report {
                 "ID = " + Id +
                 "\nDate = " + date +"\n\n"+ s;
     }
+
 }

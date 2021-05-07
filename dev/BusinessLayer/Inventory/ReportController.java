@@ -1,5 +1,7 @@
 package BusinessLayer.Inventory;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -66,6 +68,19 @@ public class ReportController {
         defRep.addProd(p);
     }
 
+    public HashMap<Integer, Integer> sendReport(){
+        HashMap<Integer, Integer> report = new HashMap<>();
+        List<Category> cat = new ArrayList<>();
+        for(StockReport s : stockReports)
+             cat = s.getCategories();
+        for (Category c : cat) {
+            for(Product p: c.getProducts()){
+                report.put(p.getId(), p.getOrderAmount());
+            }
+        }
+        stockReports.clear();
+        return report;
+    }
     public List<DefectiveReport> getDefReports() {
         return defReports;
     }
