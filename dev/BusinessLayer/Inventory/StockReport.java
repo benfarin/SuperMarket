@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class StockReport extends Report {
+    private static int day = 3;
     private List<Category> categories;
 
     public StockReport(){
@@ -21,6 +22,9 @@ public class StockReport extends Report {
         return categories;
     }
 
+    public void setDay(int day){
+        this.day = day;
+    }
     @Override
     public String exportReport() {
         String s ="";

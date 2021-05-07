@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Product {
-    static int ID = 0;
+    static int ID = 1;
     private int id;
     private String name;
     private String manufacture;
