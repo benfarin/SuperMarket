@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Category {
-
     private String name;
     private Category supCategory;
     private List<Category> subCategories;

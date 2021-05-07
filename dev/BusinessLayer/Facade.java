@@ -28,7 +28,9 @@ public class Facade {
     }
 
     //-------------------------PRODUCT--------------------------
-
+    public Product getProdByID(int id){
+        return invCnt.getProdByID(id);
+    }
     public String setManufacture(String prodName,String manu){
         if(invCnt.getProduct(prodName) == null){
             return "The product "+prodName+" does not exist\n";

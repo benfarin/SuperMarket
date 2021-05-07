@@ -7,7 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Product {
-
+    static int ID = 0;
+    private int id;
     private String name;
     private String manufacture;
     private Category category;
@@ -39,6 +40,8 @@ public class Product {
         this.discount = 0;
         this.discountDate = null;
         this.defectiveItem = 0;
+        this.id = ID;
+        ID++;
         category.addProduct(this);
     }
 
@@ -102,6 +105,10 @@ public class Product {
         if(defectiveItem > 0) {
             this.defectiveItem = defectiveItem;
         }
+    }
+
+    public int getId() {
+        return id;
     }
 
     public boolean setMinimum(int minimum) {

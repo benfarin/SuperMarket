@@ -67,6 +67,13 @@ public class InventoryController {
 //        if (!categories.contains(c))
 //            categories.add(c);
 //    }
+    public Product getProdByID(int id){
+        for (Product p : products) {
+            if (p.getId() == id)
+                return p;
+        }
+        return null;
+    }
     public void setManufacture(String name, String manu){
         Product p = getProduct(name);
         p.setManufacture(manu);
