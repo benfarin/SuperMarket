@@ -112,7 +112,7 @@ public class Facade {
         String s = "";
         if(invCnt.reduceStorageQuantity(prodName,reduce)){
             Product p = invCnt.getProduct(prodName);
-            AddNewOrder(p.getId(),4*p.getMinimum());
+            AddNewOrder((long) p.getId(),4*p.getMinimum());
                 s = "*** WARNING!!! "+ prodName+"'s storage quantity is under the minimum ***\nsend order to supplier\n";
             }
 
@@ -132,7 +132,7 @@ public class Facade {
         String s ="";
         if(invCnt.setStorageQuantity(prodName,storageQuantity)){
             Product p = invCnt.getProduct(prodName);
-            AddNewOrder(p.getId(),4*p.getMinimum());
+            AddNewOrder((long) p.getId(),4*p.getMinimum());
             s = "*** WARNING!!! "+ prodName+"'s storage quantity is under the minimum ***\n";
         }
         return "Storage quantity changed to " + storageQuantity+"\n"+s;
@@ -343,8 +343,8 @@ public class Facade {
 
     public OutgoingOrder ShowOrder(Long id_order){ return incoming_order_controller.ShowOrder(id_order); }
 
-    public boolean IsProductExistInSystem(Long id_product){ return incoming_order_controller.IsProductExistInSystem(id_product); }
-    public void AddNewOrder(int id_product, Integer amount) {
+    public boolean IsProductExistInSystem(Long id_product){ return incoming_order_controller.IsProductExistInSystem((long) id_product); }
+    public void AddNewOrder(Long id_product, Integer amount) {
         incoming_order_controller.AddNewOrder(id_product,amount);
     }
 

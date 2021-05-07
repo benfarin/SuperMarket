@@ -1,6 +1,7 @@
 package PresentationLayer.Suppliers;
 
-import BusinessLayer.OutgoingOrder;
+import BusinessLayer.Suppliers.*;
+import BusinessLayer.Suppliers.OutgoingOrder;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -110,7 +111,7 @@ import java.util.Scanner;
 
         private void AddNewOrder() {
             System.out.println("enter an ID prod"); // the id may be changein the future  by entering num product, manufacturer, and gramp_roduct and make a hash code convert to this integer
-            long id_product = io.nextLong();
+            Long id_product = io.nextLong();
             if (!facade.IsProductExistInSystem(id_product)){
                 System.out.println("there is no products with id\t"+id_product);
                 return;
