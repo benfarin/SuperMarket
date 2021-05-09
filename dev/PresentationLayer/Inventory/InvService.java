@@ -303,7 +303,8 @@ public class InvService {
                     "4)\tset category discount\n" +
                     "5)\tset category discount date\n" +
                     "6)\tDisplay category\n" +
-                    "7)\tExit"
+                    "7)\tdelete category\n" +
+                    "8)\tExit"
             );
 
             int choice = s.nextInt();
@@ -327,12 +328,20 @@ public class InvService {
                     printCategory();
                     break;
                 case 7:
+                    deleteCategory();
+                    break;
+                case 8:
                     return;
                 default:
                     System.out.println("Not a valid option, please try again.\n");
                     break;
             }
         }
+    }
+    private void deleteCategory(){
+        System.out.print("Category's name- ");
+        String catName = s.next();
+        facade.deleteCategory(catName);
     }
     private void addCategory(){
         System.out.print("Category's name- ");

@@ -72,9 +72,9 @@ public class Facade {
         }
         invCnt.setDefectiveItems(prodName,def);
         for(DefectiveReport defRep: repCnt.getDefReports()){ // if this prod in any reports it will add the amount
-            if(defRep.isProdInRep(prodName)){
-                //CALL SUPPLIER
-            }
+//            if(defRep.isProdInRep(prodName)){
+//                //CALL SUPPLIER
+//            }
 
         }
         return "set "+ prodName+"'s defective items to " + def+"\n";
@@ -161,7 +161,12 @@ public class Facade {
 
     //-------------------------CATEGORY--------------------------
 
-
+    public String deleteCategory(String catName){
+        if(invCnt.getCategory(catName)==null){
+            return "Can't delete "+catName+" this category does not exist\n";
+        }
+        return "The category "+ catName +"was deleted";
+    }
     public String addSub(String mainCat,String subC){
         if(invCnt.getCategory(mainCat)==null){
             return "Can't add sub-category because main category "+mainCat+" does not exist\n"+"add main category first\n";

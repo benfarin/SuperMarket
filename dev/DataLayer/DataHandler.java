@@ -14,7 +14,7 @@ public class DataHandler {
             catMapper.addCategory(name,super_cat,discount,discountDate);
         }
         catch (Exception e){
-            System.out.println("got exception from database, try to add category");
+            System.out.println("got exception from database, try to add category\n"+e.getMessage());
         }
     }
     public void updateDiscounts(String name, int discount, Date discountDate){
@@ -22,7 +22,7 @@ public class DataHandler {
             catMapper.updateDiscounts(name,discount,discountDate);
         }
         catch (Exception e){
-            System.out.println("got exception from database, try to update discount");
+            System.out.println("got exception from database, try to update discount\n"+e.getMessage());
         }
     }
     public void updateDiscDate(String name, Date discountDate){
@@ -30,7 +30,15 @@ public class DataHandler {
             catMapper.updateDiscDate(name,discountDate);
         }
         catch (Exception e){
-            System.out.println("got exception from database, try to update discount date");
+            System.out.println("got exception from database, try to update discount date\n"+e.getMessage());
+        }
+    }
+    public void deleteCategory(String name){
+        try{
+            catMapper.deleteCategory(name);
+        }
+        catch (Exception e){
+            System.out.println("got exception from database, try to delete category\n"+e.getMessage());
         }
     }
 }
