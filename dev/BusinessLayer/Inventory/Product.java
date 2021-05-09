@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Product {
-    static int ID = 0;
+    static int ID = 1;
     private int id;
     private String name;
     private String manufacture;
@@ -20,6 +20,7 @@ public class Product {
     private double priceToCustomer;
     private int defectiveItem;
     private int minimum;
+    private int orderAmount;
     private Map<Double,Date> priceToCusHistory;
     private Map<Double,Date> priceFromSupHistory;
 
@@ -36,6 +37,7 @@ public class Product {
         priceToCusHistory.put(priceToCustomer, new Date());
         this.minimum = minimum;
         this.storageQuantity= 0;
+        this.orderAmount = minimum*4;
         this.storeQuantity = 0;
         this.discount = 0;
         this.discountDate = null;
@@ -195,5 +197,11 @@ public class Product {
                 "Price From Supplier = " + priceFromSupplier + "\n" +
                 "Price To Customer = " + priceToCustomer + "\n" +
                 "Defective Item = " + defectiveItem + "\n";
+    }
+
+    public int getOrderAmount() {
+       if(orderAmount-storageQuantity < 0)
+            return 0;
+       return orderAmount-storageQuantity;
     }
 }
