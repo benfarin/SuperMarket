@@ -14,7 +14,7 @@ public class Data {
     public void connect(){
         try {
           //  Class.forName("org.sqlite.JDBC");
-            con = DriverManager.getConnection("jdbc:sqlite:dev/SQL_Inventory_Suppliers.db");
+//            con = DriverManager.getConnection("jdbc:sqlite:dev/SQL_Inventory_Suppliers.db");
         }
 
         catch ( Exception e ) {
