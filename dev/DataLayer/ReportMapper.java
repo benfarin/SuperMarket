@@ -32,7 +32,7 @@ public class ReportMapper {
                 int id = res.getInt("rid");
                 Date date = res.getDate("date");
                 Statement stmt1 = this.con.createStatement();
-                ResultSet res1 = stmt1.executeQuery("SELECT * FROM StockReport WHERE pid="+id);
+                ResultSet res1 = stmt1.executeQuery("SELECT * FROM StockReport WHERE rid="+id);
                 StockReport re = new StockReport(id, date);
                 while(res1.next()) {
                     stock = true;
@@ -43,39 +43,63 @@ public class ReportMapper {
 
                 }
                 else{
-                    res1 = stmt1.executeQuery("SELECT * FROM DefectiveReport WHERE pid="+id);
+                    res1 = stmt1.executeQuery("SELECT * FROM DefectiveReport WHERE rid="+id);
                     DefectiveReport re1 = new DefectiveReport(id, date);
                     while(res1.next()) {
                         re1.addProd(facade.getProdByID(res1.getInt("pid")));
                     }
-                    if (stock) {
                         defectiveReports.put(id, re1);
+                        stock = false;
 
-                    }
 
                 }
             }
         }
 
-//        public HashMap<Integer, Integer> setDiscounts(int supplierID) throws SQLException {
-//            Statement stmt = this.con.createStatement();
-//            ResultSet res = stmt.executeQuery("SELECT * FROM DiscountContract WHERE sid="+supplierID+";");
-//            HashMap<Integer, Integer> discountsMap = new HashMap<>();
-//
-//            while(res.next())
-//            {
-//                int amount = res.getInt("amount");
-//                int discount = res.getInt("discount");
-//                discountsMap.put(amount, discount);
-//            }
-//            return discountsMap;
-//        }
+    public void deleteStockReport(int id)throws SQLException{
+        Statement stmt = this.con.createStatement();
+        ResultSet res = stmt.executeQuery("DELETE FROM Report WHERE rid ="+id);
+        res = stmt.executeQuery("DELETE FROM StockReport WHERE rid ="+id);
+    }
+    public void deleteDefectiveReport(int id)throws SQLException{
+        Statement stmt = this.con.createStatement();
+        ResultSet res = stmt.executeQuery("DELETE FROM Report WHERE rid ="+id);
+        res = stmt.executeQuery("DELETE FROM DefectiveReport WHERE rid ="+id);
+    }
+    public void addStockCat(int id, String cat) throws SQLException{
+        Statement stmt = this.con.createStatement();
+        ResultSet res = stmt.executeQuery("INSERT INTO StockReport (rid, category_name) VALUES ("+id+","+cat+")");
+    }
+    public void addStock(int id, Date date, List<String> cat) throws SQLException{
+        Statement stmt = this.con.createStatement();
+        ResultSet res = stmt.executeQuery("INSERT INTO Report (rid, date) VALUES ("+id+","+date+")");
+        for(String s : cat){
+            addStockCat(id, s);
+        }
+    }
+    public void addDefective(int id, Date date, List<Integer> prod) throws SQLException{
+        Statement stmt = this.con.createStatement();
+        ResultSet res = stmt.executeQuery("INSERT INTO Report (rid, date) VALUES ("+id+","+date+")");
+        for(Integer p : prod){
+            addDefectiveProd(id, p);
+        }
+    }
+    public void addDefectiveProd(int id, int prod) throws SQLException{
+        Statement stmt = this.con.createStatement();
+        ResultSet res = stmt.executeQuery("INSERT INTO DefectiveReport (rid, pid) VALUES ("+id+","+prod+")");
+    }
 
-
+    public void deleteStockCat(int id, String cat)throws SQLException{
+        Statement stmt = this.con.createStatement();
+        ResultSet res = stmt.executeQuery("DELETE FROM StockReport WHERE rid = "+id+" AND category_name = "+cat);
+    }
+    public void deleteDefectiveProd(int id, int pid)throws SQLException{
+        Statement stmt = this.con.createStatement();
+        ResultSet res = stmt.executeQuery("DELETE FROM DefectiveReport WHERE rid = "+id+" AND pid = "+pid);
+    }
     public HashMap<Integer, StockReport> getStockReports() {
         return stockReports;
     }
-
     public HashMap<Integer, DefectiveReport> getDefectiveReports() {
         return defectiveReports;
     }
