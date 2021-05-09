@@ -31,5 +31,9 @@ public abstract class Report {
         this.Id = ID;
         this.date = new Date(System.currentTimeMillis());
     }
+    public Report(int id, Date date){
+        this.Id = id;
+        this.date = date;
+    }
 
 }

@@ -31,6 +31,10 @@ public class DefectiveReport extends Report {
         super();
         this.defectiveProducts = new LinkedList<>();
     }
+    public DefectiveReport(int id, Date date){
+        super(id, date);
+        this.defectiveProducts = new LinkedList<>();
+    }
 
     public void addProd(Product p){
         if(!defectiveProducts.contains(p))

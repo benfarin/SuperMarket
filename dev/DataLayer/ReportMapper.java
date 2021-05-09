@@ -16,45 +16,45 @@ import java.util.List;
 
 public class ReportMapper {
 
-    private HashMap<Integer, StockReport> stockReports;
+        private HashMap<Integer, StockReport> stockReports;
     private HashMap<Integer, DefectiveReport> defectiveReports;
     private Connection con=null;
-    private Facade facade;
+        private Facade facade;
 
-    public ReportMapper() throws SQLException {
-        stockReports =new HashMap<>();
-        Statement stmt = this.con.createStatement();
-        ResultSet res = stmt.executeQuery("SELECT * FROM Report");
-        List<Category> categories1;
-        boolean stock = false;
-        while(res.next())
-        {
-            int id = res.getInt("rid");
-            Date date = res.getDate("date");
-            Statement stmt1 = this.con.createStatement();
-            ResultSet res1 = stmt1.executeQuery("SELECT * FROM StockReport WHERE rid="+id);
-            StockReport re = new StockReport(id, date);
-            while(res1.next()) {
-                stock = true;
-                re.addCategory(facade.getCategory(res1.getString("category_name")));
-            }
-            if (stock) {
-                stockReports.put(id, re);
-
-            }
-            else{
-                res1 = stmt1.executeQuery("SELECT * FROM DefectiveReport WHERE rid="+id);
-                DefectiveReport re1 = new DefectiveReport(id, date);
+        public ReportMapper() throws SQLException {
+            stockReports =new HashMap<>();
+            Statement stmt = this.con.createStatement();
+            ResultSet res = stmt.executeQuery("SELECT * FROM Report");
+            List<Category> categories1;
+            boolean stock = false;
+            while(res.next())
+            {
+                int id = res.getInt("rid");
+                Date date = res.getDate("date");
+                Statement stmt1 = this.con.createStatement();
+                ResultSet res1 = stmt1.executeQuery("SELECT * FROM StockReport WHERE rid="+id);
+                StockReport re = new StockReport(id, date);
                 while(res1.next()) {
-                    re1.addProd(facade.getProdByID(res1.getInt("pid")));
+                    stock = true;
+                    re.addCategory(facade.getCategory(res1.getString("category_name")));
                 }
-                defectiveReports.put(id, re1);
-                stock = false;
+                if (stock) {
+                    stockReports.put(id, re);
+
+                }
+                else{
+                    res1 = stmt1.executeQuery("SELECT * FROM DefectiveReport WHERE rid="+id);
+                    DefectiveReport re1 = new DefectiveReport(id, date);
+                    while(res1.next()) {
+                        re1.addProd(facade.getProdByID(res1.getInt("pid")));
+                    }
+                        defectiveReports.put(id, re1);
+                        stock = false;
 
 
+                }
             }
         }
-    }
 
     public void deleteStockReport(int id)throws SQLException{
         Statement stmt = this.con.createStatement();
@@ -104,3 +104,5 @@ public class ReportMapper {
         return defectiveReports;
     }
 }
+
+
