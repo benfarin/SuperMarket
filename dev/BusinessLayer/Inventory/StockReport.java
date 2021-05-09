@@ -1,5 +1,6 @@
 package BusinessLayer.Inventory;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -12,7 +13,10 @@ public class StockReport extends Report {
         super();
         this.categories = new LinkedList<>();
     }
-
+    public StockReport(int id, Date date){
+        super(id, date);
+        this.categories = new LinkedList<>();
+    }
     public void addCategory(Category category){
         if(!categories.contains(category))
             this.categories.add(category);
