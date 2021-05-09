@@ -414,4 +414,7 @@ public class Facade {
         supplierController.DeleteSupplier(id);
     }
 
+    public Category getCategory(String name) {
+        return invCnt.getCategory(name);
+    }
 }

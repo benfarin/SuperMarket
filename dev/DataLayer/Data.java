@@ -1,4 +1,6 @@
 package DataLayer;
+import BusinessLayer.Inventory.Product;
+
 import java.sql.*;
 
 public class Data {
@@ -25,4 +27,6 @@ public class Data {
 
 
 
+
 }
+
