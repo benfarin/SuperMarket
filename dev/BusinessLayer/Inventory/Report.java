@@ -1,6 +1,7 @@
 package BusinessLayer.Inventory;
 
 import java.util.Date;
+import java.util.HashMap;
 
 public abstract class Report {
 

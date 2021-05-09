@@ -1,11 +1,14 @@
 package BusinessLayer.Inventory;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
 public class ReportController {
     List<DefectiveReport> defReports;
     List<StockReport> stockReports;
+    private static int day = 3;
 
 
     public ReportController() {
@@ -19,6 +22,13 @@ public class ReportController {
                 return dRep;
         }
         return null;
+    }
+
+    public void setDay(int day){
+        this.day = day;
+        for (StockReport s : stockReports){
+            s.setDay(day);
+        }
     }
 
     public StockReport getStoReport(int id) {
@@ -65,7 +75,23 @@ public class ReportController {
         DefectiveReport defRep = getDefReport(id);
         defRep.addProd(p);
     }
+    public int getDay(){
+        return day;
+    }
 
+    public HashMap<Integer, Integer> sendReport(){
+        HashMap<Integer, Integer> report = new HashMap<>();
+        List<Category> cat = new ArrayList<>();
+        for(StockReport s : stockReports){
+             cat = s.getCategories();
+        for (Category c : cat) {
+            for(Product p: c.getProducts()){
+                report.put(p.getId(), p.getOrderAmount());
+            }}
+        }
+        stockReports.clear();
+        return report;
+    }
     public List<DefectiveReport> getDefReports() {
         return defReports;
     }

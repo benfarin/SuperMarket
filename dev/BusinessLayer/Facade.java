@@ -2,12 +2,9 @@ package BusinessLayer;
 
 import BusinessLayer.Inventory.*;
 
-import java.util.Date;
-import BusinessLayer.Suppliers.*;
+import java.util.*;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import BusinessLayer.Suppliers.*;
 
 public class Facade {
     private InventoryController invCnt;
@@ -266,6 +263,50 @@ public class Facade {
         repCnt.addProdToDefRep(id,p);
         return "Added the product " + product+ " to "+ id + " report\n";
     }
+    public void orderToday(){
+        int day = repCnt.getDay();
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(new Date(System.currentTimeMillis()));
+            boolean dayIsHere;
+            switch (day) {
+                case 1:
+                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY;
+                    break;
+                case 2:
+                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY;
+                    break;
+                case 3:
+                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.TUESDAY;
+                    break;
+                case 4:
+                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.WEDNESDAY;
+                    break;
+                case 5:
+                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.THURSDAY;
+                    break;
+                case 6:
+                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY;
+                    break;
+                case 7:
+                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY;
+                    break;
+                default:
+                    dayIsHere = false;
+                    break;
+            }
+            if(dayIsHere)
+                sendOrder();
+    }
+    public void sendOrder(){
+        HashMap<Integer, Integer> order = new HashMap<>();
+        order = repCnt.sendReport();
+
+        for(Integer i : order.keySet())
+            if(order.get(i) > 0){
+                //todo
+                incoming_order_controller.AddNewOrder(Long.valueOf(i),order.get(i));
+        }
+    }
     public String exportStockReport(int id){
         if(repCnt.getStoReport(id) == null)
             return "The report "+id+ " does not exist\n";
@@ -279,6 +320,7 @@ public class Facade {
 
 
     private void initialize(){
+        orderToday();
         ProductPerSup one = new ProductPerSup("milk 3%", new Long(123123), 5.9, null, new Long(82723), null);
         ProductPerSup two = new ProductPerSup("Honey", new Long(34622), 5.9, null, new Long(34644), null);
         ProductPerSup three = new ProductPerSup("Chocolate", new Long(67933), 5.0, null, new Long(122352), null);
@@ -372,4 +414,7 @@ public class Facade {
         supplierController.DeleteSupplier(id);
     }
 
+    public Category getCategory(String name) {
+        return invCnt.getCategory(name);
+    }
 }

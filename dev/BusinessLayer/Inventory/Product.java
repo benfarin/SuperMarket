@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Product {
-    static int ID = 0;
+    static int ID = 1;
     private int id;
     private String name;
     private String manufacture;
@@ -20,9 +20,28 @@ public class Product {
     private double priceToCustomer;
     private int defectiveItem;
     private int minimum;
+    private int orderAmount;
     private Map<Double,Date> priceToCusHistory;
     private Map<Double,Date> priceFromSupHistory;
 
+
+    public Product(int id, String name, String manufacture, Category category, int storeQuantity, int storageQuantity, int discount, Date discountDate, double priceFromSupplier, double priceToCustomer, int defectiveItem, int minimum, int orderAmount, Map<Double, Date> priceToCusHistory, Map<Double, Date> priceFromSupHistory) {
+        this.id = id;
+        this.name = name;
+        this.manufacture = manufacture;
+        this.category = category;
+        this.storeQuantity = storeQuantity;
+        this.storageQuantity = storageQuantity;
+        this.discount = discount;
+        this.discountDate = discountDate;
+        this.priceFromSupplier = priceFromSupplier;
+        this.priceToCustomer = priceToCustomer;
+        this.defectiveItem = defectiveItem;
+        this.minimum = minimum;
+        this.orderAmount = orderAmount;
+        this.priceToCusHistory = priceToCusHistory;
+        this.priceFromSupHistory = priceFromSupHistory;
+    }
 
     public Product(String name, Category category, String manufacture, double priceFromSupplier, double priceToCustomer, int minimum) {
         priceToCusHistory = new HashMap<>();
@@ -36,6 +55,7 @@ public class Product {
         priceToCusHistory.put(priceToCustomer, new Date());
         this.minimum = minimum;
         this.storageQuantity= 0;
+        this.orderAmount = minimum*4;
         this.storeQuantity = 0;
         this.discount = 0;
         this.discountDate = null;
@@ -195,5 +215,11 @@ public class Product {
                 "Price From Supplier = " + priceFromSupplier + "\n" +
                 "Price To Customer = " + priceToCustomer + "\n" +
                 "Defective Item = " + defectiveItem + "\n";
+    }
+
+    public int getOrderAmount() {
+       if(orderAmount-storageQuantity < 0)
+            return 0;
+       return orderAmount-storageQuantity;
     }
 }

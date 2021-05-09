@@ -15,6 +15,7 @@ public class Service {
         this.supService = new SupService();
     }
     public void startMenu() {
+        
         do {
             System.out.println("\t\tSuper-Li :)\n\n" +
                     "1)\tInventory menu\n" +

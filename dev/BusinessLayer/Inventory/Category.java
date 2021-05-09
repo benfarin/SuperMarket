@@ -27,7 +27,6 @@ public class Category {
             if(this.supCategory != null)
                 this.supCategory.addProduct(p);
         }
-
     }
     public void addSup(Category c){
         this.supCategory = c;
