@@ -110,6 +110,10 @@ public class Category {
         this.discount+=discount;
     }
 
+    public Category getSupCategory() {
+        return supCategory;
+    }
+
     public String printCategory() {
         String subCats ="";
         for(Category c : subCategories){

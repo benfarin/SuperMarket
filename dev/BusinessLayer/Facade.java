@@ -5,19 +5,24 @@ import BusinessLayer.Inventory.*;
 import java.util.*;
 
 import BusinessLayer.Suppliers.*;
+import DataLayer.DataHandler;
 
 public class Facade {
     private InventoryController invCnt;
     private ReportController repCnt;
-    IncomingOrderController incoming_order_controller;
-    SupplierController supplierController;
+    private IncomingOrderController incoming_order_controller;
+    private SupplierController supplierController;
+    private DataHandler dataHandler;
 
     public Facade() {
-
+        this.dataHandler = new DataHandler();
         initialize();
     }
     public String addCategory (String name, List<String> subCategories){
-        invCnt.addCategory(name,subCategories);
+        Category c = invCnt.addCategory(name,subCategories);
+        if(c !=null){ // ADD TO DATABASE
+            dataHandler.addCatToData(c.getName(),c.getSupCategory().getName(),c.getDiscount(),c.getDiscountDate());
+        }
         return "the category " + name + " successfully added\n";
     }
     public String addProduct (String name,String category, String manufacture, double priceFromSupplier, double priceToCustomer, int minimum){
@@ -196,6 +201,8 @@ public class Facade {
             return "the category "+catName+" does not exist\n";
         }
         invCnt.setCatDiscount(catName,discount,discountDate);
+        // update database
+        dataHandler.updateDiscounts(catName,discount,discountDate);
         return "set " +catName+ "'s discount to "+ discount + " until "+ discountDate.toString()+"\n";
     }
     public String setCatDiscountDate(String catName, Date discountDate){
@@ -203,6 +210,8 @@ public class Facade {
             return "the category "+catName+" does not exist\n";
         }
         invCnt.setCatDiscountDate(catName,discountDate);
+        // update data base
+        dataHandler.updateDiscDate(catName,discountDate);
         return "set " +catName+ "'s discount date to "+ discountDate.toString()+"\n";
     }
     public String printCategory(String catName) {

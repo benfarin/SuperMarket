@@ -57,8 +57,7 @@ public class ProductMapper {
             return discountsMap;
         }
 
-        public HashMap<Integer, Contract> getProducts() {
-            return products;
-        }
+//        public HashMap<Integer, Contract> getProducts() {
+//            return products;
+//        }
     }
-}

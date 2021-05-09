@@ -3,6 +3,7 @@ package BusinessLayer.Inventory;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class InventoryController {
     List<Product> products;
@@ -60,6 +61,12 @@ public class InventoryController {
         Product p = new Product(name,category,manufacture,priceFromSupplier,priceToCustomer,minimum);
         if (!products.contains(p))
             products.add(p);
+    }
+    public void addProductFromData (int id, String name, String manufacture, Category category, int storeQuantity, int storageQuantity, int discount, Date discountDate, double priceFromSupplier, double priceToCustomer, int defectiveItem, int minimum, int orderAmount, Map<Double, Date> priceToCusHistory, Map<Double, Date> priceFromSupHistory) {
+        Product p = new Product(id,name,manufacture,category,storeQuantity,storageQuantity,discount,discountDate,priceFromSupplier,priceToCustomer,defectiveItem,minimum,orderAmount,priceToCusHistory,priceFromSupHistory);
+        if (!products.contains(p))
+            products.add(p);
+        p.getCategory().addProduct(p);
     }
 
 //    public void addCategory (String name, List<Category> subCategories) {
