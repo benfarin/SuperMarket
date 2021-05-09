@@ -10,7 +10,10 @@ public abstract class Report {
     protected Date date;
 
     public abstract String exportReport();
-
+    public Report(int id, Date date){
+        this.Id = id;
+        this.date = date;
+    }
     public int getID() {
         return Id;
     }
@@ -27,6 +30,10 @@ public abstract class Report {
         ID ++;
         this.Id = ID;
         this.date = new Date(System.currentTimeMillis());
+    }
+    public Report(int id, Date date){
+        this.Id = id;
+        this.date = date;
     }
 
 }

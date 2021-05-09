@@ -21,6 +21,16 @@ public class Category {
         this.products = new LinkedList<>();
         this.supCategory = null;
     }
+
+    public Category(String name, Category supCategory, List<Category> subCategories, List<Product> products, int discount, Date discountDate) {
+        this.name = name;
+        this.supCategory = supCategory;
+        this.subCategories = subCategories;
+        this.products = products;
+        this.discount = discount;
+        this.discountDate = discountDate;
+    }
+
     public void addProduct(Product p){
         if(!products.contains(p)) {
             products.add(p);
@@ -98,6 +108,10 @@ public class Category {
 
     public void addDiscount(int discount){
         this.discount+=discount;
+    }
+
+    public Category getSupCategory() {
+        return supCategory;
     }
 
     public String printCategory() {

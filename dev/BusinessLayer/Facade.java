@@ -5,19 +5,24 @@ import BusinessLayer.Inventory.*;
 import java.util.*;
 
 import BusinessLayer.Suppliers.*;
+import DataLayer.DataHandler;
 
 public class Facade {
     private InventoryController invCnt;
     private ReportController repCnt;
-    IncomingOrderController incoming_order_controller;
-    SupplierController supplierController;
+    private IncomingOrderController incoming_order_controller;
+    private SupplierController supplierController;
+    private DataHandler dataHandler;
 
     public Facade() {
-
+        this.dataHandler = new DataHandler();
         initialize();
     }
     public String addCategory (String name, List<String> subCategories){
-        invCnt.addCategory(name,subCategories);
+        Category c = invCnt.addCategory(name,subCategories);
+        if(c !=null){ // ADD TO DATABASE
+            dataHandler.addCatToData(c.getName(),c.getSupCategory().getName(),c.getDiscount(),c.getDiscountDate());
+        }
         return "the category " + name + " successfully added\n";
     }
     public String addProduct (String name,String category, String manufacture, double priceFromSupplier, double priceToCustomer, int minimum){
@@ -67,9 +72,9 @@ public class Facade {
         }
         invCnt.setDefectiveItems(prodName,def);
         for(DefectiveReport defRep: repCnt.getDefReports()){ // if this prod in any reports it will add the amount
-            if(defRep.isProdInRep(prodName)){
-                //CALL SUPPLIER
-            }
+//            if(defRep.isProdInRep(prodName)){
+//                //CALL SUPPLIER
+//            }
 
         }
         return "set "+ prodName+"'s defective items to " + def+"\n";
@@ -156,7 +161,12 @@ public class Facade {
 
     //-------------------------CATEGORY--------------------------
 
-
+    public String deleteCategory(String catName){
+        if(invCnt.getCategory(catName)==null){
+            return "Can't delete "+catName+" this category does not exist\n";
+        }
+        return "The category "+ catName +"was deleted";
+    }
     public String addSub(String mainCat,String subC){
         if(invCnt.getCategory(mainCat)==null){
             return "Can't add sub-category because main category "+mainCat+" does not exist\n"+"add main category first\n";
@@ -196,6 +206,8 @@ public class Facade {
             return "the category "+catName+" does not exist\n";
         }
         invCnt.setCatDiscount(catName,discount,discountDate);
+        // update database
+        dataHandler.updateDiscounts(catName,discount,discountDate);
         return "set " +catName+ "'s discount to "+ discount + " until "+ discountDate.toString()+"\n";
     }
     public String setCatDiscountDate(String catName, Date discountDate){
@@ -203,6 +215,8 @@ public class Facade {
             return "the category "+catName+" does not exist\n";
         }
         invCnt.setCatDiscountDate(catName,discountDate);
+        // update data base
+        dataHandler.updateDiscDate(catName,discountDate);
         return "set " +catName+ "'s discount date to "+ discountDate.toString()+"\n";
     }
     public String printCategory(String catName) {
