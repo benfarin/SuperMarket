@@ -25,6 +25,24 @@ public class Product {
     private Map<Double,Date> priceFromSupHistory;
 
 
+    public Product(int id, String name, String manufacture, Category category, int storeQuantity, int storageQuantity, int discount, Date discountDate, double priceFromSupplier, double priceToCustomer, int defectiveItem, int minimum, int orderAmount, Map<Double, Date> priceToCusHistory, Map<Double, Date> priceFromSupHistory) {
+        this.id = id;
+        this.name = name;
+        this.manufacture = manufacture;
+        this.category = category;
+        this.storeQuantity = storeQuantity;
+        this.storageQuantity = storageQuantity;
+        this.discount = discount;
+        this.discountDate = discountDate;
+        this.priceFromSupplier = priceFromSupplier;
+        this.priceToCustomer = priceToCustomer;
+        this.defectiveItem = defectiveItem;
+        this.minimum = minimum;
+        this.orderAmount = orderAmount;
+        this.priceToCusHistory = priceToCusHistory;
+        this.priceFromSupHistory = priceFromSupHistory;
+    }
+
     public Product(String name, Category category, String manufacture, double priceFromSupplier, double priceToCustomer, int minimum) {
         priceToCusHistory = new HashMap<>();
         priceFromSupHistory = new HashMap<>();
