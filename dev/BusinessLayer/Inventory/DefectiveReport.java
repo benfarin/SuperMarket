@@ -1,5 +1,6 @@
 package BusinessLayer.Inventory;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -25,6 +26,10 @@ public class DefectiveReport extends Report {
 
     public DefectiveReport() {
         super();
+        this.defectiveProducts = new LinkedList<>();
+    }
+    public DefectiveReport(int id, Date date){
+        super(id, date);
         this.defectiveProducts = new LinkedList<>();
     }
 

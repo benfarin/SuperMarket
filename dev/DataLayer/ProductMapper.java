@@ -10,11 +10,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 public class ProductMapper {
 
 
-        private HashMap<String, Product> products;
+        private HashMap<Integer, Product> products;
         private Connection con=null;
         private Facade facade;
 
@@ -36,29 +37,38 @@ public class ProductMapper {
                 int storeQuantity = res.getInt("storeQuantity");
                 int storageQuantity = res.getInt("storageQuantity");
                 int discount = res.getInt("discount");
-                Date discountDate =
+                Date discountDate = res.getDate("discountDate");
+                int defectiveItem = res.getInt("defectiveItems");
+                int orderAmount = res.getInt("orderAmount");
+                ResultSet res1 = stmt.executeQuery("SELECT * FROM PriceToCusHistoryWHERE pid="+id);
+                Map<Double,Date> priceToCusHistory = new HashMap<>();
+                while(res1.next())
+                    priceToCusHistory.put(res1.getDouble("price"),res1.getDate("date"));
+                res1 = stmt.executeQuery("SELECT * FROM PriceFromSupHistory WHERE pid="+id);
+                Map<Double,Date> priceFromSupHistory = new HashMap<>();
+                while(res1.next())
+                    priceFromSupHistory.put(res1.getDouble("price"),res1.getDate("date"));
 
-
-                products.put(id, new Product(id, name, manufacture, category, storeQuantity, storageQuantity, discount, discountDate, priceFromSupplier, priceToCustomer, defectiveItem, minimum, orderAmount, priceToCusHistory, priceFromSupHistory);
+                products.put(id, new Product(id, name, manufacture, category1, storeQuantity, storageQuantity, discount, discountDate, priceFromSupplier, priceToCustomer, defectiveItem, minimum, orderAmount, priceToCusHistory, priceFromSupHistory));
             }
         }
 
-        public HashMap<Integer, Integer> setDiscounts(int supplierID) throws SQLException {
-            Statement stmt = this.con.createStatement();
-            ResultSet res = stmt.executeQuery("SELECT * FROM DiscountContract WHERE sid="+supplierID+";");
-            HashMap<Integer, Integer> discountsMap = new HashMap<>();
+//        public HashMap<Integer, Integer> setDiscounts(int supplierID) throws SQLException {
+//            Statement stmt = this.con.createStatement();
+//            ResultSet res = stmt.executeQuery("SELECT * FROM DiscountContract WHERE sid="+supplierID+";");
+//            HashMap<Integer, Integer> discountsMap = new HashMap<>();
+//
+//            while(res.next())
+//            {
+//                int amount = res.getInt("amount");
+//                int discount = res.getInt("discount");
+//                discountsMap.put(amount, discount);
+//            }
+//            return discountsMap;
+//        }
 
-            while(res.next())
-            {
-                int amount = res.getInt("amount");
-                int discount = res.getInt("discount");
-                discountsMap.put(amount, discount);
-            }
-            return discountsMap;
-        }
-
-        public HashMap<Integer, Contract> getProducts() {
+        public HashMap<Integer, Product> getProducts() {
             return products;
         }
-    }
+
 }
