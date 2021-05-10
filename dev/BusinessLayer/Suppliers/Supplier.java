@@ -12,7 +12,7 @@ public class Supplier {
     private List<String> contacts;
     private String paymentMethod;
     private String bankAccount;
-    private  HashMap<Long, Product> products; // do we want hold the product himself? or the id?
+    private  HashMap<Long, ProductPerSup> products; // do we want hold the product himself? or the id?
     private Contract contract;
 
 
@@ -26,10 +26,24 @@ public class Supplier {
         this.paymentMethod = paymentMethod;
         this.bankAccount = bankAccount;
         this.contract= new Contract(null,false,new HashMap<Integer,Integer>()); //addContract();
-        this.products=new HashMap<Long, Product>();
+        this.products=new HashMap<Long, ProductPerSup>();
     }
-    public HashMap<Long, Product> getProducts() {
+    public Supplier(Integer id_supplier, Long id_company, String name, List<String> contacts, String paymentMethod, String bankAccount, Contract contract) {
+        this.id_supplier = id_supplier;
+        this.id_company = id_company;
+        this.name = name;
+        this.contacts = contacts;
+        this.paymentMethod = paymentMethod;
+        this.bankAccount = bankAccount;
+        this.contract= contract;
+        this.products=null;//new HashMap<Long, ProductPerSup>();
+    }
+
+    public HashMap<Long, ProductPerSup> getProducts() {
         return products;
+    }
+    public void addProductFromDB(ProductPerSup prod){
+        products.put(prod.getStoreCode(), prod);
     }
 
 
