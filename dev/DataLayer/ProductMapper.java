@@ -17,10 +17,11 @@ public class ProductMapper {
 
 
     private HashMap<Integer, Product> products;
-    private Connection con=null;
+    private Connection con;
     private Facade facade;
 
-    public ProductMapper() throws SQLException {
+    public ProductMapper(Connection con) throws SQLException {
+        this.con = con;
         products =new HashMap<>();
         Statement stmt = this.con.createStatement();
         ResultSet res = stmt.executeQuery("SELECT * FROM Product");

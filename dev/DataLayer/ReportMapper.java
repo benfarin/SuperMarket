@@ -18,10 +18,11 @@ public class ReportMapper {
 
         private HashMap<Integer, StockReport> stockReports;
     private HashMap<Integer, DefectiveReport> defectiveReports;
-    private Connection con=null;
+    private Connection con;
         private Facade facade;
 
-        public ReportMapper() throws SQLException {
+        public ReportMapper(Connection con) throws SQLException {
+            this.con = con;
             stockReports =new HashMap<>();
             Statement stmt = this.con.createStatement();
             ResultSet res = stmt.executeQuery("SELECT * FROM Report");
