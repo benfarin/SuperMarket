@@ -15,7 +15,7 @@ class IncomingOrderControllerTest {
     Supplier sup2;
     @BeforeEach
     public void setUp() {
-        LinkedList<Product> products= new LinkedList<Product>();
+        LinkedList<ProductPerSup> products= new LinkedList<ProductPerSup>();
 
          sup1 = new Supplier(new Integer(1111),new Long(13),"Itzik",null,"bla bla1","leumi");
          sup2 = new Supplier(new Integer(2222),new Long(20),"Avi",null,"bla bla2","HAPOALIM");
@@ -26,9 +26,9 @@ class IncomingOrderControllerTest {
         map2.put(new Integer(30),new Double(10));// for 10 product there is 10 precent discount
         map2.put(new Integer(40),new Double(12));// for 20 product there is 12 precent discount
 
-        Product prod1 = new Product("prod1",new Long(1),new Double(10),map1,new Long(1),sup1);
-        Product prod2 = new Product("prod2",new Long(1),new Double(20),map2,new Long(2),sup2);
-        Product prod3 = new Product("prod3",new Long(2),new Double(20),map2,new Long(2),sup2);
+        ProductPerSup prod1 = new ProductPerSup("prod1",new Long(1),new Double(10),map1,new Long(1),sup1);
+        ProductPerSup prod2 = new ProductPerSup("prod2",new Long(1),new Double(20),map2,new Long(2),sup2);
+        ProductPerSup prod3 = new ProductPerSup("prod3",new Long(2),new Double(20),map2,new Long(2),sup2);
 
         products.add(prod1);
         products.add(prod2); // products now with the same product with different suppliers
