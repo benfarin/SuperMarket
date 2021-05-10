@@ -1,5 +1,6 @@
 package DataLayer;
 
+import BusinessLayer.Facade;
 import BusinessLayer.Inventory.DefectiveReport;
 import BusinessLayer.Inventory.Product;
 import BusinessLayer.Inventory.StockReport;
@@ -17,11 +18,13 @@ public class DataHandler {
     private ProductMapper prodMapper;
     private ReportMapper repMapper;
     private Connection con;
-    public DataHandler() {
+    private Facade facade;
+    public DataHandler(Facade facade) {
+        this.facade = facade;
         con = null;
         connect();
         try {
-            this.catMapper = new CategoryMapper(con);
+            this.catMapper = new CategoryMapper(con,facade);
             this.prodMapper = new ProductMapper(con);
             this.repMapper = new ReportMapper(con);
         } catch (Exception e) {
