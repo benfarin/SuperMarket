@@ -25,17 +25,32 @@ public class CategoryMapper {
         ResultSet res = stmt.executeQuery("SELECT * FROM Category");
         while (res.next()) {
             String name = res.getString("name");
-            String sup_cat = res.getString("super_cat");
-            Category supCat = facade.getCategory(sup_cat);
+//            String sup_cat = res.getString("super_cat");
+//            Category supCat = facade.getCategory(sup_cat);
             int discount = res.getInt("discount");
             Date discountDate = res.getDate("discountDate");
-            categories.put(name,facade.addCatFromData(name, supCat, discount, discountDate));
+            facade.addCatFromData(name, null, discount, discountDate);
+//            categories.put(name,facade.addCatFromData(name, null, discount, discountDate));
         }
-        for (Category c : categories.values()) {
-            if (c.getSupCategory() != null) {
-                facade.addSub(c.getSupCategory().getName(), c.getName());
+        res = stmt.executeQuery("SELECT * FROM Category");
+        while (res.next()) {
+            String name = res.getString("name");
+            String sup_cat = res.getString("super_cat");
+            facade.addSub(sup_cat,name);
             }
+        res = stmt.executeQuery("SELECT * FROM Category");
+        while (res.next()) {
+            String name = res.getString("name");
+            Category cat = facade.getCategory(name);
+            categories.put(name, cat);
         }
+
+
+//        for (Category c : categories.values()) {
+//            if (c.getSupCategory() != null) {
+//                facade.addSub(c.getSupCategory().getName(), c.getName());
+//            }
+//        }
     }
     public void addCategory(String name,String super_cat, int discount, java.util.Date discountDate) throws SQLException{
         String sql = "INSERT INTO Category(name,super_cat,discount,discountDate) VALUES(?,?,?,?)";
@@ -63,10 +78,15 @@ public class CategoryMapper {
             for (Category c : categories.values()) {
                 if (c.getSupCategory()!=null) {
                     if (c.getSupCategory().getName().equals(name)) {
-                        addSup("", c.getName());
+                        addSup(null, c.getName());
                     }
                 }
             }
+//            for (Product p : facade.getCategory(name).getProducts()) {
+//                if (c.getSupCategory().getName().equals(name)) {
+//                    addSup(null, c.getName());
+//                }
+//            }
             categories.remove(name);
             PreparedStatement pstmt = con.prepareStatement(sql);
             pstmt.setString(1, name);
@@ -83,8 +103,8 @@ public class CategoryMapper {
             pstmt.setString(1,super_cat);
             pstmt.setString(2,cat);
             pstmt.executeUpdate();
-            Category c = categories.get(cat);
-            c.setSupCategory(new Category(super_cat,new LinkedList<>()));
+            Category c = facade.getCategory(cat);
+            c.setSupCategory(facade.getCategory(super_cat));
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

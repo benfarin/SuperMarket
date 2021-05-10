@@ -22,10 +22,10 @@ class CategoryTest {
 
     @BeforeAll
     static void setUp() {
-        subCategory1 = new Category("Low-fat", new LinkedList<>());
-        subCategory2 = new Category("Milk", new LinkedList<>());
-        subCategory3 = new Category("Dairy-free", new LinkedList<>());
-        mainCategory = new Category("Dairy", new LinkedList<>());
+        subCategory1 = new Category("Low-fat");
+        subCategory2 = new Category("Milk");
+        subCategory3 = new Category("Dairy-free");
+        mainCategory = new Category("Dairy");
         catList = new LinkedList<>();
         catList.add(subCategory1);
         catList.add(subCategory2);

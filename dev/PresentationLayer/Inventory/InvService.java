@@ -346,22 +346,7 @@ public class InvService {
     private void addCategory(){
         System.out.print("Category's name- ");
         String catName = s.next();
-        System.out.print("Category's sub-categories separated by ',' -  if non enter 'non' - ");
-        String subCat = s.next();
-        List<String> subC = new LinkedList<>();
-        if (subCat.equals("non"))
-            subCat = "";
-        else {
-            String[] a = subCat.split(",");
-            for (int i = 0; i < a.length; i++)
-                subC.add(a[i]);
-            for (String s : a) {
-                if (s.contains("\n"))
-                    s.substring(0,s.length()-1);
-                facade.addSup(catName, s);
-            }
-        }
-        System.out.println(facade.addCategory(catName,subC));
+        System.out.println(facade.addCategory(catName));
 
     }
     private void addSubCat(){

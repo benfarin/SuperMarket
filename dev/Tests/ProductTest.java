@@ -14,7 +14,7 @@ class ProductTest {
     Product p;
     @BeforeEach
     void setUp() {
-        Category c = new Category("fruit",new LinkedList<>());
+        Category c = new Category("fruit");
         p = new Product("apple",c,"Maabarot",2.90,4.10,20);
     }
 

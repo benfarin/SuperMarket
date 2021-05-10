@@ -98,7 +98,7 @@ public class DataHandler {
             catMapper.addSup(supCat,cat);
         }
         catch (Exception e) {
-            System.out.println("failed to add product\n" + e.getMessage());
+            System.out.println("failed to add category\n" + e.getMessage());
         }
     }
 
