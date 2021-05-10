@@ -308,38 +308,37 @@ public class Facade {
         return "Added the product " + product+ " to "+ id + " report\n";
     }
     public void orderToday(){
-        int day = repCnt.getDay();
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(new Date(System.currentTimeMillis()));
-            boolean dayIsHere;
-            switch (day) {
-                case 1:
-                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY;
-                    break;
-                case 2:
-                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY;
-                    break;
-                case 3:
-                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.TUESDAY;
-                    break;
-                case 4:
-                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.WEDNESDAY;
-                    break;
-                case 5:
-                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.THURSDAY;
-                    break;
-                case 6:
-                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY;
-                    break;
-                case 7:
-                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY;
-                    break;
-                default:
-                    dayIsHere = false;
-                    break;
-            }
-            if(dayIsHere)
-                sendOrder();
+//            Calendar cal = Calendar.getInstance();
+//            cal.setTime(new Date(System.currentTimeMillis()));
+//            boolean dayIsHere;
+//            switch (repCnt.getDay()) {
+//                case 1:
+//                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY;
+//                    break;
+//                case 2:
+//                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY;
+//                    break;
+//                case 3:
+//                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.TUESDAY;
+//                    break;
+//                case 4:
+//                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.WEDNESDAY;
+//                    break;
+//                case 5:
+//                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.THURSDAY;
+//                    break;
+//                case 6:
+//                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY;
+//                    break;
+//                case 7:
+//                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY;
+//                    break;
+//                default:
+//                    dayIsHere = false;
+//                    break;
+//            }
+//            if(dayIsHere)
+//                sendOrder();
     }
     public void sendOrder(){
         HashMap<Integer, Integer> order = new HashMap<>();
