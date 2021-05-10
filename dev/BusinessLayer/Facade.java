@@ -15,8 +15,9 @@ public class Facade {
     private DataHandler dataHandler;
 
     public Facade() {
-        this.dataHandler = new DataHandler();
+
         initialize();
+        this.dataHandler = new DataHandler(this);
     }
     public String addCategory (String name, List<String> subCategories){
         Category c = invCnt.addCategory(name,subCategories);
@@ -26,6 +27,17 @@ public class Facade {
             dataHandler.addCatToData(c.getName(), null, c.getDiscount(), c.getDiscountDate());
         }
         return "the category " + name + " successfully added\n";
+    }
+    public Category addCatFromData(String name, String supCat,int discount,Date discountDate){
+        Category sup;
+        if(supCat != null) {
+            sup = invCnt.getCategory(supCat);
+        }
+        else
+            sup = null;
+        Category c = new Category(name,sup, new LinkedList<>(), new LinkedList<>(), discount, discountDate);
+        invCnt.addCatFromData(c);
+        return c;
     }
     public String addProduct (String name,String category, String manufacture, double priceFromSupplier, double priceToCustomer, int minimum){
         if(invCnt.getCategory(category)==null){
@@ -365,7 +377,7 @@ public class Facade {
 
 
     private void initialize(){
-        orderToday();
+
         ProductPerSup one = new ProductPerSup("milk 3%", new Long(123123), 5.9, null, new Long(82723), null);
         ProductPerSup two = new ProductPerSup("Honey", new Long(34622), 5.9, null, new Long(34644), null);
         ProductPerSup three = new ProductPerSup("Chocolate", new Long(67933), 5.0, null, new Long(122352), null);
@@ -407,7 +419,7 @@ public class Facade {
 //..............INV..............
         this.repCnt = new ReportController();
         this.invCnt = new InventoryController();
-
+        orderToday();
     }
 
     public void AddContact(int id_sup, String new_contact) {

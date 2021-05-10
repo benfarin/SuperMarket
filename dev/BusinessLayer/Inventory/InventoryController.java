@@ -29,6 +29,11 @@ public class InventoryController {
         products.add(p1);
 
     }
+    public void addCatFromData(Category c){
+        if(!categories.contains(c)){
+            categories.add(c);
+        }
+    }
     public Category addCategory(String name, List<String> subCatName){
         List<Category> mySub = new LinkedList<>();
         for(String s : subCatName){

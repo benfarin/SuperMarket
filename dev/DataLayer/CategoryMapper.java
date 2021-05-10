@@ -5,7 +5,8 @@ import BusinessLayer.Inventory.Category;
 import BusinessLayer.Inventory.Product;
 
 import java.sql.*;
-import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,35 +17,36 @@ public class CategoryMapper {
     private Facade facade;
     Connection con;
 
-    public CategoryMapper(Connection con) throws SQLException {
+    public CategoryMapper(Connection con,Facade facade) throws SQLException {
         this.con = con;
+        this.facade = facade;
         categories = new HashMap<>();
         Statement stmt = this.con.createStatement();
         ResultSet res = stmt.executeQuery("SELECT * FROM Category");
         while (res.next()) {
             String name = res.getString("name");
-            String sup_cat = res.getString("sup_cat");
-            Category supCat = facade.getCategory(sup_cat);
+            String sup_cat = res.getString("super_cat");
+            //Category supCat = facade.getCategory(sup_cat);
             int discount = res.getInt("discount");
             Date discountDate = res.getDate("discountDate");
-            categories.put(name, new Category(name, supCat, new LinkedList<>(), new LinkedList<>(), discount, discountDate));
+            facade.addCatFromData(name, sup_cat, discount, discountDate);
         }
-        for (Category c : categories.values()) {
-            if (c.getSupCategory() != null) {
-                facade.addSub(c.getSupCategory().getName(), c.getName());
-            }
-        }
+//        for (Category c : categories.values()) {
+//            if (c.getSupCategory() != null) {
+//                facade.addSub(c.getSupCategory().getName(), c.getName());
+//            }
+//        }
     }
-    public void addCategory(String name,String super_cat, int discount, Date discountDate) throws SQLException{
+    public void addCategory(String name,String super_cat, int discount, java.util.Date discountDate) throws SQLException{
 //        Statement stmt = this.con.createStatement();
         String sql = "INSERT INTO Category(name,super_cat,discount,discountDate) VALUES(?,?,?,?)";
-
+        Date sqlDate = new Date(discountDate.getTime());
         try (
                 PreparedStatement pstmt = con.prepareStatement(sql)) {
             pstmt.setString(1, name);
             pstmt.setString(2, super_cat);
             pstmt.setInt(3, discount);
-            pstmt.setDate(4, (java.sql.Date) discountDate);
+            pstmt.setDate(4, sqlDate);
 
             pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -56,13 +58,36 @@ public class CategoryMapper {
         Statement stmt = this.con.createStatement();
         ResultSet res = stmt.executeQuery("DELETE FROM Category WHERE name="+name+";");
     }
-    public void updateDiscounts(String name, int discount, Date discountDate) throws SQLException {
-        Statement stmt = this.con.createStatement();
-        ResultSet res = stmt.executeQuery("UPDATE Category SET discount =" + discount + ", discountDate =" + discountDate + " WHERE category_name=" + name);
+    public void updateDiscounts(String name, int discount, java.util.Date discountDate) throws SQLException {
+        String sql = "UPDATE Category SET discount = ? , "
+                + "discountDate = ? "
+                + "WHERE name = ?";
+        try{
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, discount);
+            java.sql.Date sqlDate = new Date(discountDate.getTime());
+            pstmt.setDate(2, sqlDate);
+            pstmt.setString(3, name);
+            // update
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
     }
 
-    public void updateDiscDate(String name, Date discountDate) throws SQLException {
-        Statement stmt = this.con.createStatement();
-        ResultSet res = stmt.executeQuery("UPDATE Category SET discountDate =" + discountDate + " WHERE category_name=" + name);
+    public void updateDiscDate(String name, java.util.Date discountDate) throws SQLException {
+        String sql = "UPDATE Category SET discountDate = ? "
+                + "WHERE name = ?";
+        try{
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            java.sql.Date sqlDate = new Date(discountDate.getTime());
+            pstmt.setDate(1, sqlDate);
+            pstmt.setString(2, name);
+            // update
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }
