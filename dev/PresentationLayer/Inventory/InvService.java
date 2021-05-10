@@ -8,7 +8,7 @@ import java.util.*;
 
 public class InvService {
     public static Scanner s = new Scanner(System.in);
-//            .useDelimiter("\n");
+    //            .useDelimiter("\n");
     Facade facade;
 
     public InvService(Facade facade){
@@ -24,26 +24,26 @@ public class InvService {
                     "4)\tDefective report\n" +
                     "5)\tExit"
             );
-                int choice = s.nextInt();
-                switch (choice) {
-                    case 1:
-                        productMenu();
-                        break;
-                    case 2:
-                        categoryMenu();
-                        break;
-                    case 3:
-                        stockReport();
-                        break;
-                    case 4:
-                        defectiveReport();
-                        break;
-                    case 5:
-                        return;
-                    default:
-                        System.out.println("Not a valid option, please try again.\n");
-                        break;
-                }
+            int choice = s.nextInt();
+            switch (choice) {
+                case 1:
+                    productMenu();
+                    break;
+                case 2:
+                    categoryMenu();
+                    break;
+                case 3:
+                    stockReport();
+                    break;
+                case 4:
+                    defectiveReport();
+                    break;
+                case 5:
+                    return;
+                default:
+                    System.out.println("Not a valid option, please try again.\n");
+                    break;
+            }
         }
         while (true) ;
     }
@@ -118,7 +118,7 @@ public class InvService {
         System.out.println("\nDefective item count- ");
         int quantity = s.nextInt();
         System.out.println(facade.setDefectiveItems(product,quantity));
-       // String result = facade.
+        // String result = facade.
     }
 
     private void updateDiscount(){
@@ -341,18 +341,13 @@ public class InvService {
     private void deleteCategory(){
         System.out.print("Category's name- ");
         String catName = s.next();
-        facade.deleteCategory(catName);
+        System.out.println(facade.deleteCategory(catName));
     }
     private void addCategory(){
         System.out.print("Category's name- ");
         String catName = s.next();
-        System.out.print("Category's sub-categories(string,string,..)- ");
-        String subCat = s.next();
-        String[] a = subCat.split(",");
-        List<String> subC = new LinkedList<>();
-        for(int i = 0; i< a.length; i++)
-            subC.add(a[i]);
-        System.out.println(facade.addCategory(catName,subC));
+        System.out.println(facade.addCategory(catName));
+
     }
     private void addSubCat(){
         System.out.print("Main category's name- ");
@@ -361,6 +356,7 @@ public class InvService {
         String subCat = s.next();
 
         System.out.println(facade.addSub(mainCat,subCat));
+        facade.addSup(mainCat,subCat);
     }
     private void deleteSubCat(){
         System.out.print("Main category's name- ");
@@ -369,6 +365,7 @@ public class InvService {
         String subCat = s.next();
 
         System.out.println(facade.deleteSubCat(mainCat,subCat));
+        facade.deleteSup(subCat);
     }
     private void printCategory(){
         System.out.print("Category's name- ");
@@ -394,7 +391,23 @@ public class InvService {
         }
         System.out.println(facade.setCatDiscount(catName,discount,disDate));
     }
-    private void setCatDiscDate(){}
+    private void setCatDiscDate(){
+        System.out.print("\nCategory's name- ");
+        String catName = s.next();
+        boolean dateCorrect = false;
+        Date disDate = new Date();
+        while (!dateCorrect) {
+            try {
+                System.out.print("\nDiscount expiration date (DD/MM/YYYY)- ");
+                Date exDate = new SimpleDateFormat("dd/MM/yyyy").parse(s.next());
+                disDate = exDate;
+                dateCorrect = true;
+            } catch (ParseException e) {
+                System.out.print("\nDate format incorrect, please try again. ");
+            }
+        }
+        System.out.println(facade.setCatDisDate(catName,disDate));
+    }
     private void stockReport(){
         while (true) {
             System.out.println("\t\tStock report menu:\n\n" +

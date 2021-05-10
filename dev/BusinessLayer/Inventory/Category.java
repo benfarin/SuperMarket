@@ -12,14 +12,18 @@ public class Category {
     private int discount;
     private Date discountDate;
 
-    public Category(String name, List<Category> subCategories) {
+    public Category(String name) {
         this.name = name;
         this.subCategories = new LinkedList<>();
-        this.subCategories = subCategories;
+        this.subCategories =  new LinkedList<>();
         this.discount = 0;
         this.discountDate = null;
         this.products = new LinkedList<>();
         this.supCategory = null;
+    }
+
+    public void setSupCategory(Category supCategory) {
+        this.supCategory = supCategory;
     }
 
     public Category(String name, Category supCategory, List<Category> subCategories, List<Product> products, int discount, Date discountDate) {
@@ -44,7 +48,7 @@ public class Category {
     public void addSub(Category c){
         if(!subCategories.contains(c))
             subCategories.add(c);
-        c.addSup(this);
+        //  c.addSup(this);
     }
 
     public String getName() {
@@ -103,8 +107,8 @@ public class Category {
         if(this.discountDate == null)
             this.discountDate = new Date();
         if(discountDate != null && discountDate.after(today)) {
-        this.discountDate = discountDate;
-    }}
+            this.discountDate = discountDate;
+        }}
 
     public void addDiscount(int discount){
         this.discount+=discount;

@@ -19,23 +19,27 @@ public class Facade {
         initialize();
         this.dataHandler = new DataHandler(this);
     }
-    public String addCategory (String name, List<String> subCategories){
-        Category c = invCnt.addCategory(name,subCategories);
+    public String addCategory (String name){
+        Category c = invCnt.addCategory(name);
         if(c !=null){ // ADD TO DATABASE
             if(c.getSupCategory() != null)
                 dataHandler.addCatToData(c.getName(), c.getSupCategory().getName(), c.getDiscount(), c.getDiscountDate());
             dataHandler.addCatToData(c.getName(), null, c.getDiscount(), c.getDiscountDate());
         }
-        return "the category " + name + " successfully added\n";
-    }
-    public Category addCatFromData(String name, String supCat,int discount,Date discountDate){
-        Category sup;
-        if(supCat != null) {
-            sup = invCnt.getCategory(supCat);
+        for(Category cat : c.getSubCategories()){
+            cat.addSup(c);
         }
-        else
-            sup = null;
-        Category c = new Category(name,sup, new LinkedList<>(), new LinkedList<>(), discount, discountDate);
+        return "the category " + name + " successfully added\n";
+
+    }
+    public Category addCatFromData(String name, Category supCat,int discount,Date discountDate){
+    //    Category sup;
+//        if(supCat != null) {
+//            sup = invCnt.getCategory(supCat);
+//        }
+//        else
+//            sup = null;
+        Category c = new Category(name,supCat, new LinkedList<>(), new LinkedList<>(), discount, discountDate);
         invCnt.addCatFromData(c);
         return c;
     }
@@ -52,8 +56,11 @@ public class Facade {
     public Product addProductFromData (int id, String name, String manufacture, Category category, int storeQuantity, int storageQuantity, int discount, Date discountDate, double priceFromSupplier, double priceToCustomer, int defectiveItem, int minimum, Map<Double, Date> priceToCusHistory, Map<Double, Date> priceFromSupHistory){
         return  invCnt.addProductFromData(id,name, manufacture, category,storeQuantity, storageQuantity, discount, discountDate, priceFromSupplier, priceToCustomer,defectiveItem, minimum, priceToCusHistory, priceFromSupHistory);
     }
-
     //-------------------------PRODUCT--------------------------
+    public void setFirstId (int id) {
+        invCnt.setFirstId(id);
+    }
+
     public Product getProdByID(int id){
         return invCnt.getProdByID(id);
     }
@@ -140,8 +147,8 @@ public class Facade {
         if(invCnt.reduceStorageQuantity(prodName,reduce)){
             Product p = invCnt.getProduct(prodName);
             AddNewOrder((long) p.getId(),4*p.getMinimum());
-                s = "*** WARNING!!! "+ prodName+"'s storage quantity is under the minimum ***\nsend order to supplier\n";
-            }
+            s = "*** WARNING!!! "+ prodName+"'s storage quantity is under the minimum ***\nsend order to supplier\n";
+        }
 
         return "Reduced "+ reduce+" from " + prodName+" storage quantity\n"+s;
     }
@@ -194,7 +201,11 @@ public class Facade {
         if(invCnt.getCategory(catName)==null){
             return "Can't delete "+catName+" this category does not exist\n";
         }
-        return "The category "+ catName +"was deleted";
+        for (Category c: invCnt.getCategory(catName).getSubCategories())
+            dataHandler.addSup(null,c.getName());
+        invCnt.deleteCat(catName);
+        dataHandler.deleteCategory(catName);
+        return "The category "+ catName +" was deleted";
     }
     public String addSub(String mainCat,String subC){
         if(invCnt.getCategory(mainCat)==null){
@@ -206,6 +217,7 @@ public class Facade {
 
         Category subCat = invCnt.getCategory(subC);
         invCnt.addSub(mainCat,subCat);
+        //dataHandler.addSup(mainCat,subC);
         return "The sub-category " + subC + " successfully added to " + mainCat+"\n";
     }
     public String deleteSubCat(String mainCat, String subC){
@@ -239,6 +251,17 @@ public class Facade {
         dataHandler.updateDiscounts(catName,discount,discountDate);
         return "set " +catName+ "'s discount to "+ discount + " until "+ discountDate.toString()+"\n";
     }
+
+    public String setCatDisDate(String catName,Date disDate){
+        if(invCnt.getCategory(catName)==null){
+            return "the category "+catName+" does not exist\n";
+        }
+        invCnt.setCatDiscountDate(catName,disDate);
+        // update database
+        dataHandler.updateDiscDate(catName,disDate);
+        return "set " +catName+ "'s discount until "+ disDate.toString()+"\n";
+    }
+
     public String setCatDiscountDate(String catName, Date discountDate){
         if(invCnt.getCategory(catName)==null){
             return "the category "+catName+" does not exist\n";
@@ -276,12 +299,6 @@ public class Facade {
         dataHandler.addStock(sto.getID(),sto.getDate(),catNames);
         return "Added stock report about the categories: " + ret+"\n";
     }
-    public void addDefectiveReportFromData(DefectiveReport re) {
-        repCnt.addDefReport(re);
-    }
-    public void addStockReportFromData(StockReport re){
-      repCnt.addStockReport(re);
-    }
     public String addDefReport(List<String> products){
         List<Product> prods = new LinkedList<>();
         String ret = new String();
@@ -311,8 +328,7 @@ public class Facade {
         Category c = invCnt.getCategory(category);
         if(c==null)
             return "the category "+category+" does not exist\n";
-        if(!repCnt.addCatToStRep(id,c))
-            return "The category " + category+ " already exists in report "+ id + "\n";
+        repCnt.addCatToStRep(id,c);
         //database
         dataHandler.addStockCat(id,category);
         return "Added the category " + category+ " to "+ id + " report\n";
@@ -324,45 +340,43 @@ public class Facade {
         Product p = invCnt.getProduct(product);
         if(p==null)
             return "the product "+product+" does not exist\n";
-        if(!repCnt.addProdToDefRep(id,p))
-            return "The product " + product + " already exists in report "+ id + "\n";
-
+        repCnt.addProdToDefRep(id,p);
         //database
         dataHandler.addDefectiveProd(id,p.getId());
         return "Added the product " + product+ " to "+ id + " report\n";
     }
     public void orderToday(){
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(new Date(System.currentTimeMillis()));
-            boolean dayIsHere;
-            switch (repCnt.getDay()) {
-                case 1:
-                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY;
-                    break;
-                case 2:
-                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY;
-                    break;
-                case 3:
-                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.TUESDAY;
-                    break;
-                case 4:
-                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.WEDNESDAY;
-                    break;
-                case 5:
-                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.THURSDAY;
-                    break;
-                case 6:
-                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY;
-                    break;
-                case 7:
-                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY;
-                    break;
-                default:
-                    dayIsHere = false;
-                    break;
-            }
-            if(dayIsHere)
-                sendOrder();
+//            Calendar cal = Calendar.getInstance();
+//            cal.setTime(new Date(System.currentTimeMillis()));
+//            boolean dayIsHere;
+//            switch (repCnt.getDay()) {
+//                case 1:
+//                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY;
+//                    break;
+//                case 2:
+//                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY;
+//                    break;
+//                case 3:
+//                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.TUESDAY;
+//                    break;
+//                case 4:
+//                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.WEDNESDAY;
+//                    break;
+//                case 5:
+//                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.THURSDAY;
+//                    break;
+//                case 6:
+//                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY;
+//                    break;
+//                case 7:
+//                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY;
+//                    break;
+//                default:
+//                    dayIsHere = false;
+//                    break;
+//            }
+//            if(dayIsHere)
+//                sendOrder();
     }
     public void sendOrder(){
         HashMap<Integer, Integer> order = new HashMap<>();
@@ -372,12 +386,12 @@ public class Facade {
             if(order.get(i) > 0){
                 //todo
                 incoming_order_controller.AddNewOrder(Long.valueOf(i),order.get(i));
-        }
+            }
     }
     public String exportStockReport(int id){
         if(repCnt.getStoReport(id) == null)
             return "The report "+id+ " does not exist\n";
-       return repCnt.exportReport(id);
+        return repCnt.exportReport(id);
     }
     public String exportDefReport(int id){
         if(repCnt.getDefReport(id) == null)
@@ -485,5 +499,20 @@ public class Facade {
         return invCnt.getCategory(name);
     }
 
+    public void addSup(String supCat, String cat){
+       // invCnt.addSup(supCat, cat);
+        dataHandler.addSup(supCat,cat);
+    }
+    public void deleteSup(String cat){
+        dataHandler.deleteSup(cat);
+    }
 
+
+    public void addStockReportFromData(StockReport re) {
+        repCnt.addStockReport(re);
+    }
+
+    public void addDefectiveReportFromData(DefectiveReport re1) {
+        repCnt.addDefReport(re1);
+    }
 }

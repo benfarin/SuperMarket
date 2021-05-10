@@ -4,8 +4,6 @@ import BusinessLayer.Facade;
 import BusinessLayer.Inventory.DefectiveReport;
 import BusinessLayer.Inventory.Product;
 import BusinessLayer.Inventory.StockReport;
-import BusinessLayer.Suppliers.Contract;
-import BusinessLayer.Suppliers.ProductPerSup;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -19,13 +17,7 @@ public class DataHandler {
     private CategoryMapper catMapper;
     private ProductMapper prodMapper;
     private ReportMapper repMapper;
-
-    private ContractMapper contractMapper;
-    private ProductPerSupMapper productPerSupMapper;
-    private SupplierMapper supplierMapper;
-    private OrderMapper orderMapper;
-
-    public static Connection con;
+    private Connection con;
     private Facade facade;
     public DataHandler(Facade facade) {
         this.facade = facade;
@@ -35,19 +27,12 @@ public class DataHandler {
             this.catMapper = new CategoryMapper(con,facade);
             this.prodMapper = new ProductMapper(con,facade);
             this.repMapper = new ReportMapper(con, facade);
-
-            this.contractMapper = new ContractMapper();
-            this.productPerSupMapper = new ProductPerSupMapper();
-            this.supplierMapper = new SupplierMapper();
-            this.orderMapper = new OrderMapper();
-
-
         } catch (Exception e) {
             System.out.println("initialize failed!!!!\n" + e.getMessage());
         }
 
     }
-    public static Connection connect(){
+    public Connection connect(){
         try {
             Class.forName("org.sqlite.JDBC");
             con = DriverManager.getConnection("jdbc:sqlite:dev/SQL_Inventory_Suppliers.db");
@@ -101,10 +86,19 @@ public class DataHandler {
         try {
             prodMapper.addProduct(id, name, manufacture, category, storeQuantity,
                     storageQuantity, discount, discountDate, priceFromSupplier,
-                    priceToCustomer, defectiveItems, minimum, orderAmount, priceToCusHistory,
+                    priceToCustomer, defectiveItems, minimum, priceToCusHistory,
                     priceFromSupHistory);
         } catch (Exception e) {
             System.out.println("failed to add product\n" + e.getMessage());
+        }
+    }
+
+    public void addSup (String supCat, String cat){
+        try {
+            catMapper.addSup(supCat,cat);
+        }
+        catch (Exception e) {
+            System.out.println("failed to add category\n" + e.getMessage());
         }
     }
 
@@ -218,7 +212,7 @@ public class DataHandler {
         }
     }
     public HashMap<Integer, Product> getProducts(){
-       return prodMapper.getProducts();
+        return prodMapper.getProducts();
     }
     //............REPORT.............
     public void deleteStockReport(int id){
@@ -283,5 +277,14 @@ public class DataHandler {
     }
     public HashMap<Integer, DefectiveReport> getDefectiveReports() {
         return repMapper.getDefectiveReports();
+    }
+
+    public void deleteSup(String cat){
+        try {
+            catMapper.addSup("",cat);
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

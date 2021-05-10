@@ -29,7 +29,7 @@ public abstract class Report {
     }
     public Report(int id, Date date){
         this.Id = id;
-        if(ID < id){
+        if (ID < id) {
             ID = id;
         }
         this.date = date;

@@ -25,22 +25,41 @@ public class CategoryMapper {
         ResultSet res = stmt.executeQuery("SELECT * FROM Category");
         while (res.next()) {
             String name = res.getString("name");
-            String sup_cat = res.getString("super_cat");
-            //Category supCat = facade.getCategory(sup_cat);
+//            String sup_cat = res.getString("super_cat");
+//            Category supCat = facade.getCategory(sup_cat);
             int discount = res.getInt("discount");
             Date discountDate = res.getDate("discountDate");
-            categories.put(name,facade.addCatFromData(name, sup_cat, discount, discountDate));
+            facade.addCatFromData(name, null, discount, discountDate);
+//            categories.put(name,facade.addCatFromData(name, null, discount, discountDate));
         }
-        for (Category c : categories.values()) {
-            if (c.getSupCategory() != null) {
-                facade.addSub(c.getSupCategory().getName(), c.getName());
+        res = stmt.executeQuery("SELECT * FROM Category");
+        while (res.next()) {
+            String name = res.getString("name");
+            String sup_cat = res.getString("super_cat");
+            facade.addSub(sup_cat,name);
             }
+        res = stmt.executeQuery("SELECT * FROM Category");
+        while (res.next()) {
+            String name = res.getString("name");
+            Category cat = facade.getCategory(name);
+            categories.put(name, cat);
         }
+
+
+//        for (Category c : categories.values()) {
+//            if (c.getSupCategory() != null) {
+//                facade.addSub(c.getSupCategory().getName(), c.getName());
+//            }
+//        }
     }
     public void addCategory(String name,String super_cat, int discount, java.util.Date discountDate) throws SQLException{
 //        Statement stmt = this.con.createStatement();
         String sql = "INSERT INTO Category(name,super_cat,discount,discountDate) VALUES(?,?,?,?)";
-        Date sqlDate = new Date(discountDate.getTime());
+        java.sql.Date sqlDate;
+        if(discountDate!=null)
+            sqlDate = new java.sql.Date(discountDate.getTime());
+        else
+            sqlDate = null;
         try (
                 PreparedStatement pstmt = con.prepareStatement(sql)) {
             pstmt.setString(1, name);
@@ -52,14 +71,41 @@ public class CategoryMapper {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-       // ResultSet res = stmt.executeQuery("INSERT INTO Category(name,super_cat,discount,discountDate) VALUES ("+name+","+super_cat+","+discount+","+discountDate+");");
+        // ResultSet res = stmt.executeQuery("INSERT INTO Category(name,super_cat,discount,discountDate) VALUES ("+name+","+super_cat+","+discount+","+discountDate+");");
     }
     public void deleteCategory(String name) throws SQLException{
         String sql = "DELETE FROM Category WHERE name=?";
         try{
+            for (Category c : categories.values()) {
+                if (c.getSupCategory()!=null) {
+                    if (c.getSupCategory().getName().equals(name)) {
+                        addSup(null, c.getName());
+                    }
+                }
+            }
+//            for (Product p : facade.getCategory(name).getProducts()) {
+//                if (c.getSupCategory().getName().equals(name)) {
+//                    addSup(null, c.getName());
+//                }
+//            }
+            categories.remove(name);
             PreparedStatement pstmt = con.prepareStatement(sql);
             pstmt.setString(1, name);
             pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    public void addSup(String super_cat, String cat) throws SQLException{
+        String sql = "UPDATE Category SET super_cat = ? "
+                + "WHERE name = ?";
+        try{
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setString(1,super_cat);
+            pstmt.setString(2,cat);
+            pstmt.executeUpdate();
+            Category c = facade.getCategory(cat);
+            c.setSupCategory(facade.getCategory(super_cat));
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

@@ -19,7 +19,7 @@ class StockReportTest {
 
     @BeforeEach
     void setUp() {
-        dairy = new Category("Dairy", new LinkedList<>());
+        dairy = new Category("Dairy");
         report = new StockReport();
         categories = new LinkedList<>();
         categories.add(dairy);

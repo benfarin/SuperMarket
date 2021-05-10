@@ -21,8 +21,8 @@ public class ProductMapper {
         this.con = con;
         this.facade = facade;
         products =new HashMap<>();
-        Statement stmt = this.con.createStatement();
-        ResultSet res = stmt.executeQuery("SELECT * FROM Product");
+        Statement stmt1 = this.con.createStatement();
+        ResultSet res = stmt1.executeQuery("SELECT * FROM Product");
 
         while(res.next())
         {
@@ -39,6 +39,7 @@ public class ProductMapper {
             int discount = res.getInt("discount");
             Date discountDate = res.getDate("discountDate");
             int defectiveItem = res.getInt("defectiveItems");
+            Statement stmt = this.con.createStatement();
             ResultSet res1 = stmt.executeQuery("SELECT * FROM PriceToCusHistory WHERE pid="+id);
             Map<Double,Date> priceToCusHistory = new HashMap<>();
             while(res1.next())
@@ -50,11 +51,18 @@ public class ProductMapper {
 
             products.put(id,facade.addProductFromData(id, name, manufacture, category1, storeQuantity, storageQuantity, discount, discountDate, priceFromSupplier, priceToCustomer, defectiveItem, minimum, priceToCusHistory, priceFromSupHistory));
         }
-    }
 
+        int lastId = 0;
+        for (Integer id : products.keySet()) {
+            if (id > lastId)
+                lastId = id;
+        }
+        facade.setFirstId(lastId);
+
+    }
     public void addProduct(int id, String name, String manufacture, String category, int storeQuantity,
                            int storageQuantity, int discount, Date discountDate, double priceFromSupplier,
-                           double priceToCustomer, int defectiveItems, int minimum, int orderAmount, Map<Double, Date> priceToCusHistory,
+                           double priceToCustomer, int defectiveItems, int minimum, Map<Double, Date> priceToCusHistory,
                            Map<Double, Date> priceFromSupHistory) throws SQLException{
         String sql = "INSERT INTO Product (pid, name,category_name, manufacture, storeQuantity, storageQuantity, discount, discountDate, priceFromSupplier, priceToCustomer, defectiveItems, minimum) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
         java.sql.Date sqlDate;

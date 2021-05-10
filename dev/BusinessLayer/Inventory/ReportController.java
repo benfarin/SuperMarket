@@ -1,118 +1,163 @@
+//
+// Source code recreated from a .class file by IntelliJ IDEA
+// (powered by Fernflower decompiler)
+//
+
 package BusinessLayer.Inventory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 public class ReportController {
-    List<DefectiveReport> defReports;
-    List<StockReport> stockReports;
+    List<DefectiveReport> defReports = new LinkedList();
+    List<StockReport> stockReports = new LinkedList();
     private static int day = 3;
 
-
     public ReportController() {
-        this.defReports = new LinkedList<>();
-        this.stockReports = new LinkedList<>();
     }
 
     public DefectiveReport getDefReport(int id) {
-        for (DefectiveReport dRep : defReports) {
-            if (dRep.getID() == id)
-                return dRep;
-        }
-        return null;
+        Iterator var2 = this.defReports.iterator();
+
+        DefectiveReport dRep;
+        do {
+            if (!var2.hasNext()) {
+                return null;
+            }
+
+            dRep = (DefectiveReport)var2.next();
+        } while(dRep.getID() != id);
+
+        return dRep;
     }
 
-    public void setDay(int day){
-        this.day = day;
-        for (StockReport s : stockReports){
+    public void setDay(int day) {
+        ReportController.day = day;
+        Iterator var2 = this.stockReports.iterator();
+
+        while(var2.hasNext()) {
+            StockReport s = (StockReport)var2.next();
             s.setDay(day);
         }
+
     }
 
     public StockReport getStoReport(int id) {
-        for (StockReport sRep : stockReports) {
-            if (sRep.getID() == id)
-                return sRep;
-        }
-        return null;
+        Iterator var2 = this.stockReports.iterator();
+
+        StockReport sRep;
+        do {
+            if (!var2.hasNext()) {
+                return null;
+            }
+
+            sRep = (StockReport)var2.next();
+        } while(sRep.getID() != id);
+
+        return sRep;
     }
 
     public StockReport addStockReport(List<Category> categories) {
         StockReport sto = new StockReport();
-        for (Category c : categories)
+        Iterator var3 = categories.iterator();
+
+        while(var3.hasNext()) {
+            Category c = (Category)var3.next();
             sto.addCategory(c);
+        }
+
         this.stockReports.add(sto);
         return sto;
     }
 
     public DefectiveReport addDefReport(List<Product> products) {
         DefectiveReport def = new DefectiveReport();
-        for (Product p : products)
+        Iterator var3 = products.iterator();
+
+        while(var3.hasNext()) {
+            Product p = (Product)var3.next();
             def.addProd(p);
+        }
+
         this.defReports.add(def);
         return def;
     }
 
     public boolean addCatToStRep(int id, Category category) {
-        StockReport sRep = getStoReport(id);
-        if (sRep != null && !sRep.getCategories().contains(category)){
+        StockReport sRep = this.getStoReport(id);
+        if (sRep != null && !sRep.getCategories().contains(category)) {
             sRep.addCategory(category);
-        return true;
+            return true;
+        } else {
+            return false;
         }
-        return false;
     }
 
     public String exportReport(int id) {
-        StockReport sRep = getStoReport(id);
+        StockReport sRep = this.getStoReport(id);
         if (sRep != null) {
             return sRep.exportReport();
         } else {
-            DefectiveReport dRep = getDefReport(id);
-            if (dRep != null)
-                return dRep.exportReport();
+            DefectiveReport dRep = this.getDefReport(id);
+            return dRep != null ? dRep.exportReport() : "The report does not exist";
         }
-        return "The report does not exist";
     }
 
-    public boolean addProdToDefRep(int id, Product p){
-        DefectiveReport defRep = getDefReport(id);
-        if (defRep != null && !defRep.getDefectiveProducts().contains(p)){
+    public boolean addProdToDefRep(int id, Product p) {
+        DefectiveReport defRep = this.getDefReport(id);
+        if (defRep != null && !defRep.getDefectiveProducts().contains(p)) {
             defRep.addProd(p);
-            return true;}
-        return false;
+            return true;
+        } else {
+            return false;
+        }
     }
-    public int getDay(){
+
+    public int getDay() {
         return day;
     }
 
-    public HashMap<Integer, Integer> sendReport(){
-        HashMap<Integer, Integer> report = new HashMap<>();
-        List<Category> cat = new ArrayList<>();
-        for(StockReport s : stockReports){
-             cat = s.getCategories();
-        for (Category c : cat) {
-            for(Product p: c.getProducts()){
-                report.put(p.getId(), p.getOrderAmount());
-            }}
+    public HashMap<Integer, Integer> sendReport() {
+        HashMap<Integer, Integer> report = new HashMap();
+        new ArrayList();
+        Iterator var3 = this.stockReports.iterator();
+
+        while(var3.hasNext()) {
+            StockReport s = (StockReport)var3.next();
+            List<Category> cat = s.getCategories();
+            Iterator var5 = cat.iterator();
+
+            while(var5.hasNext()) {
+                Category c = (Category)var5.next();
+                Iterator var7 = c.getProducts().iterator();
+
+                while(var7.hasNext()) {
+                    Product p = (Product)var7.next();
+                    report.put(p.getId(), p.getOrderAmount());
+                }
+            }
         }
-        stockReports.clear();
+
+        this.stockReports.clear();
         return report;
     }
+
     public List<DefectiveReport> getDefReports() {
-        return defReports;
+        return this.defReports;
     }
 
     public List<StockReport> getStockReports() {
-        return stockReports;
+        return this.stockReports;
     }
 
     public void addDefReport(DefectiveReport re) {
-        defReports.add(re);
+        this.defReports.add(re);
     }
 
     public void addStockReport(StockReport re) {
-        stockReports.add(re);
+        this.stockReports.add(re);
     }
 }
