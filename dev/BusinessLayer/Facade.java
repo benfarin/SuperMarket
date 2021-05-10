@@ -49,9 +49,10 @@ public class Facade {
         dataHandler.addProduct(p.getId(),p.getName(),p.getManufacture(),p.getCategory().getName(),p.getStoreQuantity(),p.getStorageQuantity(),p.getDiscount(),p.getDiscountDate(),p.getPriceFromSupplier(),p.getPriceToCustomer(),p.getDefectiveItem(),p.getMinimum(),p.getOrderAmount(),p.getPriceToCusHistory(),p.getPriceFromSupHistory());
         return "the product " + name + " successfully added\n";
     }
-    public Product addProductFromData (int id, String name, String manufacture, Category category, int storeQuantity, int storageQuantity, int discount, Date discountDate, double priceFromSupplier, double priceToCustomer, int defectiveItem, int minimum, int orderAmount, Map<Double, Date> priceToCusHistory, Map<Double, Date> priceFromSupHistory){
-        return  invCnt.addProductFromData(id,name, manufacture, category,storeQuantity, storageQuantity, discount, discountDate, priceFromSupplier, priceToCustomer,defectiveItem, minimum,orderAmount, priceToCusHistory, priceFromSupHistory);
+    public Product addProductFromData (int id, String name, String manufacture, Category category, int storeQuantity, int storageQuantity, int discount, Date discountDate, double priceFromSupplier, double priceToCustomer, int defectiveItem, int minimum, Map<Double, Date> priceToCusHistory, Map<Double, Date> priceFromSupHistory){
+        return  invCnt.addProductFromData(id,name, manufacture, category,storeQuantity, storageQuantity, discount, discountDate, priceFromSupplier, priceToCustomer,defectiveItem, minimum, priceToCusHistory, priceFromSupHistory);
     }
+
     //-------------------------PRODUCT--------------------------
     public Product getProdByID(int id){
         return invCnt.getProdByID(id);
@@ -275,6 +276,12 @@ public class Facade {
         dataHandler.addStock(sto.getID(),sto.getDate(),catNames);
         return "Added stock report about the categories: " + ret+"\n";
     }
+    public void addDefectiveReportFromData(DefectiveReport re) {
+        repCnt.addDefReport(re);
+    }
+    public void addStockReportFromData(StockReport re){
+      repCnt.addStockReport(re);
+    }
     public String addDefReport(List<String> products){
         List<Product> prods = new LinkedList<>();
         String ret = new String();
@@ -304,7 +311,8 @@ public class Facade {
         Category c = invCnt.getCategory(category);
         if(c==null)
             return "the category "+category+" does not exist\n";
-        repCnt.addCatToStRep(id,c);
+        if(!repCnt.addCatToStRep(id,c))
+            return "The category " + category+ " already exists in report "+ id + "\n";
         //database
         dataHandler.addStockCat(id,category);
         return "Added the category " + category+ " to "+ id + " report\n";
@@ -316,43 +324,45 @@ public class Facade {
         Product p = invCnt.getProduct(product);
         if(p==null)
             return "the product "+product+" does not exist\n";
-        repCnt.addProdToDefRep(id,p);
+        if(!repCnt.addProdToDefRep(id,p))
+            return "The product " + product + " already exists in report "+ id + "\n";
+
         //database
         dataHandler.addDefectiveProd(id,p.getId());
         return "Added the product " + product+ " to "+ id + " report\n";
     }
     public void orderToday(){
-//            Calendar cal = Calendar.getInstance();
-//            cal.setTime(new Date(System.currentTimeMillis()));
-//            boolean dayIsHere;
-//            switch (repCnt.getDay()) {
-//                case 1:
-//                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY;
-//                    break;
-//                case 2:
-//                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY;
-//                    break;
-//                case 3:
-//                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.TUESDAY;
-//                    break;
-//                case 4:
-//                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.WEDNESDAY;
-//                    break;
-//                case 5:
-//                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.THURSDAY;
-//                    break;
-//                case 6:
-//                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY;
-//                    break;
-//                case 7:
-//                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY;
-//                    break;
-//                default:
-//                    dayIsHere = false;
-//                    break;
-//            }
-//            if(dayIsHere)
-//                sendOrder();
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(new Date(System.currentTimeMillis()));
+            boolean dayIsHere;
+            switch (repCnt.getDay()) {
+                case 1:
+                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY;
+                    break;
+                case 2:
+                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY;
+                    break;
+                case 3:
+                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.TUESDAY;
+                    break;
+                case 4:
+                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.WEDNESDAY;
+                    break;
+                case 5:
+                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.THURSDAY;
+                    break;
+                case 6:
+                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY;
+                    break;
+                case 7:
+                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY;
+                    break;
+                default:
+                    dayIsHere = false;
+                    break;
+            }
+            if(dayIsHere)
+                sendOrder();
     }
     public void sendOrder(){
         HashMap<Integer, Integer> order = new HashMap<>();
@@ -474,4 +484,6 @@ public class Facade {
     public Category getCategory(String name) {
         return invCnt.getCategory(name);
     }
+
+
 }

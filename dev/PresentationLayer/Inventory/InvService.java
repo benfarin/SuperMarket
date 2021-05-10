@@ -424,6 +424,7 @@ public class InvService {
         }
 
     }
+
     private void addStockRep(){
         System.out.print("\nWhich categories to include in the report- ");
         String catsNames = s.next();
@@ -447,7 +448,7 @@ public class InvService {
     }
     private void defectiveReport(){
         while (true) {
-            System.out.println("\t\tStock report menu:\n\n" +
+            System.out.println("\t\tDefective report menu:\n\n" +
                     "1)\tadd defective Report\n" +
                     "2)\tadd product to defective report\n" +
                     "3)\texport defective report\n" +

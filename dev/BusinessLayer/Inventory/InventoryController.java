@@ -12,21 +12,6 @@ public class InventoryController {
     public InventoryController () {
         this.products = new LinkedList<>();
         this.categories = new LinkedList<>();
-        Category subCategory1 = new Category("Low-fat", new LinkedList<>());
-        Category subCategory2 = new Category("Milk", new LinkedList<>());
-        Category subCategory3 = new Category("Dairy-free", new LinkedList<>());
-        Category mainCategory = new Category("Dairy", new LinkedList<>());
-        mainCategory.addSub(subCategory1);
-        mainCategory.addSub(subCategory2);
-        mainCategory.addSub(subCategory3);
-        Product p = new Product("milk",mainCategory,"Maabarot",2.90,4.10,20);
-        Product p1 = new Product("milk low fat",subCategory2,"Maabarot",2.90,4.10,20);
-        categories.add(subCategory1);
-        categories.add(subCategory2);
-        categories.add(subCategory3);
-        categories.add(mainCategory);
-        products.add(p);
-        products.add(p1);
 
     }
     public void addCatFromData(Category c){
@@ -68,8 +53,8 @@ public class InventoryController {
             products.add(p);
         return p;
     }
-    public Product addProductFromData (int id, String name, String manufacture, Category category, int storeQuantity, int storageQuantity, int discount, Date discountDate, double priceFromSupplier, double priceToCustomer, int defectiveItem, int minimum, int orderAmount, Map<Double, Date> priceToCusHistory, Map<Double, Date> priceFromSupHistory) {
-        Product p = new Product(id,name,manufacture,category,storeQuantity,storageQuantity,discount,discountDate,priceFromSupplier,priceToCustomer,defectiveItem,minimum,orderAmount,priceToCusHistory,priceFromSupHistory);
+    public Product addProductFromData (int id, String name, String manufacture, Category category, int storeQuantity, int storageQuantity, int discount, Date discountDate, double priceFromSupplier, double priceToCustomer, int defectiveItem, int minimum, Map<Double, Date> priceToCusHistory, Map<Double, Date> priceFromSupHistory) {
+        Product p = new Product(id,name,manufacture,category,storeQuantity,storageQuantity,discount,discountDate,priceFromSupplier,priceToCustomer,defectiveItem,minimum,priceToCusHistory,priceFromSupHistory);
         if (!products.contains(p))
             products.add(p);
         p.getCategory().addProduct(p);
