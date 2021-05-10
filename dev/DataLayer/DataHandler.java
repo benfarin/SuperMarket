@@ -26,7 +26,8 @@ public class DataHandler {
         try {
             this.catMapper = new CategoryMapper(con,facade);
             this.prodMapper = new ProductMapper(con,facade);
-            this.repMapper = new ReportMapper(con);
+            this.repMapper = new ReportMapper(con, facade);
+
         } catch (Exception e) {
             System.out.println("initialize failed!!!!\n" + e.getMessage());
         }
@@ -203,7 +204,7 @@ public class DataHandler {
         }
     }
     public HashMap<Integer, Product> getProducts(){
-       return prodMapper.getProducts();
+        return prodMapper.getProducts();
     }
     //............REPORT.............
     public void deleteStockReport(int id){

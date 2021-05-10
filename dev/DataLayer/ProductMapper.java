@@ -21,13 +21,13 @@ public class ProductMapper {
         this.con = con;
         this.facade = facade;
         products =new HashMap<>();
-        Statement stmt = this.con.createStatement();
-        ResultSet res = stmt.executeQuery("SELECT * FROM Product");
+        Statement stmt1 = this.con.createStatement();
+        ResultSet res = stmt1.executeQuery("SELECT * FROM Product");
 
         while(res.next())
         {
             String name = res.getString("name");
-            String category = res.getString("category");
+            String category = res.getString("category_name");
             Category category1 = facade.getCategory(category);
             String manufacture = res.getString("manufacture");
             int priceFromSupplier = res.getInt("priceFromSupplier");
@@ -39,7 +39,7 @@ public class ProductMapper {
             int discount = res.getInt("discount");
             Date discountDate = res.getDate("discountDate");
             int defectiveItem = res.getInt("defectiveItems");
-            int orderAmount = res.getInt("orderAmount");
+            Statement stmt = this.con.createStatement();
             ResultSet res1 = stmt.executeQuery("SELECT * FROM PriceToCusHistory WHERE pid="+id);
             Map<Double,Date> priceToCusHistory = new HashMap<>();
             while(res1.next())
@@ -49,7 +49,7 @@ public class ProductMapper {
             while(res1.next())
                 priceFromSupHistory.put(res1.getDouble("price"),res1.getDate("date"));
 
-            products.put(id,facade.addProductFromData(id, name, manufacture, category1, storeQuantity, storageQuantity, discount, discountDate, priceFromSupplier, priceToCustomer, defectiveItem, minimum, orderAmount, priceToCusHistory, priceFromSupHistory));
+            products.put(id,facade.addProductFromData(id, name, manufacture, category1, storeQuantity, storageQuantity, discount, discountDate, priceFromSupplier, priceToCustomer, defectiveItem, minimum, priceToCusHistory, priceFromSupHistory));
         }
     }
 

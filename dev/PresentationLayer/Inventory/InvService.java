@@ -8,7 +8,7 @@ import java.util.*;
 
 public class InvService {
     public static Scanner s = new Scanner(System.in);
-//            .useDelimiter("\n");
+    //            .useDelimiter("\n");
     Facade facade;
 
     public InvService(Facade facade){
@@ -24,26 +24,26 @@ public class InvService {
                     "4)\tDefective report\n" +
                     "5)\tExit"
             );
-                int choice = s.nextInt();
-                switch (choice) {
-                    case 1:
-                        productMenu();
-                        break;
-                    case 2:
-                        categoryMenu();
-                        break;
-                    case 3:
-                        stockReport();
-                        break;
-                    case 4:
-                        defectiveReport();
-                        break;
-                    case 5:
-                        return;
-                    default:
-                        System.out.println("Not a valid option, please try again.\n");
-                        break;
-                }
+            int choice = s.nextInt();
+            switch (choice) {
+                case 1:
+                    productMenu();
+                    break;
+                case 2:
+                    categoryMenu();
+                    break;
+                case 3:
+                    stockReport();
+                    break;
+                case 4:
+                    defectiveReport();
+                    break;
+                case 5:
+                    return;
+                default:
+                    System.out.println("Not a valid option, please try again.\n");
+                    break;
+            }
         }
         while (true) ;
     }
@@ -118,7 +118,7 @@ public class InvService {
         System.out.println("\nDefective item count- ");
         int quantity = s.nextInt();
         System.out.println(facade.setDefectiveItems(product,quantity));
-       // String result = facade.
+        // String result = facade.
     }
 
     private void updateDiscount(){
@@ -424,6 +424,7 @@ public class InvService {
         }
 
     }
+
     private void addStockRep(){
         System.out.print("\nWhich categories to include in the report- ");
         String catsNames = s.next();
@@ -447,7 +448,7 @@ public class InvService {
     }
     private void defectiveReport(){
         while (true) {
-            System.out.println("\t\tStock report menu:\n\n" +
+            System.out.println("\t\tDefective report menu:\n\n" +
                     "1)\tadd defective Report\n" +
                     "2)\tadd product to defective report\n" +
                     "3)\texport defective report\n" +
