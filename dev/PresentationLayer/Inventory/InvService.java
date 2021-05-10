@@ -424,6 +424,7 @@ public class InvService {
         }
 
     }
+
     private void addStockRep(){
         System.out.print("\nWhich categories to include in the report- ");
         String catsNames = s.next();

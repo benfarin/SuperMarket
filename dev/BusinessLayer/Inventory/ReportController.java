@@ -55,10 +55,13 @@ public class ReportController {
         return def;
     }
 
-    public void addCatToStRep(int id, Category category) {
+    public boolean addCatToStRep(int id, Category category) {
         StockReport sRep = getStoReport(id);
-        if (sRep != null)
+        if (sRep != null && !sRep.getCategories().contains(category)){
             sRep.addCategory(category);
+        return true;
+        }
+        return false;
     }
 
     public String exportReport(int id) {
@@ -72,9 +75,13 @@ public class ReportController {
         }
         return "The report does not exist";
     }
-    public void addProdToDefRep(int id, Product p){
+
+    public boolean addProdToDefRep(int id, Product p){
         DefectiveReport defRep = getDefReport(id);
-        defRep.addProd(p);
+        if (defRep != null && !defRep.getDefectiveProducts().contains(p)){
+            defRep.addProd(p);
+            return true;}
+        return false;
     }
     public int getDay(){
         return day;
@@ -99,5 +106,13 @@ public class ReportController {
 
     public List<StockReport> getStockReports() {
         return stockReports;
+    }
+
+    public void addDefReport(DefectiveReport re) {
+        defReports.add(re);
+    }
+
+    public void addStockReport(StockReport re) {
+        stockReports.add(re);
     }
 }
