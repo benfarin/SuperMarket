@@ -38,7 +38,6 @@ public class CategoryMapper {
         }
     }
     public void addCategory(String name,String super_cat, int discount, java.util.Date discountDate) throws SQLException{
-//        Statement stmt = this.con.createStatement();
         String sql = "INSERT INTO Category(name,super_cat,discount,discountDate) VALUES(?,?,?,?)";
         java.sql.Date sqlDate;
         if(discountDate!=null)
