@@ -26,10 +26,10 @@ public class CategoryMapper {
         while (res.next()) {
             String name = res.getString("name");
             String sup_cat = res.getString("super_cat");
-            //Category supCat = facade.getCategory(sup_cat);
+            Category supCat = facade.getCategory(sup_cat);
             int discount = res.getInt("discount");
             Date discountDate = res.getDate("discountDate");
-            categories.put(name,facade.addCatFromData(name, sup_cat, discount, discountDate));
+            categories.put(name,facade.addCatFromData(name, supCat, discount, discountDate));
         }
         for (Category c : categories.values()) {
             if (c.getSupCategory() != null) {
