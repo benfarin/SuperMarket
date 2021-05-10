@@ -16,12 +16,13 @@ import java.util.List;
 public class CategoryMapper {
 
     private HashMap<String, Category> categories;
-    private Connection con = null;
     private Facade facade;
+    Statement stmt;
 
-    public void CategoryMapper() throws SQLException {
+    public CategoryMapper(Statement stmt) throws SQLException {
+        this.stmt = stmt;
         categories = new HashMap<>();
-        Statement stmt = this.con.createStatement();
+        //Statement stmt = this.con.createStatement();
         ResultSet res = stmt.executeQuery("SELECT * FROM Category");
         while (res.next()) {
             String name = res.getString("name");
@@ -38,20 +39,20 @@ public class CategoryMapper {
         }
     }
     public void addCategory(String name,String super_cat, int discount, Date discountDate) throws SQLException{
-        Statement stmt = this.con.createStatement();
+        //Statement stmt = this.con.createStatement();
         ResultSet res = stmt.executeQuery("INSERT INTO Category (name,super_cat,discount,discountDate) VALUES ("+name+","+super_cat+","+discount+","+discountDate+");");
     }
     public void deleteCategory(String name) throws SQLException{
-        Statement stmt = this.con.createStatement();
+        //Statement stmt = this.con.createStatement();
         ResultSet res = stmt.executeQuery("DELETE FROM Category WHERE name="+name+";");
     }
     public void updateDiscounts(String name, int discount, Date discountDate) throws SQLException {
-        Statement stmt = this.con.createStatement();
+        //Statement stmt = this.con.createStatement();
         ResultSet res = stmt.executeQuery("UPDATE Category SET discount =" + discount + ", discountDate =" + discountDate + " WHERE category_name=" + name);
     }
 
     public void updateDiscDate(String name, Date discountDate) throws SQLException {
-        Statement stmt = this.con.createStatement();
+        //Statement stmt = this.con.createStatement();
         ResultSet res = stmt.executeQuery("UPDATE Category SET discountDate =" + discountDate + " WHERE category_name=" + name);
     }
 }

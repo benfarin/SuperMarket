@@ -39,11 +39,12 @@ public class ReportController {
         return null;
     }
 
-    public void addStockReport(List<Category> categories) {
+    public StockReport addStockReport(List<Category> categories) {
         StockReport sto = new StockReport();
         for (Category c : categories)
             sto.addCategory(c);
         this.stockReports.add(sto);
+        return sto;
     }
 
     public DefectiveReport addDefReport(List<Product> products) {

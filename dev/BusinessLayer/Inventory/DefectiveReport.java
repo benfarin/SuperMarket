@@ -8,10 +8,6 @@ import java.util.List;
 public class DefectiveReport extends Report {
 
     private List<Product> defectiveProducts;
-    public DefectiveReport(int id, Date date){
-        super(id, date);
-        this.defectiveProducts = new LinkedList<>();
-    }
     @Override
     public String exportReport() {
         String s = "";
@@ -53,4 +49,7 @@ public class DefectiveReport extends Report {
         return false;
     }
 
+    public List<Product> getDefectiveProducts() {
+        return defectiveProducts;
+    }
 }

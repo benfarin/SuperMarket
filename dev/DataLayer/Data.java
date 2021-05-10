@@ -1,9 +1,9 @@
-package DataLayer;
-import BusinessLayer.Inventory.Product;
-
-import java.sql.*;
-
-public class Data {
+//package DataLayer;
+//import BusinessLayer.Inventory.Product;
+//
+//import java.sql.*;
+//
+//public class Data {
 //
 //    private Connection con;
 //    public Data(){
@@ -13,8 +13,8 @@ public class Data {
 //
 //    public void connect(){
 //        try {
-//          //  Class.forName("org.sqlite.JDBC");
-////            con = DriverManager.getConnection("jdbc:sqlite:dev/SQL_Inventory_Suppliers.db");
+//            Class.forName("org.sqlite.JDBC");
+//            con = DriverManager.getConnection("jdbc:sqlite:dev/SQL_Inventory_Suppliers.db");
 //        }
 //
 //        catch ( Exception e ) {
@@ -23,10 +23,10 @@ public class Data {
 //        }
 //        System.out.println("database successfully created");
 //    }
-
-
-
-
-
-}
-
+//
+//
+//
+//
+//
+//}
+//

@@ -4,19 +4,26 @@ import BusinessLayer.Inventory.DefectiveReport;
 import BusinessLayer.Inventory.Product;
 import BusinessLayer.Inventory.StockReport;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.sql.Statement;
 
 public class DataHandler {
     private CategoryMapper catMapper;
     private ProductMapper prodMapper;
     private ReportMapper repMapper;
-
+    private Connection con;
+    private Statement statment;
     public DataHandler() {
-        try {
-            this.catMapper = new CategoryMapper();
+        con = null;
+        connect();
+        try { ;
+            statment = this.con.createStatement();
+            this.catMapper = new CategoryMapper(statment);
             this.prodMapper = new ProductMapper();
             this.repMapper = new ReportMapper();
         } catch (Exception e) {
@@ -24,7 +31,18 @@ public class DataHandler {
         }
 
     }
+    public void connect(){
+        try {
+            Class.forName("org.sqlite.JDBC");
+            con = DriverManager.getConnection("jdbc:sqlite:dev/SQL_Inventory_Suppliers.db");
+        }
 
+        catch ( Exception e ) {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            System.exit(0);
+        }
+        System.out.println("database successfully created");
+    }
     //--------------CATEGORIES--------------
     public void addCatToData(String name, String super_cat, int discount, Date discountDate) {
         try {
@@ -119,9 +137,9 @@ public class DataHandler {
             System.out.println("failed to updateStorageQuantity\n" + e.getMessage());
         }
     }
-    public void updateDiscount (int id, int discount){
+    public void updateDiscount (int id, int discount,Date discountDate){
         try {
-            prodMapper.updateDiscount(id, discount);
+            prodMapper.updateDiscount(id, discount,discountDate);
         } catch (Exception e) {
             System.out.println("failed to updateDiscount\n" + e.getMessage());
         }
@@ -140,14 +158,14 @@ public class DataHandler {
             System.out.println("failed to updateDiscountDate\n" + e.getMessage());
         }
     }
-    public void updatePriceFromSupplier (int id, int priceFromSupplier){
+    public void updatePriceFromSupplier (int id, double priceFromSupplier){
         try {
             prodMapper.updatePriceFromSupplier(id, priceFromSupplier);
         } catch (Exception e) {
             System.out.println("failed to updatePriceFromSupplier\n" + e.getMessage());
         }
     }
-    public void updatePriceToCustomer (int id, int priceToCustomer){
+    public void updatePriceToCustomer (int id, double priceToCustomer){
         try {
             prodMapper.updatePriceToCustomer(id, priceToCustomer);
         } catch (Exception e) {
