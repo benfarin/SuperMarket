@@ -49,10 +49,14 @@ public class Facade {
         dataHandler.addProduct(p.getId(),p.getName(),p.getManufacture(),p.getCategory().getName(),p.getStoreQuantity(),p.getStorageQuantity(),p.getDiscount(),p.getDiscountDate(),p.getPriceFromSupplier(),p.getPriceToCustomer(),p.getDefectiveItem(),p.getMinimum(),p.getOrderAmount(),p.getPriceToCusHistory(),p.getPriceFromSupHistory());
         return "the product " + name + " successfully added\n";
     }
-    public Product addProductFromData (int id, String name, String manufacture, Category category, int storeQuantity, int storageQuantity, int discount, Date discountDate, double priceFromSupplier, double priceToCustomer, int defectiveItem, int minimum, int orderAmount, Map<Double, Date> priceToCusHistory, Map<Double, Date> priceFromSupHistory){
-        return  invCnt.addProductFromData(id,name, manufacture, category,storeQuantity, storageQuantity, discount, discountDate, priceFromSupplier, priceToCustomer,defectiveItem, minimum,orderAmount, priceToCusHistory, priceFromSupHistory);
+    public Product addProductFromData (int id, String name, String manufacture, Category category, int storeQuantity, int storageQuantity, int discount, Date discountDate, double priceFromSupplier, double priceToCustomer, int defectiveItem, int minimum, Map<Double, Date> priceToCusHistory, Map<Double, Date> priceFromSupHistory){
+        return  invCnt.addProductFromData(id,name, manufacture, category,storeQuantity, storageQuantity, discount, discountDate, priceFromSupplier, priceToCustomer,defectiveItem, minimum, priceToCusHistory, priceFromSupHistory);
     }
     //-------------------------PRODUCT--------------------------
+    public void setFirstId (int id) {
+        invCnt.setFirstId(id);
+    }
+
     public Product getProdByID(int id){
         return invCnt.getProdByID(id);
     }
@@ -139,8 +143,8 @@ public class Facade {
         if(invCnt.reduceStorageQuantity(prodName,reduce)){
             Product p = invCnt.getProduct(prodName);
             AddNewOrder((long) p.getId(),4*p.getMinimum());
-                s = "*** WARNING!!! "+ prodName+"'s storage quantity is under the minimum ***\nsend order to supplier\n";
-            }
+            s = "*** WARNING!!! "+ prodName+"'s storage quantity is under the minimum ***\nsend order to supplier\n";
+        }
 
         return "Reduced "+ reduce+" from " + prodName+" storage quantity\n"+s;
     }
@@ -193,7 +197,9 @@ public class Facade {
         if(invCnt.getCategory(catName)==null){
             return "Can't delete "+catName+" this category does not exist\n";
         }
-        return "The category "+ catName +"was deleted";
+        invCnt.deleteCat(catName);
+        dataHandler.deleteCategory(catName);
+        return "The category "+ catName +" was deleted";
     }
     public String addSub(String mainCat,String subC){
         if(invCnt.getCategory(mainCat)==null){
@@ -205,6 +211,7 @@ public class Facade {
 
         Category subCat = invCnt.getCategory(subC);
         invCnt.addSub(mainCat,subCat);
+        //dataHandler.addSup(mainCat,subC);
         return "The sub-category " + subC + " successfully added to " + mainCat+"\n";
     }
     public String deleteSubCat(String mainCat, String subC){
@@ -238,6 +245,17 @@ public class Facade {
         dataHandler.updateDiscounts(catName,discount,discountDate);
         return "set " +catName+ "'s discount to "+ discount + " until "+ discountDate.toString()+"\n";
     }
+
+    public String setCatDisDate(String catName,Date disDate){
+        if(invCnt.getCategory(catName)==null){
+            return "the category "+catName+" does not exist\n";
+        }
+        invCnt.setCatDiscountDate(catName,disDate);
+        // update database
+        dataHandler.updateDiscDate(catName,disDate);
+        return "set " +catName+ "'s discount until "+ disDate.toString()+"\n";
+    }
+
     public String setCatDiscountDate(String catName, Date discountDate){
         if(invCnt.getCategory(catName)==null){
             return "the category "+catName+" does not exist\n";
@@ -362,12 +380,12 @@ public class Facade {
             if(order.get(i) > 0){
                 //todo
                 incoming_order_controller.AddNewOrder(Long.valueOf(i),order.get(i));
-        }
+            }
     }
     public String exportStockReport(int id){
         if(repCnt.getStoReport(id) == null)
             return "The report "+id+ " does not exist\n";
-       return repCnt.exportReport(id);
+        return repCnt.exportReport(id);
     }
     public String exportDefReport(int id){
         if(repCnt.getDefReport(id) == null)
@@ -473,5 +491,12 @@ public class Facade {
 
     public Category getCategory(String name) {
         return invCnt.getCategory(name);
+    }
+
+    public void addSup(String supCat, String cat){
+        dataHandler.addSup(supCat,cat);
+    }
+    public void deleteSup(String cat){
+        dataHandler.deleteSup(cat);
     }
 }

@@ -68,15 +68,15 @@ public class InventoryController {
             products.add(p);
         return p;
     }
-    public Product addProductFromData (int id, String name, String manufacture, Category category, int storeQuantity, int storageQuantity, int discount, Date discountDate, double priceFromSupplier, double priceToCustomer, int defectiveItem, int minimum, int orderAmount, Map<Double, Date> priceToCusHistory, Map<Double, Date> priceFromSupHistory) {
-        Product p = new Product(id,name,manufacture,category,storeQuantity,storageQuantity,discount,discountDate,priceFromSupplier,priceToCustomer,defectiveItem,minimum,orderAmount,priceToCusHistory,priceFromSupHistory);
+    public Product addProductFromData (int id, String name, String manufacture, Category category, int storeQuantity, int storageQuantity, int discount, Date discountDate, double priceFromSupplier, double priceToCustomer, int defectiveItem, int minimum, Map<Double, Date> priceToCusHistory, Map<Double, Date> priceFromSupHistory) {
+        Product p = new Product(id,name,manufacture,category,storeQuantity,storageQuantity,discount,discountDate,priceFromSupplier,priceToCustomer,defectiveItem,minimum,priceToCusHistory,priceFromSupHistory);
         if (!products.contains(p))
             products.add(p);
         p.getCategory().addProduct(p);
         return p;
     }
 
-//    public void addCategory (String name, List<Category> subCategories) {
+    //    public void addCategory (String name, List<Category> subCategories) {
 //        Category c = new Category(name,subCategories);
 //        if (!categories.contains(c))
 //            categories.add(c);
@@ -143,7 +143,7 @@ public class InventoryController {
 
     public boolean setStorageQuantity(String name, int storageQuantity){
         Product p = getProduct(name);
-       return p.setStorageQuantity(storageQuantity);
+        return p.setStorageQuantity(storageQuantity);
     }
 
     public String printProduct(String name){
@@ -177,11 +177,24 @@ public class InventoryController {
     }
     public String displayPFSHistory(String prodName){
         Product p = getProduct(prodName);
-       return p.displayPriceFromSupHistory();
+        return p.displayPriceFromSupHistory();
     }
     public String displayPTCHistory(String prodName){
         Product p = getProduct(prodName);
         return p.displayPriceToCusHistory();
+    }
+
+    public void setFirstId(int id){
+        Product p = new Product();
+        p.setFirstId(id);
+    }
+    public void deleteCat(String cat){
+        for (Category c: categories) {
+            if (c.getName().equals(cat)) {
+                categories.remove(c);
+                return;
+            }
+        }
     }
 
 }
