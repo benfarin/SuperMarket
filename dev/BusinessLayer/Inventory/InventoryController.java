@@ -168,4 +168,8 @@ public class InventoryController {
         return p.displayPriceToCusHistory();
     }
 
+    public void setFirstId(int lastId) {
+        if (!products.isEmpty())
+            Product.ID = lastId + 1;
+    }
 }

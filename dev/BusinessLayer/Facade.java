@@ -542,4 +542,8 @@ public class Facade {
     public Category getCategory(String name) {
         return this.invCnt.getCategory(name);
     }
+
+    public void setFirstId(int lastId) {
+        invCnt.setFirstId(lastId);
+    }
 }
