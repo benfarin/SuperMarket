@@ -65,6 +65,9 @@ public class Product {
         category.addProduct(this);
     }
 
+    public Product(){}
+
+    public void setFirstId(int id){ ID = id+1;}
 
     public double getPriceFromSupplier() {
         return priceFromSupplier;

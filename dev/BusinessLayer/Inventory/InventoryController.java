@@ -167,9 +167,16 @@ public class InventoryController {
         Product p = getProduct(prodName);
         return p.displayPriceToCusHistory();
     }
-
     public void setFirstId(int lastId) {
         if (!products.isEmpty())
             Product.ID = lastId + 1;
+    }
+    public void deleteCat(String cat){
+        for (Category c: categories) {
+            if (c.getName().equals(cat)) {
+                categories.remove(c);
+                return;
+            }
+        }
     }
 }
