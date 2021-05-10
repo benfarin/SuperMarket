@@ -26,16 +26,20 @@ public class Facade {
                 dataHandler.addCatToData(c.getName(), c.getSupCategory().getName(), c.getDiscount(), c.getDiscountDate());
             dataHandler.addCatToData(c.getName(), null, c.getDiscount(), c.getDiscountDate());
         }
-        return "the category " + name + " successfully added\n";
-    }
-    public Category addCatFromData(String name, String supCat,int discount,Date discountDate){
-        Category sup;
-        if(supCat != null) {
-            sup = invCnt.getCategory(supCat);
+        for(Category cat : c.getSubCategories()){
+            cat.addSup(c);
         }
-        else
-            sup = null;
-        Category c = new Category(name,sup, new LinkedList<>(), new LinkedList<>(), discount, discountDate);
+        return "the category " + name + " successfully added\n";
+
+    }
+    public Category addCatFromData(String name, Category supCat,int discount,Date discountDate){
+    //    Category sup;
+//        if(supCat != null) {
+//            sup = invCnt.getCategory(supCat);
+//        }
+//        else
+//            sup = null;
+        Category c = new Category(name,supCat, new LinkedList<>(), new LinkedList<>(), discount, discountDate);
         invCnt.addCatFromData(c);
         return c;
     }
@@ -498,5 +502,14 @@ public class Facade {
     }
     public void deleteSup(String cat){
         dataHandler.deleteSup(cat);
+    }
+
+
+    public void addStockReportFromData(StockReport re) {
+        repCnt.addStockReport(re);
+    }
+
+    public void addDefectiveReportFromData(DefectiveReport re1) {
+        repCnt.addDefReport(re1);
     }
 }

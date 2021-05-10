@@ -21,8 +21,8 @@ public class ProductMapper {
         this.con = con;
         this.facade = facade;
         products =new HashMap<>();
-        Statement stmt = this.con.createStatement();
-        ResultSet res = stmt.executeQuery("SELECT * FROM Product");
+        Statement stmt1 = this.con.createStatement();
+        ResultSet res = stmt1.executeQuery("SELECT * FROM Product");
 
         while(res.next())
         {
@@ -39,6 +39,7 @@ public class ProductMapper {
             int discount = res.getInt("discount");
             Date discountDate = res.getDate("discountDate");
             int defectiveItem = res.getInt("defectiveItems");
+            Statement stmt = this.con.createStatement();
             ResultSet res1 = stmt.executeQuery("SELECT * FROM PriceToCusHistory WHERE pid="+id);
             Map<Double,Date> priceToCusHistory = new HashMap<>();
             while(res1.next())
