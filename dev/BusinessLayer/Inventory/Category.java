@@ -22,6 +22,10 @@ public class Category {
         this.supCategory = null;
     }
 
+    public void setSupCategory(Category supCategory) {
+        this.supCategory = supCategory;
+    }
+
     public Category(String name, Category supCategory, List<Category> subCategories, List<Product> products, int discount, Date discountDate) {
         this.name = name;
         this.supCategory = supCategory;
@@ -44,7 +48,7 @@ public class Category {
     public void addSub(Category c){
         if(!subCategories.contains(c))
             subCategories.add(c);
-        c.addSup(this);
+      //  c.addSup(this);
     }
 
     public String getName() {
