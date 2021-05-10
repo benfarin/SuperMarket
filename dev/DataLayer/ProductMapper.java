@@ -57,8 +57,12 @@ public class ProductMapper {
                            int storageQuantity, int discount, Date discountDate, double priceFromSupplier,
                            double priceToCustomer, int defectiveItems, int minimum, int orderAmount, Map<Double, Date> priceToCusHistory,
                            Map<Double, Date> priceFromSupHistory) throws SQLException{
-        String sql = "INSERT INTO Product (pid, name,category, manufacture, storeQuantity, storageQuantity, discount, discountDate, orderAmount, priceFromSupplier, priceToCustomer, defectiveItems, minimum) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
-        java.sql.Date sqlDate = new java.sql.Date(discountDate.getTime());
+        String sql = "INSERT INTO Product (pid, name,category_name, manufacture, storeQuantity, storageQuantity, discount, discountDate, priceFromSupplier, priceToCustomer, defectiveItems, minimum) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
+        java.sql.Date sqlDate;
+        if(discountDate!=null)
+            sqlDate = new java.sql.Date(discountDate.getTime());
+        else
+            sqlDate = null;
         try (
                 PreparedStatement pstmt = con.prepareStatement(sql)) {
             pstmt.setInt(1, id);
@@ -69,11 +73,10 @@ public class ProductMapper {
             pstmt.setInt(6, storageQuantity);
             pstmt.setInt(7, discount);
             pstmt.setDate(8, sqlDate);
-            pstmt.setInt(9, orderAmount);
-            pstmt.setDouble(10,priceFromSupplier);
-            pstmt.setDouble(11,priceToCustomer);
-            pstmt.setInt(12, defectiveItems);
-            pstmt.setInt(13, minimum);
+            pstmt.setDouble(9,priceFromSupplier);
+            pstmt.setDouble(10,priceToCustomer);
+            pstmt.setInt(11, defectiveItems);
+            pstmt.setInt(12, minimum);
 
 
             pstmt.executeUpdate();
@@ -227,6 +230,8 @@ public class ProductMapper {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+        java.sql.Date sDate = new java.sql.Date(System.currentTimeMillis());
+        insertPriceFromSupHistoryRecord(id,priceFromSupplier,sDate);
     }
     public void updatePriceToCustomer (int id, double priceToCustomer) throws SQLException{
         String sql = "UPDATE Product SET priceToCustomer = ? "
@@ -240,6 +245,8 @@ public class ProductMapper {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+        java.sql.Date sDate = new java.sql.Date(System.currentTimeMillis());
+        insertPriceToCusHistoryRecord(id,priceToCustomer,sDate);
     }
     public void updateDefectiveItems (int id, int defectiveItems) throws SQLException{
         String sql = "UPDATE Product SET defectiveItems = ? "

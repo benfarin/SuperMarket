@@ -29,13 +29,13 @@ public class CategoryMapper {
             //Category supCat = facade.getCategory(sup_cat);
             int discount = res.getInt("discount");
             Date discountDate = res.getDate("discountDate");
-            facade.addCatFromData(name, sup_cat, discount, discountDate);
+            categories.put(name,facade.addCatFromData(name, sup_cat, discount, discountDate));
         }
-//        for (Category c : categories.values()) {
-//            if (c.getSupCategory() != null) {
-//                facade.addSub(c.getSupCategory().getName(), c.getName());
-//            }
-//        }
+        for (Category c : categories.values()) {
+            if (c.getSupCategory() != null) {
+                facade.addSub(c.getSupCategory().getName(), c.getName());
+            }
+        }
     }
     public void addCategory(String name,String super_cat, int discount, java.util.Date discountDate) throws SQLException{
 //        Statement stmt = this.con.createStatement();
