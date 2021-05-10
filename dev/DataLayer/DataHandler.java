@@ -4,6 +4,8 @@ import BusinessLayer.Facade;
 import BusinessLayer.Inventory.DefectiveReport;
 import BusinessLayer.Inventory.Product;
 import BusinessLayer.Inventory.StockReport;
+import BusinessLayer.Suppliers.Contract;
+import BusinessLayer.Suppliers.ProductPerSup;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -17,7 +19,13 @@ public class DataHandler {
     private CategoryMapper catMapper;
     private ProductMapper prodMapper;
     private ReportMapper repMapper;
-    private Connection con;
+
+    private ContractMapper contractMapper;
+    private ProductPerSupMapper productPerSupMapper;
+    private SupplierMapper supplierMapper;
+    private OrderMapper orderMapper;
+
+    public static Connection con;
     private Facade facade;
     public DataHandler(Facade facade) {
         this.facade = facade;
@@ -28,12 +36,18 @@ public class DataHandler {
             this.prodMapper = new ProductMapper(con,facade);
             this.repMapper = new ReportMapper(con, facade);
 
+            this.contractMapper = new ContractMapper();
+            this.productPerSupMapper = new ProductPerSupMapper();
+            this.supplierMapper = new SupplierMapper();
+            this.orderMapper = new OrderMapper();
+
+
         } catch (Exception e) {
             System.out.println("initialize failed!!!!\n" + e.getMessage());
         }
 
     }
-    public Connection connect(){
+    public static Connection connect(){
         try {
             Class.forName("org.sqlite.JDBC");
             con = DriverManager.getConnection("jdbc:sqlite:dev/SQL_Inventory_Suppliers.db");

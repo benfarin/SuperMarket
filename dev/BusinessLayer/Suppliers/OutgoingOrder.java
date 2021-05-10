@@ -22,6 +22,14 @@ public class OutgoingOrder {
         deliveryDate = delivery_Date;
         totalPrice = 0;
     }
+    public OutgoingOrder(Integer sup,LocalDate delivery_Date, HashMap<Long, Integer> items, double totalPrice){
+        id=static_id; //TODO: Make the IDs count properly from 0 as they are loaded
+        static_id++;
+        this.supplier_id = sup;
+        this.items=items;
+        this.deliveryDate = delivery_Date;
+        this.totalPrice=totalPrice;
+    }
 
     public HashMap<Long, Integer> getItems() { return items; }
 
