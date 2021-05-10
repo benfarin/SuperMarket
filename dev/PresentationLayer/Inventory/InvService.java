@@ -11,8 +11,8 @@ public class InvService {
 //            .useDelimiter("\n");
     Facade facade;
 
-    public InvService(){
-        this.facade = new Facade();
+    public InvService(Facade facade){
+        this.facade = facade;
     }
 
     public void startMenu() {

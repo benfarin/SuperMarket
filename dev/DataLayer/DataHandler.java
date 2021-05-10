@@ -17,21 +17,19 @@ public class DataHandler {
     private ProductMapper prodMapper;
     private ReportMapper repMapper;
     private Connection con;
-    private Statement statment;
     public DataHandler() {
         con = null;
         connect();
-        try { ;
-            statment = this.con.createStatement();
-            this.catMapper = new CategoryMapper(statment);
-            this.prodMapper = new ProductMapper();
-            this.repMapper = new ReportMapper();
+        try {
+            this.catMapper = new CategoryMapper(con);
+            this.prodMapper = new ProductMapper(con);
+            this.repMapper = new ReportMapper(con);
         } catch (Exception e) {
             System.out.println("initialize failed!!!!\n" + e.getMessage());
         }
 
     }
-    public void connect(){
+    public Connection connect(){
         try {
             Class.forName("org.sqlite.JDBC");
             con = DriverManager.getConnection("jdbc:sqlite:dev/SQL_Inventory_Suppliers.db");
@@ -42,6 +40,7 @@ public class DataHandler {
             System.exit(0);
         }
         System.out.println("database successfully created");
+        return  con;
     }
     //--------------CATEGORIES--------------
     public void addCatToData(String name, String super_cat, int discount, Date discountDate) {

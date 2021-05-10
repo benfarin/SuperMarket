@@ -21,7 +21,9 @@ public class Facade {
     public String addCategory (String name, List<String> subCategories){
         Category c = invCnt.addCategory(name,subCategories);
         if(c !=null){ // ADD TO DATABASE
-            dataHandler.addCatToData(c.getName(),c.getSupCategory().getName(),c.getDiscount(),c.getDiscountDate());
+            if(c.getSupCategory() != null)
+                dataHandler.addCatToData(c.getName(), c.getSupCategory().getName(), c.getDiscount(), c.getDiscountDate());
+            dataHandler.addCatToData(c.getName(), null, c.getDiscount(), c.getDiscountDate());
         }
         return "the category " + name + " successfully added\n";
     }

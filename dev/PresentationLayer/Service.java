@@ -1,5 +1,6 @@
 package PresentationLayer;
 
+import BusinessLayer.Facade;
 import PresentationLayer.Inventory.InvService;
 import PresentationLayer.Suppliers.SupService;
 
@@ -8,11 +9,13 @@ import java.util.Scanner;
 public class Service {
     private InvService invService;
     private SupService supService;
+    private Facade facade;
     public static Scanner s = new Scanner(System.in);
 
     public Service() {
-        this.invService = new InvService();
-        this.supService = new SupService();
+        this.facade = new Facade();
+        this.invService = new InvService(facade);
+        this.supService = new SupService(facade);
     }
     public void startMenu() {
         

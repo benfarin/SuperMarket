@@ -1,5 +1,6 @@
 package PresentationLayer.Suppliers;
 
+import BusinessLayer.Facade;
 import BusinessLayer.Suppliers.*;
 import BusinessLayer.Suppliers.OutgoingOrder;
 
@@ -11,9 +12,9 @@ import java.util.Scanner;
         public static Scanner io = new Scanner(System.in);
         BusinessLayer.Facade facade;
 
-        public SupService(){
+        public SupService(Facade facade){
 
-            this.facade = new BusinessLayer.Facade();
+            this.facade = facade;
 
         }
 
