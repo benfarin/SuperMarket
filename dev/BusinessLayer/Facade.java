@@ -500,7 +500,12 @@ public class Facade {
         dataHandler.deleteSup(cat);
     }
 
-    public void setFirstId(int lastId) {
-        invCnt.setFirstId(lastId);
+
+    public void addStockReportFromData(StockReport re) {
+        repCnt.addStockReport(re);
+    }
+
+    public void addDefectiveReportFromData(DefectiveReport re1) {
+        repCnt.addDefReport(re1);
     }
 }
