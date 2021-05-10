@@ -26,8 +26,7 @@ public class DataHandler {
         try {
             this.catMapper = new CategoryMapper(con,facade);
             this.prodMapper = new ProductMapper(con,facade);
-            this.repMapper = new ReportMapper(con, facade);
-
+            this.repMapper = new ReportMapper(con);
         } catch (Exception e) {
             System.out.println("initialize failed!!!!\n" + e.getMessage());
         }
@@ -87,9 +86,18 @@ public class DataHandler {
         try {
             prodMapper.addProduct(id, name, manufacture, category, storeQuantity,
                     storageQuantity, discount, discountDate, priceFromSupplier,
-                    priceToCustomer, defectiveItems, minimum, orderAmount, priceToCusHistory,
+                    priceToCustomer, defectiveItems, minimum, priceToCusHistory,
                     priceFromSupHistory);
         } catch (Exception e) {
+            System.out.println("failed to add product\n" + e.getMessage());
+        }
+    }
+
+    public void addSup (String supCat, String cat){
+        try {
+            catMapper.addSup(supCat,cat);
+        }
+        catch (Exception e) {
             System.out.println("failed to add product\n" + e.getMessage());
         }
     }
@@ -204,7 +212,7 @@ public class DataHandler {
         }
     }
     public HashMap<Integer, Product> getProducts(){
-        return prodMapper.getProducts();
+       return prodMapper.getProducts();
     }
     //............REPORT.............
     public void deleteStockReport(int id){
@@ -269,5 +277,14 @@ public class DataHandler {
     }
     public HashMap<Integer, DefectiveReport> getDefectiveReports() {
         return repMapper.getDefectiveReports();
+    }
+
+    public void deleteSup(String cat){
+        try {
+            catMapper.addSup("",cat);
+        }
+        catch (Exception e) {
+        System.out.println(e.getMessage());
+        }
     }
 }
