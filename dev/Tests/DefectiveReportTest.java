@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class DefectiveReportTest {
     DefectiveReport defReport = new DefectiveReport();
 
-    Category c = new Category("fruit", new LinkedList<>());
+    Category c = new Category("fruit");
     Product p = new Product("apple", c, "Maabarot", 2.90, 4.10, 20);
 
 

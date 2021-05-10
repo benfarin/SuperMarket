@@ -12,10 +12,10 @@ public class Category {
     private int discount;
     private Date discountDate;
 
-    public Category(String name, List<Category> subCategories) {
+    public Category(String name) {
         this.name = name;
         this.subCategories = new LinkedList<>();
-        this.subCategories = subCategories;
+        this.subCategories =  new LinkedList<>();
         this.discount = 0;
         this.discountDate = null;
         this.products = new LinkedList<>();

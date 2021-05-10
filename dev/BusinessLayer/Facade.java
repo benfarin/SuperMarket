@@ -19,8 +19,8 @@ public class Facade {
         initialize();
         this.dataHandler = new DataHandler(this);
     }
-    public String addCategory (String name, List<String> subCategories){
-        Category c = invCnt.addCategory(name,subCategories);
+    public String addCategory (String name){
+        Category c = invCnt.addCategory(name);
         if(c !=null){ // ADD TO DATABASE
             if(c.getSupCategory() != null)
                 dataHandler.addCatToData(c.getName(), c.getSupCategory().getName(), c.getDiscount(), c.getDiscountDate());
@@ -201,6 +201,8 @@ public class Facade {
         if(invCnt.getCategory(catName)==null){
             return "Can't delete "+catName+" this category does not exist\n";
         }
+        for (Category c: invCnt.getCategory(catName).getSubCategories())
+            dataHandler.addSup(null,c.getName());
         invCnt.deleteCat(catName);
         dataHandler.deleteCategory(catName);
         return "The category "+ catName +" was deleted";
@@ -498,6 +500,7 @@ public class Facade {
     }
 
     public void addSup(String supCat, String cat){
+       // invCnt.addSup(supCat, cat);
         dataHandler.addSup(supCat,cat);
     }
     public void deleteSup(String cat){

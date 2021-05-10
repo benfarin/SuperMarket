@@ -60,7 +60,6 @@ public class ProductMapper {
         facade.setFirstId(lastId);
 
     }
-
     public void addProduct(int id, String name, String manufacture, String category, int storeQuantity,
                            int storageQuantity, int discount, Date discountDate, double priceFromSupplier,
                            double priceToCustomer, int defectiveItems, int minimum, Map<Double, Date> priceToCusHistory,

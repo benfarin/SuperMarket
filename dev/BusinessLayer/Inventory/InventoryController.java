@@ -18,14 +18,8 @@ public class InventoryController {
             categories.add(c);
         }
     }
-    public Category addCategory(String name, List<String> subCatName){
-        List<Category> mySub = new LinkedList<>();
-        for(String s : subCatName){
-            Category subC = new Category(s,new LinkedList<>());
-            mySub.add(subC);
-            categories.add(subC);
-        }
-        Category cat = new Category(name,mySub);
+    public Category addCategory(String name){
+        Category cat = new Category(name);
         if(!categories.contains(cat))
             categories.add(cat);
         return cat;
