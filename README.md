@@ -1,4 +1,4 @@
-[הוראות מערכת ספקים ומלאי.docx](https://github.com/hilaklein/ADSS_Group_I/files/6453801/default.docx)
+
 # ADSS_Group_I
  ~~~~~~~~~~~~~~~~~~~~~
  Inventory & Suppliers 
@@ -8,3 +8,5 @@
  -Rotem Cohen 209014570
  -Niv Ben Farin 312178171
  -Nimrod Burg 206283913
+
+[הוראות מערכת ספקים ומלאי.pdf](https://github.com/hilaklein/ADSS_Group_I/files/6453809/default.pdf)
