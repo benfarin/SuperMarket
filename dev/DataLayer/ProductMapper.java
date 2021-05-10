@@ -50,7 +50,7 @@ public class ProductMapper {
             while(res1.next())
                 priceFromSupHistory.put(res1.getDouble("price"),res1.getDate("date"));
 
-            products.put(id, new Product(id, name, manufacture, category1, storeQuantity, storageQuantity, discount, discountDate, priceFromSupplier, priceToCustomer, defectiveItem, minimum, orderAmount, priceToCusHistory, priceFromSupHistory));
+            products.put(id,facade.addProductFromData(id, name, manufacture, category1, storeQuantity, storageQuantity, discount, discountDate, priceFromSupplier, priceToCustomer, defectiveItem, minimum, orderAmount, priceToCusHistory, priceFromSupHistory));
         }
     }
 
@@ -93,9 +93,9 @@ public class ProductMapper {
         Statement stmt = this.con.createStatement();
         ResultSet res = stmt.executeQuery("UPDATE Product SET storageQuantity = "+storageQuantity+" WHERE pid = "+id);
     }
-    public void updateDiscount (int id, int discount) throws SQLException{
+    public void updateDiscount (int id, int discount,Date discountDate) throws SQLException{
         Statement stmt = this.con.createStatement();
-        ResultSet res = stmt.executeQuery("UPDATE Product SET discount = "+discount+" WHERE pid = "+id);
+        ResultSet res = stmt.executeQuery("UPDATE Product SET discount = "+discount+ ", discountDate =" + discountDate + " WHERE pid = "+id);
     }
     public void updateDiscountDate (int id, Date discountDate) throws SQLException{
         Statement stmt = this.con.createStatement();
@@ -105,11 +105,11 @@ public class ProductMapper {
         Statement stmt = this.con.createStatement();
         ResultSet res = stmt.executeQuery("UPDATE Product SET orderAmount = "+orderAmount+" WHERE pid = "+id);
     }
-    public void updatePriceFromSupplier (int id, int priceFromSupplier) throws SQLException{
+    public void updatePriceFromSupplier (int id, double priceFromSupplier) throws SQLException{
         Statement stmt = this.con.createStatement();
         ResultSet res = stmt.executeQuery("UPDATE Product SET priceFromSupplier = "+priceFromSupplier+" WHERE pid = "+id);
     }
-    public void updatePriceToCustomer (int id, int priceToCustomer) throws SQLException{
+    public void updatePriceToCustomer (int id, double priceToCustomer) throws SQLException{
         Statement stmt = this.con.createStatement();
         ResultSet res = stmt.executeQuery("UPDATE Product SET priceToCustomer = "+priceToCustomer+" WHERE pid = "+id);
     }

@@ -30,10 +30,14 @@ public class Facade {
             return "Can't add product because category does not exist\n"+"add category first\n";
         }
         Category prodCat = invCnt.getCategory(category);
-        invCnt.addProduct(name,prodCat,manufacture,priceFromSupplier,priceToCustomer,minimum);
+        Product p = invCnt.addProduct(name,prodCat,manufacture,priceFromSupplier,priceToCustomer,minimum);
+        // add to database
+        dataHandler.addProduct(p.getId(),p.getName(),p.getManufacture(),p.getCategory().getName(),p.getStoreQuantity(),p.getStorageQuantity(),p.getDiscount(),p.getDiscountDate(),p.getPriceFromSupplier(),p.getPriceToCustomer(),p.getDefectiveItem(),p.getMinimum(),p.getOrderAmount(),p.getPriceToCusHistory(),p.getPriceFromSupHistory());
         return "the product " + name + " successfully added\n";
     }
-
+    public Product addProductFromData (int id, String name, String manufacture, Category category, int storeQuantity, int storageQuantity, int discount, Date discountDate, double priceFromSupplier, double priceToCustomer, int defectiveItem, int minimum, int orderAmount, Map<Double, Date> priceToCusHistory, Map<Double, Date> priceFromSupHistory){
+        return  invCnt.addProductFromData(id,name, manufacture, category,storeQuantity, storageQuantity, discount, discountDate, priceFromSupplier, priceToCustomer,defectiveItem, minimum,orderAmount, priceToCusHistory, priceFromSupHistory);
+    }
     //-------------------------PRODUCT--------------------------
     public Product getProdByID(int id){
         return invCnt.getProdByID(id);
@@ -43,6 +47,8 @@ public class Facade {
             return "The product "+prodName+" does not exist\n";
         }
         invCnt.setManufacture(prodName,manu);
+        //add to database
+        dataHandler.updateManufacture(invCnt.getProduct(prodName).getId(),manu);
         return "set "+ prodName+"'s manufacture to " + manu+"\n";
     }
     public String setPriceFromSupplier(String prodName,double priceFromSupplier){
@@ -50,6 +56,8 @@ public class Facade {
             return "The product "+prodName+" does not exist\n";
         }
         invCnt.setPriceFromSupplier(prodName,priceFromSupplier);
+        //database
+        dataHandler.updatePriceFromSupplier(invCnt.getProduct(prodName).getId(),priceFromSupplier);
         return "set "+ prodName+"'s price from supplier to " + priceFromSupplier+"\n";
     }
     public String setPriceToCustomer(String prodName , double priceToCustomer){
@@ -57,6 +65,8 @@ public class Facade {
             return "The product "+prodName+" does not exist\n";
         }
         invCnt.setPriceToCustomer(prodName,priceToCustomer);
+        //database
+        dataHandler.updatePriceToCustomer(invCnt.getProduct(prodName).getId(),priceToCustomer);
         return "set "+ prodName+"'s price to costumer to " + priceToCustomer+"\n";
     }
     public String setProdDiscount(String prodName,int discount, Date discountDate){
@@ -64,6 +74,8 @@ public class Facade {
             return "The product "+prodName+" does not exist\n";
         }
         invCnt.setProdDiscount(prodName,discount,discountDate);
+        //database
+        dataHandler.updateDiscount(invCnt.getProduct(prodName).getId(),discount,discountDate);
         return "set "+ prodName+"'s discount to " +discount+ "% until " + discountDate+"\n";
     }
     public String setDefectiveItems (String prodName, int def){
@@ -71,12 +83,8 @@ public class Facade {
             return "Can't reduce storage quantity because the product "+prodName+" does not exist\n";
         }
         invCnt.setDefectiveItems(prodName,def);
-        for(DefectiveReport defRep: repCnt.getDefReports()){ // if this prod in any reports it will add the amount
-//            if(defRep.isProdInRep(prodName)){
-//                //CALL SUPPLIER
-//            }
-
-        }
+        //database
+        dataHandler.updateDefectiveItems(invCnt.getProduct(prodName).getId(),def);
         return "set "+ prodName+"'s defective items to " + def+"\n";
     }
     public String setMinimum(String prodName , int minimum) {
@@ -84,6 +92,8 @@ public class Facade {
             return "Can't reduce storage quantity because the product "+prodName+" does not exist\n";
         }
         invCnt.setMinimum(prodName,minimum);
+        //database
+        dataHandler.updateMinimum(invCnt.getProduct(prodName).getId(),minimum);
         return "set "+ prodName+"'s minimum to " + minimum+"\n";
     }
     public String addStoreQuantity(String prodName, int add){
@@ -125,6 +135,8 @@ public class Facade {
             return "Can't set store quantity because the product "+prodName+" does not exist\n";
         }
         invCnt.setStoreQuantity(prodName,storeQuantity);
+        //database
+        dataHandler.updateStoreQuantity(invCnt.getProduct(prodName).getId(),storeQuantity);
         return "Store quantity changed to " + storeQuantity;
     }
     public String setStorageQuantity(String prodName, int storageQuantity){
@@ -137,6 +149,8 @@ public class Facade {
             AddNewOrder((long) p.getId(),4*p.getMinimum());
             s = "*** WARNING!!! "+ prodName+"'s storage quantity is under the minimum ***\n";
         }
+        //database
+        dataHandler.updateStorageQuantity(invCnt.getProduct(prodName).getId(),storageQuantity);
         return "Storage quantity changed to " + storageQuantity+"\n"+s;
     }
     public String printProduct(String prodName){
@@ -236,9 +250,15 @@ public class Facade {
             }
             cats.add(c);
         }
-        repCnt.addStockReport(cats);
+        StockReport sto = repCnt.addStockReport(cats);
         if(ret.length() > 1)
             ret = ret.substring(0,ret.length()-2);
+        //database
+        List<String> catNames = new LinkedList<>();
+        for(Category c : sto.getCategories()){
+            catNames.add(c.getName());
+        }
+        dataHandler.addStock(sto.getID(),sto.getDate(),catNames);
         return "Added stock report about the categories: " + ret+"\n";
     }
     public String addDefReport(List<String> products){
@@ -255,6 +275,12 @@ public class Facade {
         DefectiveReport d = repCnt.addDefReport(prods);
         if(ret.length()>1)
             ret = ret.substring(0,ret.length()-2);
+        //database
+        List<Integer> prodID = new LinkedList<>();
+        for(Product p : d.getDefectiveProducts()){
+            prodID.add(p.getId());
+        }
+        dataHandler.addDefective(d.getID(),d.getDate(),prodID);
         return "Added defective report about the products: " + ret+ "\n this report ID: "+d.getID()+"\n";
     }
     public String addCatToStRep(int id, String category){
@@ -265,6 +291,8 @@ public class Facade {
         if(c==null)
             return "the category "+category+" does not exist\n";
         repCnt.addCatToStRep(id,c);
+        //database
+        dataHandler.addStockCat(id,category);
         return "Added the category " + category+ " to "+ id + " report\n";
     }
     public String addProdToDefRep(int id, String product){
@@ -275,6 +303,8 @@ public class Facade {
         if(p==null)
             return "the product "+product+" does not exist\n";
         repCnt.addProdToDefRep(id,p);
+        //database
+        dataHandler.addDefectiveProd(id,p.getId());
         return "Added the product " + product+ " to "+ id + " report\n";
     }
     public void orderToday(){

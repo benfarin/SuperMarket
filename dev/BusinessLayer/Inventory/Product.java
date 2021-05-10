@@ -164,6 +164,22 @@ public class Product {
         return alertStorageQuantity();
     }
 
+    public int getStoreQuantity() {
+        return storeQuantity;
+    }
+
+    public Date getDiscountDate() {
+        return discountDate;
+    }
+
+    public Map<Double, Date> getPriceToCusHistory() {
+        return priceToCusHistory;
+    }
+
+    public Map<Double, Date> getPriceFromSupHistory() {
+        return priceFromSupHistory;
+    }
+
     public int getMinimum() {
         return minimum;
     }
