@@ -48,7 +48,7 @@ public class Category {
     public void addSub(Category c){
         if(!subCategories.contains(c))
             subCategories.add(c);
-      //  c.addSup(this);
+        //  c.addSup(this);
     }
 
     public String getName() {
@@ -107,8 +107,8 @@ public class Category {
         if(this.discountDate == null)
             this.discountDate = new Date();
         if(discountDate != null && discountDate.after(today)) {
-        this.discountDate = discountDate;
-    }}
+            this.discountDate = discountDate;
+        }}
 
     public void addDiscount(int discount){
         this.discount+=discount;

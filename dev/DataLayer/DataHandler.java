@@ -212,7 +212,7 @@ public class DataHandler {
         }
     }
     public HashMap<Integer, Product> getProducts(){
-       return prodMapper.getProducts();
+        return prodMapper.getProducts();
     }
     //............REPORT.............
     public void deleteStockReport(int id){
@@ -284,7 +284,7 @@ public class DataHandler {
             catMapper.addSup("",cat);
         }
         catch (Exception e) {
-        System.out.println(e.getMessage());
+            System.out.println(e.getMessage());
         }
     }
 }

@@ -60,7 +60,7 @@ public class InventoryController {
         return p;
     }
 
-//    public void addCategory (String name, List<Category> subCategories) {
+    //    public void addCategory (String name, List<Category> subCategories) {
 //        Category c = new Category(name,subCategories);
 //        if (!categories.contains(c))
 //            categories.add(c);
@@ -127,7 +127,7 @@ public class InventoryController {
 
     public boolean setStorageQuantity(String name, int storageQuantity){
         Product p = getProduct(name);
-       return p.setStorageQuantity(storageQuantity);
+        return p.setStorageQuantity(storageQuantity);
     }
 
     public String printProduct(String name){
@@ -161,7 +161,7 @@ public class InventoryController {
     }
     public String displayPFSHistory(String prodName){
         Product p = getProduct(prodName);
-       return p.displayPriceFromSupHistory();
+        return p.displayPriceFromSupHistory();
     }
     public String displayPTCHistory(String prodName){
         Product p = getProduct(prodName);

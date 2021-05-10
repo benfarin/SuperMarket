@@ -143,8 +143,8 @@ public class Facade {
         if(invCnt.reduceStorageQuantity(prodName,reduce)){
             Product p = invCnt.getProduct(prodName);
             AddNewOrder((long) p.getId(),4*p.getMinimum());
-                s = "*** WARNING!!! "+ prodName+"'s storage quantity is under the minimum ***\nsend order to supplier\n";
-            }
+            s = "*** WARNING!!! "+ prodName+"'s storage quantity is under the minimum ***\nsend order to supplier\n";
+        }
 
         return "Reduced "+ reduce+" from " + prodName+" storage quantity\n"+s;
     }
@@ -380,12 +380,12 @@ public class Facade {
             if(order.get(i) > 0){
                 //todo
                 incoming_order_controller.AddNewOrder(Long.valueOf(i),order.get(i));
-        }
+            }
     }
     public String exportStockReport(int id){
         if(repCnt.getStoReport(id) == null)
             return "The report "+id+ " does not exist\n";
-       return repCnt.exportReport(id);
+        return repCnt.exportReport(id);
     }
     public String exportDefReport(int id){
         if(repCnt.getDefReport(id) == null)

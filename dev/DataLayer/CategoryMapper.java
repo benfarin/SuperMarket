@@ -56,7 +56,7 @@ public class CategoryMapper {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-       // ResultSet res = stmt.executeQuery("INSERT INTO Category(name,super_cat,discount,discountDate) VALUES ("+name+","+super_cat+","+discount+","+discountDate+");");
+        // ResultSet res = stmt.executeQuery("INSERT INTO Category(name,super_cat,discount,discountDate) VALUES ("+name+","+super_cat+","+discount+","+discountDate+");");
     }
     public void deleteCategory(String name) throws SQLException{
         String sql = "DELETE FROM Category WHERE name=?";

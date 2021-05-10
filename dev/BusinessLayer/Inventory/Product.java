@@ -237,8 +237,8 @@ public class Product {
     }
 
     public int getOrderAmount() {
-       if(orderAmount-storageQuantity < 0)
+        if(orderAmount-storageQuantity < 0)
             return 0;
-       return orderAmount-storageQuantity;
+        return orderAmount-storageQuantity;
     }
 }
