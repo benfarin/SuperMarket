@@ -46,7 +46,8 @@ public class ReportMapper {
             if (stock) {
                 stockReports.put(id, re);
                 facade.addStockReportFromData(re);
-
+                stock = false;
+                continue;
             }
             else{
                 res1 = stmt1.executeQuery("SELECT * FROM DefectiveReport WHERE rid="+id);
