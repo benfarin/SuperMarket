@@ -40,7 +40,11 @@ public class CategoryMapper {
     public void addCategory(String name,String super_cat, int discount, java.util.Date discountDate) throws SQLException{
 //        Statement stmt = this.con.createStatement();
         String sql = "INSERT INTO Category(name,super_cat,discount,discountDate) VALUES(?,?,?,?)";
-        Date sqlDate = new Date(discountDate.getTime());
+        java.sql.Date sqlDate;
+        if(discountDate!=null)
+            sqlDate = new java.sql.Date(discountDate.getTime());
+        else
+            sqlDate = null;
         try (
                 PreparedStatement pstmt = con.prepareStatement(sql)) {
             pstmt.setString(1, name);
@@ -57,9 +61,31 @@ public class CategoryMapper {
     public void deleteCategory(String name) throws SQLException{
         String sql = "DELETE FROM Category WHERE name=?";
         try{
+            for (Category c : categories.values()) {
+                if (c.getSupCategory()!=null) {
+                    if (c.getSupCategory().getName().equals(name)) {
+                        addSup("", c.getName());
+                    }
+                }
+            }
+            categories.remove(name);
             PreparedStatement pstmt = con.prepareStatement(sql);
             pstmt.setString(1, name);
             pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    public void addSup(String super_cat, String cat) throws SQLException{
+        String sql = "UPDATE Category SET super_cat = ? "
+                + "WHERE name = ?";
+        try{
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setString(1,super_cat);
+            pstmt.setString(2,cat);
+            pstmt.executeUpdate();
+            Category c = categories.get(cat);
+            c.setSupCategory(new Category(super_cat,new LinkedList<>()));
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
