@@ -1,3 +1,4 @@
+[הוראות מערכת ספקים ומלאי.pdf](https://github.com/hilaklein/ADSS_Group_I/files/6453856/default.pdf)
 # ADSS_Group_I
  ~~~~~~~~~~~~~~~~~~~~~
  Inventory & Suppliers 
