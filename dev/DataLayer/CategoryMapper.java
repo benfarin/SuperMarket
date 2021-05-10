@@ -55,8 +55,14 @@ public class CategoryMapper {
        // ResultSet res = stmt.executeQuery("INSERT INTO Category(name,super_cat,discount,discountDate) VALUES ("+name+","+super_cat+","+discount+","+discountDate+");");
     }
     public void deleteCategory(String name) throws SQLException{
-        Statement stmt = this.con.createStatement();
-        ResultSet res = stmt.executeQuery("DELETE FROM Category WHERE name="+name+";");
+        String sql = "DELETE FROM Category WHERE name=?";
+        try{
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, name);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
     public void updateDiscounts(String name, int discount, java.util.Date discountDate) throws SQLException {
         String sql = "UPDATE Category SET discount = ? , "

@@ -25,7 +25,7 @@ public class DataHandler {
         connect();
         try {
             this.catMapper = new CategoryMapper(con,facade);
-            this.prodMapper = new ProductMapper(con);
+            this.prodMapper = new ProductMapper(con,facade);
             this.repMapper = new ReportMapper(con);
         } catch (Exception e) {
             System.out.println("initialize failed!!!!\n" + e.getMessage());
@@ -188,16 +188,16 @@ public class DataHandler {
             System.out.println("failed to updateMinimum\n" + e.getMessage());
         }
     }
-    public void updatePriceFromSupHistory (int id, double price, Date date){
+    public void insertPriceFromSupHistoryRecord (int id, double price, Date date){
         try {
-            prodMapper.updatePriceFromSupHistory(id, price,date);
+            prodMapper.insertPriceFromSupHistoryRecord(id, price,date);
         } catch (Exception e) {
             System.out.println("failed to updatePriceFromSupHistory\n" + e.getMessage());
         }
     }
-    public void updatePriceToCusHistory (int id, double price, Date date){
+    public void insertPriceToCusHistoryRecord (int id, double price, Date date){
         try {
-            prodMapper.updatePriceToCusHistory(id, price,date);
+            prodMapper.insertPriceToCusHistoryRecord(id, price,date);
         } catch (Exception e) {
             System.out.println("failed to updatePriceToCusHistory\n" + e.getMessage());
         }
