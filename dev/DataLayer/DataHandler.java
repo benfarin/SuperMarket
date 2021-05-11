@@ -9,6 +9,7 @@ import BusinessLayer.Suppliers.Contract;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -58,6 +59,229 @@ public class DataHandler {
             System.exit(0);
         }
         System.out.println("database successfully created");
+        String sql = "CREATE TABLE IF NOT EXISTS \"Category\" (\n" +
+                "\t\"name\"\tTEXT NOT NULL,\n" +
+                "\t\"super_cat\"\tTEXT,\n" +
+                "\t\"discount\"\tINTEGER,\n" +
+                "\t\"discountDate\"\tDATE,\n" +
+                "\tPRIMARY KEY(\"name\"),\n" +
+                "\tFOREIGN KEY(\"super_cat\") REFERENCES \"Category\"(\"name\") ON UPDATE CASCADE ON DELETE CASCADE\n" +
+                ");";
+        try (
+                Statement stmt = con.createStatement()) {
+            stmt.execute(sql);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        sql ="CREATE TABLE IF NOT EXISTS \"DefectiveReport\" (\n" +
+                "\t\"rid\"\tINTEGER,\n" +
+                "\t\"pid\"\tINTEGER,\n" +
+                "\tFOREIGN KEY(\"rid\") REFERENCES \"Report\"(\"rid\"),\n" +
+                "\tPRIMARY KEY(\"rid\",\"pid\"),\n" +
+                "\tFOREIGN KEY(\"pid\") REFERENCES \"Product\"(\"pid\") ON DELETE RESTRICT ON UPDATE CASCADE\n" +
+                ");";
+        try (
+                Statement stmt = con.createStatement()) {
+            stmt.execute(sql);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        sql = "CREATE TABLE IF NOT EXISTS \"PriceFromSupHistory\" (\n" +
+                "\t\"price\"\tREAL NOT NULL,\n" +
+                "\t\"date\"\tDATE,\n" +
+                "\t\"pid\"\tINTEGER,\n" +
+                "\tFOREIGN KEY(\"pid\") REFERENCES \"Product\"(\"pid\") ON DELETE CASCADE ON UPDATE CASCADE,\n" +
+                "\tPRIMARY KEY(\"pid\",\"date\")\n" +
+                ");";
+        try (
+                Statement stmt = con.createStatement()) {
+            stmt.execute(sql);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        sql = "CREATE TABLE IF NOT EXISTS \"PriceToCusHistory\" (\n" +
+                "\t\"price\"\tREAL NOT NULL,\n" +
+                "\t\"date\"\tDATE,\n" +
+                "\t\"pid\"\tINTEGER,\n" +
+                "\tPRIMARY KEY(\"date\",\"pid\"),\n" +
+                "\tFOREIGN KEY(\"pid\") REFERENCES \"Product\"(\"pid\") ON DELETE CASCADE ON UPDATE CASCADE\n" +
+                ");";
+
+        try (
+                Statement stmt = con.createStatement()) {
+            stmt.execute(sql);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        sql = "CREATE TABLE IF NOT EXISTS \"Product\" (\n" +
+                "\t\"pid\"\tINTEGER,\n" +
+                "\t\"name\"\tTEXT NOT NULL,\n" +
+                "\t\"category_name\"\tTEXT NOT NULL,\n" +
+                "\t\"manufacture\"\tTEXT NOT NULL,\n" +
+                "\t\"storeQuantity\"\tINTEGER NOT NULL,\n" +
+                "\t\"storageQuantity\"\tINTEGER NOT NULL,\n" +
+                "\t\"discount\"\tINTEGER,\n" +
+                "\t\"discountDate\"\tDATE,\n" +
+                "\t\"priceFromSupplier\"\tREAL NOT NULL,\n" +
+                "\t\"priceToCustomer\"\tREAL NOT NULL,\n" +
+                "\t\"defectiveItems\"\tINTEGER NOT NULL,\n" +
+                "\t\"minimum\"\tINTEGER NOT NULL,\n" +
+                "\tPRIMARY KEY(\"pid\"),\n" +
+                "\tFOREIGN KEY(\"category_name\") REFERENCES \"Category\"(\"name\") ON DELETE CASCADE ON UPDATE CASCADE\n" +
+                ");";
+        try (
+                Statement stmt = con.createStatement()) {
+            stmt.execute(sql);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        sql = "CREATE TABLE IF NOT EXISTS \"Report\" (\n" +
+                "\t\"rid\"\tINTEGER,\n" +
+                "\t\"date\"\tDATE,\n" +
+                "\tPRIMARY KEY(\"rid\")\n" +
+                ");";
+        try (
+                Statement stmt = con.createStatement()) {
+            stmt.execute(sql);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        sql = "CREATE TABLE IF NOT EXISTS \"StockReport\" (\n" +
+                "\t\"rid\"\tINTEGER,\n" +
+                "\t\"category_name\"\tTEXT,\n" +
+                "\t\"day\"\tINTEGER,\n" +
+                "\tPRIMARY KEY(\"rid\",\"category_name\"),\n" +
+                "\tFOREIGN KEY(\"rid\") REFERENCES \"Report\"(\"rid\"),\n" +
+                "\tFOREIGN KEY(\"category_name\") REFERENCES \"Category\"(\"name\") ON UPDATE CASCADE ON DELETE RESTRICT\n" +
+                ");";
+        try (
+                Statement stmt = con.createStatement()) {
+            stmt.execute(sql);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        sql = "CREATE TABLE IF NOT EXISTS \"Contacts\" (\n" +
+                "\t\"sid\"\tINTEGER,\n" +
+                "\t\"info\"\tTEXT,\n" +
+                "\tPRIMARY KEY(\"sid\",\"info\"),\n" +
+                "\tFOREIGN KEY(\"sid\") REFERENCES \"Supplier\"(\"sid\") ON UPDATE CASCADE ON DELETE CASCADE\n" +
+                ");";
+        try (
+                Statement stmt = con.createStatement()) {
+            stmt.execute(sql);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        sql = "CREATE TABLE IF NOT EXISTS \"Contract\" (\n" +
+                "\t\"sid\"\tINTEGER,\n" +
+                "\t\"days_supply\"\tTEXT,\n" +
+                "\t\"need_delivery\"\tINTEGER,\n" +
+                "\tFOREIGN KEY(\"sid\") REFERENCES \"Supplier\"(\"sid\") ON UPDATE CASCADE ON DELETE CASCADE,\n" +
+                "\tPRIMARY KEY(\"sid\")\n" +
+                ");";
+        try (
+                Statement stmt = con.createStatement()) {
+            stmt.execute(sql);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        sql = "CREATE TABLE IF NOT EXISTS \"DiscountContract\" (\n" +
+                "\t\"sid\"\tINTEGER,\n" +
+                "\t\"amount\"\tINTEGER,\n" +
+                "\t\"discount\"\tINTEGER NOT NULL,\n" +
+                "\tFOREIGN KEY(\"sid\") REFERENCES \"Contract\"(\"sid\") ON UPDATE CASCADE ON DELETE CASCADE,\n" +
+                "\tPRIMARY KEY(\"sid\",\"amount\")\n" +
+                ");";
+        try (
+                Statement stmt = con.createStatement()) {
+            stmt.execute(sql);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        sql = "CREATE TABLE IF NOT EXISTS \"DiscountProducts\" (\n" +
+                "\t\"pid\"\tINTEGER,\n" +
+                "\t\"sid\"\tINTEGER,\n" +
+                "\t\"amount\"\tINTEGER,\n" +
+                "\t\"discount\"\tREAL NOT NULL,\n" +
+                "\tFOREIGN KEY(\"pid\") REFERENCES \"Product\"(\"pid\") ON DELETE CASCADE ON UPDATE CASCADE,\n" +
+                "\tPRIMARY KEY(\"pid\",\"sid\",\"amount\"),\n" +
+                "\tFOREIGN KEY(\"sid\") REFERENCES \"Supplier\"(\"sid\") ON DELETE CASCADE ON UPDATE CASCADE\n" +
+                ");";
+        try (
+                Statement stmt = con.createStatement()) {
+            stmt.execute(sql);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        sql = "CREATE TABLE IF NOT EXISTS \"ItemOrder\" (\n" +
+                "\t\"oid\"\tINTEGER,\n" +
+                "\t\"sid\"\tINTEGER,\n" +
+                "\t\"pid\"\tINTEGER,\n" +
+                "\t\"amount\"\tINTEGER,\n" +
+                "\tFOREIGN KEY(\"oid\") REFERENCES \"Orders\"(\"oid\") ON DELETE CASCADE ON UPDATE CASCADE,\n" +
+                "\tFOREIGN KEY(\"sid\") REFERENCES \"ProductPerSupplier\"(\"sid\") ON DELETE CASCADE ON UPDATE CASCADE,\n" +
+                "\tFOREIGN KEY(\"pid\") REFERENCES \"ProductPerSupplier\"(\"pid\") ON DELETE CASCADE ON UPDATE CASCADE,\n" +
+                "\tPRIMARY KEY(\"sid\",\"pid\",\"oid\")\n" +
+                ");";
+        try (
+                Statement stmt = con.createStatement()) {
+            stmt.execute(sql);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        sql = "CREATE TABLE IF NOT EXISTS \"Orders\" (\n" +
+                "\t\"oid\"\tINTEGER,\n" +
+                "\t\"date\"\tDATE,\n" +
+                "\t\"totalPrice\"\tNUMERIC,\n" +
+                "\tPRIMARY KEY(\"oid\")\n" +
+                ");";
+        try (
+                Statement stmt = con.createStatement()) {
+            stmt.execute(sql);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        sql =  "CREATE TABLE IF NOT EXISTS \"ProductPerSupplier\" (\n" +
+                "\t\"pid\"\tINTEGER,\n" +
+                "\t\"price\"\tINTEGER NOT NULL,\n" +
+                "\t\"sid\"\tINTEGER,\n" +
+                "\t\"supSerialNum\"\tINTEGER NOT NULL,\n" +
+                "\tFOREIGN KEY(\"pid\") REFERENCES \"Product\"(\"pid\") ON DELETE CASCADE ON UPDATE CASCADE,\n" +
+                "\tPRIMARY KEY(\"pid\",\"sid\"),\n" +
+                "\tFOREIGN KEY(\"sid\") REFERENCES \"Supplier\"(\"sid\") ON DELETE CASCADE ON UPDATE CASCADE\n" +
+                ");";
+        try (
+                Statement stmt = con.createStatement()) {
+            stmt.execute(sql);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        sql = "CREATE TABLE IF NOT EXISTS \"Supplier\" (\n" +
+                "\t\"sid\"\tINTEGER,\n" +
+                "\t\"name\"\tTEXT NOT NULL,\n" +
+                "\t\"paymentMethod\"\tTEXT NOT NULL,\n" +
+                "\t\"bankAccount\"\tTEXT NOT NULL,\n" +
+                "\tPRIMARY KEY(\"sid\")\n" +
+                ");";
+        try (
+                Statement stmt = con.createStatement()) {
+            stmt.execute(sql);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+
+
+        try (
+                Statement stmt = con.createStatement()) {
+            stmt.execute(sql);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
         return  con;
     }
     //--------------CATEGORIES--------------
@@ -84,9 +308,9 @@ public class DataHandler {
             System.out.println("got exception from database, try to update discount date\n" + e.getMessage());
         }
     }
-public int getDay(){
+    public int getDay(){
         return repMapper.day;
-}
+    }
     public void deleteCategory(String name) {
         try {
             catMapper.deleteCategory(name);
