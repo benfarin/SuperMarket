@@ -18,6 +18,7 @@ public class ReportMapper {
     private HashMap<Integer, DefectiveReport> defectiveReports;
     Connection con;
     private Facade facade;
+    int day;
 
     public ReportMapper(Connection con, Facade facade) throws SQLException {
         this.con = con;
@@ -40,6 +41,9 @@ public class ReportMapper {
             while(res1.next()) {
                 stock = true;
                 c_name = res1.getString("category_name");
+                int day = res1.getInt("day");
+                re.setDay(day);
+                this.day = day;
                 re.addCategory(facade.getCategory(c_name));
                 c.add(c_name);
             }
@@ -64,6 +68,18 @@ public class ReportMapper {
                 stock = false;
 
             }
+        }
+    }
+
+    public void updateDay(int day){
+        String sql = "UPDATE StockReport SET day = ? WHERE rid > 0";
+        try{
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, day);
+            // update
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
     }
 
@@ -104,12 +120,13 @@ public class ReportMapper {
             System.out.println(e.getMessage());
         }
     }
-    public void addStockCat(int id, String cat) throws SQLException{
-        String sql = "INSERT INTO StockReport (rid, category_name) VALUES(?,?)";
+    public void addStockCat(int id, String cat, int day) throws SQLException{
+        String sql = "INSERT INTO StockReport (rid, category_name, day) VALUES(?,?,?)";
         try (
                 PreparedStatement pstmt = con.prepareStatement(sql)) {
             pstmt.setInt(1, id);
             pstmt.setString(2, cat);
+            pstmt.setInt(3, day);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -127,7 +144,7 @@ public class ReportMapper {
             System.out.println(e.getMessage());
         }
         for(String s : cat){
-            addStockCat(id, s);
+            addStockCat(id, s, facade.getDay());
         }
     }
     public void addDefective(int id, Date date, List<Integer> prod) throws SQLException{

@@ -193,7 +193,10 @@ public class Facade {
         }
         return invCnt.displayPTCHistory(prodName);
     }
-
+    public void deleteProduct(int id){
+        dataHandler.deleteProduct(id);
+        invCnt.deleteProduct(id);
+    }
 
     //-------------------------CATEGORY--------------------------
 
@@ -203,6 +206,8 @@ public class Facade {
         }
         for (Category c: invCnt.getCategory(catName).getSubCategories())
             dataHandler.addSup(null,c.getName());
+        for(Product p :invCnt.getCategory(catName).getProducts())
+            deleteProduct(p.getId());
         invCnt.deleteCat(catName);
         dataHandler.deleteCategory(catName);
         return "The category "+ catName +" was deleted";
@@ -330,7 +335,7 @@ public class Facade {
             return "the category "+category+" does not exist\n";
         repCnt.addCatToStRep(id,c);
         //database
-        dataHandler.addStockCat(id,category);
+        dataHandler.addStockCat(id,category, repCnt.getDay());
         return "Added the category " + category+ " to "+ id + " report\n";
     }
     public String addProdToDefRep(int id, String product){
@@ -346,37 +351,37 @@ public class Facade {
         return "Added the product " + product+ " to "+ id + " report\n";
     }
     public void orderToday(){
-//            Calendar cal = Calendar.getInstance();
-//            cal.setTime(new Date(System.currentTimeMillis()));
-//            boolean dayIsHere;
-//            switch (repCnt.getDay()) {
-//                case 1:
-//                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY;
-//                    break;
-//                case 2:
-//                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY;
-//                    break;
-//                case 3:
-//                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.TUESDAY;
-//                    break;
-//                case 4:
-//                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.WEDNESDAY;
-//                    break;
-//                case 5:
-//                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.THURSDAY;
-//                    break;
-//                case 6:
-//                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY;
-//                    break;
-//                case 7:
-//                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY;
-//                    break;
-//                default:
-//                    dayIsHere = false;
-//                    break;
-//            }
-//            if(dayIsHere)
-//                sendOrder();
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(new Date(System.currentTimeMillis()));
+            boolean dayIsHere;
+            switch (repCnt.getDay()) {
+                case 1:
+                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY;
+                    break;
+                case 2:
+                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY;
+                    break;
+                case 3:
+                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.TUESDAY;
+                    break;
+                case 4:
+                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.WEDNESDAY;
+                    break;
+                case 5:
+                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.THURSDAY;
+                    break;
+                case 6:
+                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY;
+                    break;
+                case 7:
+                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY;
+                    break;
+                default:
+                    dayIsHere = false;
+                    break;
+            }
+            if(dayIsHere)
+                sendOrder();
     }
     public void sendOrder(){
         HashMap<Integer, Integer> order = new HashMap<>();
@@ -387,6 +392,14 @@ public class Facade {
                 //todo
                 incoming_order_controller.AddNewOrder(Long.valueOf(i),order.get(i));
             }
+    }
+    public String setOrderDay(int day){
+        if(day < 8 && day > 0) {
+            repCnt.setDay(day);
+            dataHandler.updateDay(day);
+            return "Day successfully changed";
+        }
+        return "Error changing day";
     }
     public String exportStockReport(int id){
         if(repCnt.getStoReport(id) == null)
@@ -443,6 +456,7 @@ public class Facade {
 //..............INV..............
         this.repCnt = new ReportController();
         this.invCnt = new InventoryController();
+
         orderToday();
     }
 
@@ -509,10 +523,19 @@ public class Facade {
 
 
     public void addStockReportFromData(StockReport re) {
+        repCnt.setDay(re.getDay());
         repCnt.addStockReport(re);
     }
 
     public void addDefectiveReportFromData(DefectiveReport re1) {
         repCnt.addDefReport(re1);
+    }
+
+    public int getProdIDByName(String product) {
+        return invCnt.getProduct(product).getId();
+    }
+
+    public int getDay() {
+        return repCnt.getDay();
     }
 }

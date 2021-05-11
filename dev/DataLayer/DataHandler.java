@@ -69,7 +69,9 @@ public class DataHandler {
             System.out.println("got exception from database, try to update discount date\n" + e.getMessage());
         }
     }
-
+public int getDay(){
+        return repMapper.day;
+}
     public void deleteCategory(String name) {
         try {
             catMapper.deleteCategory(name);
@@ -230,9 +232,9 @@ public class DataHandler {
             System.out.println("failed to deleteDefectiveReport\n" + e.getMessage());
         }
     }
-    public void addStockCat(int id, String cat){
+    public void addStockCat(int id, String cat, int day){
         try {
-            repMapper.addStockCat(id,cat);
+            repMapper.addStockCat(id,cat,day);
         } catch (Exception e) {
             System.out.println("failed to addStockCat\n" + e.getMessage());
         }
@@ -271,6 +273,9 @@ public class DataHandler {
         } catch (Exception e) {
             System.out.println("failed to deleteDefectiveProd\n" + e.getMessage());
         }
+    }
+    public  void updateDay(int day){
+        repMapper.updateDay(day);
     }
     public HashMap<Integer, StockReport> getStockReports(){
         return repMapper.getStockReports();

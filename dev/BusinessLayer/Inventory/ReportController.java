@@ -34,15 +34,15 @@ public class ReportController {
         return dRep;
     }
 
-    public void setDay(int day) {
-        ReportController.day = day;
+    public void setDay(int day1) {
+        ReportController.day = day1;
         Iterator var2 = this.stockReports.iterator();
 
         while(var2.hasNext()) {
             StockReport s = (StockReport)var2.next();
-            s.setDay(day);
+            s.setDay(day1);
         }
-
+        StockReport.day = day1;
     }
 
     public StockReport getStoReport(int id) {
