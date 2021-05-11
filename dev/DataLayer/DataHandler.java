@@ -51,7 +51,7 @@ public class DataHandler {
     public Connection connect(){
         try {
             Class.forName("org.sqlite.JDBC");
-            con = DriverManager.getConnection("jdbc:sqlite:dev/SQL_Inventory_Suppliers.db");
+            con = DriverManager.getConnection("jdbc:sqlite:ADSS_Group_I'\'dev'\'SQL_Inventory_Suppliers.db");
         }
 
         catch ( Exception e ) {
