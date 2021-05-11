@@ -1,5 +1,7 @@
 package BusinessLayer.Suppliers;
 
+import DataLayer.ContractMapper;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
@@ -161,6 +163,8 @@ public class Supplier {
                 System.out.println("enter the discount percent for amount: "+ amount);
                 precent=io.nextInt();
                 totalPriceDiscount.put(amount,precent);
+
+
                 System.out.println("Do you want enter more discounts?");
                 System.out.println("y/n");
                 y_discount = io.next();
@@ -168,6 +172,8 @@ public class Supplier {
             }
             new_contract = new Contract(days, NeedDelivery, totalPriceDiscount);
             setContract(new_contract);
+
+           ContractMapper.addContract(this.id_supplier, days, NeedDelivery? 1 : 0, totalPriceDiscount);
             return new_contract;
         }
 

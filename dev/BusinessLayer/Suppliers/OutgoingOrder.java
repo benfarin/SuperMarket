@@ -31,6 +31,10 @@ public class OutgoingOrder {
         this.totalPrice=totalPrice;
     }
 
+    public LocalDate getDeliveryDate() {
+        return deliveryDate;
+    }
+
     public HashMap<Long, Integer> getItems() { return items; }
 
     public Long getId() {return id;}

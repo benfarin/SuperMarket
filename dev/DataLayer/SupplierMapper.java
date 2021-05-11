@@ -11,11 +11,11 @@ public class SupplierMapper {
     private Connection con = null;
     private static HashMap<Integer, Supplier> suppliers;
 
-    public SupplierMapper() throws SQLException {
+    public SupplierMapper(Connection con) throws SQLException {
 
         suppliers=new HashMap<>();
 
-        con=DataHandler.connect();
+        this.con =con;
         Statement stmt = this.con.createStatement();
         ResultSet res = stmt.executeQuery("SELECT * FROM Supplier");
 
@@ -35,7 +35,7 @@ public class SupplierMapper {
     }
 
     private List<String> getContacts(int supplierID) throws SQLException {
-        con=DataHandler.connect();
+
         Statement stmt = this.con.createStatement();
         ResultSet res = stmt.executeQuery("SELECT * FROM Contacts WHERE sid="+supplierID+";");
         List<String> contacts = new LinkedList<>();
@@ -53,9 +53,10 @@ public class SupplierMapper {
         return suppliers;
     }
 
-    public void addSupplier(int sid, String name, String paymentMethod, String bankAccount) throws SQLException {
-        String sql = "INSERT INTO Supplier(sid,name,paymentMethod,bankAccount) VALUES(?,?,?)";
-        try (PreparedStatement pstmt = con.prepareStatement(sql)) {
+    public void addSupplier(int sid, String name, String paymentMethod, String bankAccount){
+        String sql = "INSERT INTO Supplier(sid,name,paymentMethod,bankAccount) VALUES(?,?,?,?)";
+        try  {
+            PreparedStatement pstmt = con.prepareStatement(sql);
             pstmt.setInt(1, sid);
             pstmt.setString(2, name);
             pstmt.setString(3, paymentMethod);
@@ -92,8 +93,20 @@ public class SupplierMapper {
             System.out.println(e.getMessage());
         }
     }
+    public void addContactToSupplier(int sid,String info)  {
+        String sql = "INSERT INTO Contacts(sid,info) VALUES(?,?)";
+        try {
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, sid);
+            pstmt.setString(2, info);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 
-    public void deleteSupplier(int sid) throws SQLException {
+
+    public void deleteSupplier(int sid)  {
         String sql = "DELETE FROM Supplier WHERE sid=?";
         try {
             PreparedStatement pstmt = con.prepareStatement(sql);

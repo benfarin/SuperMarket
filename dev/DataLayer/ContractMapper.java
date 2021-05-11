@@ -10,12 +10,12 @@ public class ContractMapper {
 
 
     public static HashMap<Integer, Contract> contracts;
-    private Connection con=null;
+    private static Connection con=null;
 
 
 
-    public ContractMapper() throws SQLException {
-        con=DataHandler.connect();
+    public ContractMapper(Connection con) throws SQLException {
+        this.con =con;
         contracts=new HashMap<>();
         Statement stmt = this.con.createStatement();
         ResultSet res = stmt.executeQuery("SELECT * FROM Contract");
@@ -30,13 +30,13 @@ public class ContractMapper {
             if(needsDelivery==1)
                 delivery=true;
 
-            contracts.put(supplierID, new Contract(days, delivery, setDiscounts(supplierID)));
+            contracts.put(supplierID, new Contract(days, delivery, getDiscounts(supplierID)));
         }
     }
 
-    public HashMap<Integer, Integer> setDiscounts(int supplierID) throws SQLException {
+    public HashMap<Integer, Integer> getDiscounts(int supplierID) throws SQLException {
         Statement stmt = this.con.createStatement();
-        ResultSet res = stmt.executeQuery("SELECT * FROM DiscountContract WHERE sid="+supplierID+";");
+        ResultSet res = stmt.executeQuery("SELECT * FROM DiscountContract WHERE sid="+supplierID);
         HashMap<Integer, Integer> discountsMap = new HashMap<>();
 
         while(res.next())
@@ -53,7 +53,7 @@ public class ContractMapper {
     }
 
 
-    public void addContract(int sid, String days_supply, int need_delivery, HashMap<Integer, Integer> totalPriceDiscount) throws SQLException {
+    public static void addContract(int sid, String days_supply, int need_delivery, HashMap<Integer, Integer> totalPriceDiscount)  {
         String sql = "INSERT INTO Contract(sid,days_supply,need_delivery) VALUES(?,?,?)";
         try (PreparedStatement pstmt = con.prepareStatement(sql)) {
             pstmt.setInt(1, sid);
@@ -68,7 +68,7 @@ public class ContractMapper {
         }
     }
 
-    public void addDiscountContract(int sid, int amount, int discount) throws SQLException {
+    public static void addDiscountContract(int sid, int amount, int discount) throws SQLException {
         String sql = "INSERT INTO DiscountContract(sid,amount,discount) VALUES(?,?,?)";
         try (PreparedStatement pstmt = con.prepareStatement(sql)) {
             pstmt.setInt(1, sid);

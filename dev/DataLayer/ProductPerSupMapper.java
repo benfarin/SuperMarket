@@ -10,14 +10,14 @@ import java.util.List;
 
 public class ProductPerSupMapper {
     private Connection con = null;
-    private HashMap<Long, LinkedList<ProductPerSup>> products;
+    private static HashMap<Long, LinkedList<ProductPerSup>> products;
 
-    public ProductPerSupMapper() throws SQLException {
+    public ProductPerSupMapper(Connection con) throws SQLException {
 
         products = new HashMap<>();
 
 
-        con = DataHandler.connect();
+        this.con = con;
         Statement stmt = this.con.createStatement();
         ResultSet res = stmt.executeQuery("SELECT DISTINCT pid FROM ProductPerSupplier");
 
@@ -82,4 +82,7 @@ public class ProductPerSupMapper {
         }
     }
 
+    public static HashMap<Long, LinkedList<ProductPerSup>> getMapOfAllProducts() {
+        return products;
+    }
 }

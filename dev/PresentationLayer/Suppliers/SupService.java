@@ -47,7 +47,7 @@ import java.util.Scanner;
             while (true) {
                 System.out.println("*** Item Order menu ***");
                 System.out.println("Please select an option:");
-                System.out.println("1)  Add New Order ");
+                System.out.println("1)  Add Product To Existing Weekly Order ");
                 System.out.println("2)  Show Order by Id Order");
                 System.out.println("3)  Show Order for a Supplier");
                 System.out.println("4)  Print supplier serial numbers for existing order");
@@ -209,7 +209,9 @@ import java.util.Scanner;
             String name = io.next();
 
             System.out.println("Insert Contact:");
-            String contact = io.next();
+            String contact="";
+            contact=io.nextLine();
+
             List<String> Contacts = new LinkedList<>();
             Contacts.add(contact);
 
