@@ -1,17 +1,22 @@
 package BusinessLayer.Suppliers;
 
+import DataLayer.OrderMapper;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 
 public class IncomingOrderController {
     // INT is the StoreCode for the product, LIST is for all the products from different suppliers under same code
     private HashMap<Long, LinkedList<ProductPerSup>> products;
+    // TODO: We need to add UrgentOrders. this orders will be Weekly Orders
     private HashMap<Integer, OutgoingOrder> orders; // every order is identified by the id (the key) of the supplier
 
 
 // We create an instance of this controller when we need to CREATE a new order or CHANGE existing order, then it closes.
-    public IncomingOrderController(LinkedList<ProductPerSup> allProductsList, LinkedList<OutgoingOrder> allOrdersList) {
-        products = new HashMap<Long, LinkedList<ProductPerSup>>();
+    public IncomingOrderController(HashMap<Long, LinkedList<ProductPerSup>> allProducts, HashMap<Integer, OutgoingOrder> allOrders) {
+       /* OLD CREATION OF ALL PRODUCTS MAP BEFORE WE HAD SQL, FROM A LIST OF ALL PRODUCTS
+
+       products = new HashMap<Long, LinkedList<ProductPerSup>>();
 
         for (ProductPerSup prod : allProductsList) {
             Long currStoreCode = prod.getStoreCode();
@@ -21,8 +26,9 @@ public class IncomingOrderController {
             products.get(currStoreCode).add(prod);
 
         }
-
-        orders = new HashMap<>();
+*/
+       this.products=allProducts;
+        orders = allOrders;
     }
 //        for (BusinessLayer.Suppliers.OutgoingOrder order: allOrdersList ) {
 //            long currOrderID = order
@@ -66,11 +72,13 @@ public class IncomingOrderController {
      *
      * @param id_product
      * @param amount
+     * @returns the supplier ID so I can store the order or -1 if it wasn't a new order
      */
      public void AddNewOrder(Long id_product, int amount) { // need add arguments to facade
         double min=0;
         int id_supplier_min=0;
         int index = 0;
+
 
         LinkedList<ProductPerSup> prod = products.get(id_product);
         if(prod!=null) {
@@ -86,11 +94,19 @@ public class IncomingOrderController {
             }
             if (!orders.containsKey(id_supplier_min)) {
                 OutgoingOrder order = new OutgoingOrder(id_supplier_min, null);
+
                 orders.put(id_supplier_min, order);
+
+                OrderMapper.addNewOrder(order.getId(), order.getDeliveryDate() , order.getTotalPrice());
             }
-            orders.get(id_supplier_min).AddItem(prod.get(index).getStoreCode(), amount, min);
+            OutgoingOrder existingOrder=orders.get(id_supplier_min);
+
+            existingOrder.AddItem(prod.get(index).getStoreCode(), amount, min);
+            OrderMapper.addNewItemOrder(existingOrder.getId(), id_supplier_min, prod.get(index).getStoreCode(), amount);
             //TODO: If order exists we don't have to create a new instance of it
+
         }
+
     }
     public boolean IsOrderExistInSystem(int id_order) {
         return orders.containsKey(id_order);

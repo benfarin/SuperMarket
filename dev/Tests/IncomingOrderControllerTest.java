@@ -34,7 +34,7 @@ class IncomingOrderControllerTest {
         products.add(prod2); // products now with the same product with different suppliers
         products.add(prod3);
 
-        controller = new IncomingOrderController(products,null);
+        //controller = new IncomingOrderController(products,null);
     }
     @Test
     void IsProductExistInSystem(){

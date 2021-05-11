@@ -2,6 +2,7 @@ package BusinessLayer;
 
 import BusinessLayer.Inventory.*;
 
+import java.sql.SQLException;
 import java.util.*;
 
 import BusinessLayer.Suppliers.*;
@@ -18,6 +19,8 @@ public class Facade {
 
         initialize();
         this.dataHandler = new DataHandler(this);
+        supplierController = new SupplierController(dataHandler.supplierMapper.getSuppliers());
+        incoming_order_controller = new IncomingOrderController(dataHandler.productPerSupMapper.getMapOfAllProducts(), dataHandler.orderMapper.orders);
     }
     public String addCategory (String name){
         Category c = invCnt.addCategory(name);
@@ -414,7 +417,7 @@ public class Facade {
 
 
     private void initialize(){
-
+/* OLD INITIALIZATION
         ProductPerSup one = new ProductPerSup("milk 3%", new Long(123123), 5.9, null, new Long(82723), null);
         ProductPerSup two = new ProductPerSup("Honey", new Long(34622), 5.9, null, new Long(34644), null);
         ProductPerSup three = new ProductPerSup("Chocolate", new Long(67933), 5.0, null, new Long(122352), null);
@@ -451,8 +454,11 @@ public class Facade {
         contractItzik.AddPriceDiscount(40, 10);
         itzik.setContract(contractItzik);
         moshe.setContract(contractMoshe);
-        supplierController = new SupplierController(initialSupplierMap);
-        incoming_order_controller = new IncomingOrderController(supplierController.getAllProducts(), allOrdersList);
+*/
+        // Old initialization
+        //supplierController = new SupplierController(initialSupplierMap);
+        //incoming_order_controller = new IncomingOrderController(supplierController.getAllProducts(), allOrdersList);
+
 //..............INV..............
         this.repCnt = new ReportController();
         this.invCnt = new InventoryController();
@@ -460,8 +466,9 @@ public class Facade {
         orderToday();
     }
 
-    public void AddContact(int id_sup, String new_contact) {
+    public void AddContact(int id_sup, String new_contact)  {
         supplierController.AddContact(id_sup,new_contact);
+        dataHandler.supplierMapper.addContactToSupplier(id_sup, new_contact);
     }
 
     public boolean IsSupplierExistInSystem(int id_sup) {
@@ -481,8 +488,11 @@ public class Facade {
     public OutgoingOrder ShowOrder(Long id_order){ return incoming_order_controller.ShowOrder(id_order); }
 
     public boolean IsProductExistInSystem(Long id_product){ return incoming_order_controller.IsProductExistInSystem((long) id_product); }
+
     public void AddNewOrder(Long id_product, Integer amount) {
+
         incoming_order_controller.AddNewOrder(id_product,amount);
+
     }
 
     public boolean IsOrderExistInSystem(int id_order) {
@@ -495,6 +505,7 @@ public class Facade {
 
     public void AddNewSupplier(int id, Long company, String name, List<String> contacts, String payment, String bank) {
         supplierController.AddSupplier(id,company,name,contacts,payment,bank);
+        dataHandler.supplierMapper.addSupplier(id, name, payment, bank);
     }
 
     public void AddSupplierContract(int supplier_id){
@@ -507,6 +518,7 @@ public class Facade {
 
     public void DeleteSupplier(int id) {
         supplierController.DeleteSupplier(id);
+        dataHandler.supplierMapper.deleteSupplier(id);
     }
 
     public Category getCategory(String name) {

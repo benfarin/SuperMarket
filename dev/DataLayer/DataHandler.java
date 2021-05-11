@@ -4,6 +4,8 @@ import BusinessLayer.Facade;
 import BusinessLayer.Inventory.DefectiveReport;
 import BusinessLayer.Inventory.Product;
 import BusinessLayer.Inventory.StockReport;
+import BusinessLayer.Suppliers.Contract;
+
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -17,6 +19,13 @@ public class DataHandler {
     private CategoryMapper catMapper;
     private ProductMapper prodMapper;
     private ReportMapper repMapper;
+
+    public ContractMapper contractMapper;
+    public SupplierMapper supplierMapper;
+    public ProductPerSupMapper productPerSupMapper;
+
+    public OrderMapper orderMapper;
+
     private Connection con;
     private Facade facade;
     public DataHandler(Facade facade) {
@@ -27,6 +36,12 @@ public class DataHandler {
             this.catMapper = new CategoryMapper(con,facade);
             this.prodMapper = new ProductMapper(con,facade);
             this.repMapper = new ReportMapper(con, facade);
+
+            this.contractMapper = new ContractMapper(con);
+            this.supplierMapper = new SupplierMapper(con);
+            this.productPerSupMapper = new ProductPerSupMapper(con);
+            this.orderMapper = new OrderMapper(con);
+
         } catch (Exception e) {
             System.out.println("initialize failed!!!!\n" + e.getMessage());
         }
@@ -290,6 +305,15 @@ public int getDay(){
         }
         catch (Exception e) {
             System.out.println(e.getMessage());
+        }
+    }
+
+    public void addContact(int id_sup, String contact)
+    {
+        try {
+            supplierMapper.addContactToSupplier(id_sup, contact);
+        } catch (Exception e) {
+            System.out.println("failed to addContact\n" + e.getMessage());
         }
     }
 }
