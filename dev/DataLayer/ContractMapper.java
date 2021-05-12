@@ -92,4 +92,24 @@ public class ContractMapper {
             System.out.println(e.getMessage());
         }
     }
+
+    public void deleteContract(int sid)  {
+        String sql = "DELETE FROM Contract WHERE sid=?";
+        try {
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, sid);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        sql = "DELETE FROM DiscountContract WHERE sid=?";
+        try {
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, sid);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+    }
 }

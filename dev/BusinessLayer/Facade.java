@@ -20,7 +20,7 @@ public class Facade {
         initialize();
         this.dataHandler = new DataHandler(this);
         supplierController = new SupplierController(dataHandler.supplierMapper.getSuppliers());
-        incoming_order_controller = new IncomingOrderController(dataHandler.productPerSupMapper.getMapOfAllProducts(), dataHandler.orderMapper.orders);
+        incoming_order_controller = new IncomingOrderController(dataHandler.productPerSupMapper.getMapOfAllProducts(), dataHandler.orderMapper.orders, dataHandler.orderMapper.urgentOrders);
     }
     public String addCategory (String name){
         Category c = invCnt.addCategory(name);
@@ -149,7 +149,7 @@ public class Facade {
         String s = "";
         if(invCnt.reduceStorageQuantity(prodName,reduce)){
             Product p = invCnt.getProduct(prodName);
-            AddNewOrder((long) p.getId(),4*p.getMinimum());
+            AddNewUrgentOrder((long) p.getId(),4*p.getMinimum());
             s = "*** WARNING!!! "+ prodName+"'s storage quantity is under the minimum ***\nsend order to supplier\n";
         }
 
@@ -171,7 +171,7 @@ public class Facade {
         String s ="";
         if(invCnt.setStorageQuantity(prodName,storageQuantity)){
             Product p = invCnt.getProduct(prodName);
-            AddNewOrder((long) p.getId(),4*p.getMinimum());
+            AddNewUrgentOrder((long) p.getId(),4*p.getMinimum());
             s = "*** WARNING!!! "+ prodName+"'s storage quantity is under the minimum ***\n";
         }
         //database
@@ -417,7 +417,7 @@ public class Facade {
 
 
     private void initialize(){
-/* OLD INITIALIZATION
+ /*OLD INITIALIZATION
         ProductPerSup one = new ProductPerSup("milk 3%", new Long(123123), 5.9, null, new Long(82723), null);
         ProductPerSup two = new ProductPerSup("Honey", new Long(34622), 5.9, null, new Long(34644), null);
         ProductPerSup three = new ProductPerSup("Chocolate", new Long(67933), 5.0, null, new Long(122352), null);
@@ -495,6 +495,12 @@ public class Facade {
 
     }
 
+    public void AddNewUrgentOrder(Long id_product, Integer amount) {
+
+        incoming_order_controller.AddNewUrgentOrder(id_product,amount);
+
+    }
+
     public boolean IsOrderExistInSystem(int id_order) {
         return incoming_order_controller.IsOrderExistInSystem(id_order);
     }
@@ -519,6 +525,8 @@ public class Facade {
     public void DeleteSupplier(int id) {
         supplierController.DeleteSupplier(id);
         dataHandler.supplierMapper.deleteSupplier(id);
+        //dataHandler.contractMapper.deleteContract(id); This isn't needed because cascade works
+
     }
 
     public Category getCategory(String name) {

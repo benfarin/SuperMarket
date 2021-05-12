@@ -115,6 +115,14 @@ public class SupplierMapper {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+        sql = "DELETE FROM Contacts WHERE sid=?";
+        try {
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, sid);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     public void deleteSupplierContact(int oid, String info) throws SQLException {

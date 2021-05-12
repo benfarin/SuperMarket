@@ -51,7 +51,7 @@ public class ProductPerSupMapper {
 
         private HashMap<Integer, Double> getHighAmountDiscount(Long productID, int supplierID) throws SQLException {
             Statement stmt = this.con.createStatement();
-            ResultSet res = stmt.executeQuery("SELECT * FROM DiscountProduct WHERE sid="+supplierID+" AND pid="+productID+";");
+            ResultSet res = stmt.executeQuery("SELECT * FROM DiscountProducts WHERE sid="+supplierID+" AND pid="+productID);
             HashMap<Integer, Double> discountsMap = new HashMap<>();
 
             while(res.next())

@@ -27,7 +27,7 @@ public class Supplier {
         this.contacts = contacts;
         this.paymentMethod = paymentMethod;
         this.bankAccount = bankAccount;
-        this.contract= new Contract(null,false,new HashMap<Integer,Integer>()); //addContract();
+        this.contract= null;//new Contract(null,false,new HashMap<Integer,Integer>()); //addContract();
         this.products=new HashMap<Long, ProductPerSup>();
     }
     public Supplier(Integer id_supplier, Long id_company, String name, List<String> contacts, String paymentMethod, String bankAccount, Contract contract) {
@@ -38,7 +38,7 @@ public class Supplier {
         this.paymentMethod = paymentMethod;
         this.bankAccount = bankAccount;
         this.contract= contract;
-        this.products=null;//new HashMap<Long, ProductPerSup>();
+        this.products=new HashMap<Long, ProductPerSup>();
     }
 
     public HashMap<Long, ProductPerSup> getProducts() {

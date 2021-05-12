@@ -1,7 +1,7 @@
 package BusinessLayer.Suppliers;
 
+import java.util.Date;
 import java.util.HashMap;
-import java.time.*;
 
 public class OutgoingOrder {
     private  static  Long static_id= new Long(0);
@@ -9,12 +9,12 @@ public class OutgoingOrder {
     private Integer supplier_id;
     private HashMap<Long,Integer> items; //  the key is the id_tem ,  the value is the amount.
     //TODO: nim: I think Key needs to be the supplierSerialNum (because this order goes to them). Or maybe the product object and value=amount
-    private LocalDate deliveryDate;
+    private Date deliveryDate;
     private double totalPrice;
 
 
 
-    public OutgoingOrder(Integer sup,LocalDate delivery_Date){
+    public OutgoingOrder(Integer sup, Date delivery_Date){
         id=static_id;
         static_id++;
         supplier_id = sup;
@@ -22,7 +22,7 @@ public class OutgoingOrder {
         deliveryDate = delivery_Date;
         totalPrice = 0;
     }
-    public OutgoingOrder(Integer sup,LocalDate delivery_Date, HashMap<Long, Integer> items, double totalPrice){
+    public OutgoingOrder(Integer sup, Date delivery_Date, HashMap<Long, Integer> items, double totalPrice){
         id=static_id; //TODO: Make the IDs count properly from 0 as they are loaded
         static_id++;
         this.supplier_id = sup;
@@ -31,7 +31,7 @@ public class OutgoingOrder {
         this.totalPrice=totalPrice;
     }
 
-    public LocalDate getDeliveryDate() {
+    public Date getDeliveryDate() {
         return deliveryDate;
     }
 

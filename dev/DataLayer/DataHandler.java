@@ -193,7 +193,7 @@ public class DataHandler {
                 "\t\"sid\"\tINTEGER,\n" +
                 "\t\"amount\"\tINTEGER,\n" +
                 "\t\"discount\"\tINTEGER NOT NULL,\n" +
-                "\tFOREIGN KEY(\"sid\") REFERENCES \"Contract\"(\"sid\") ON UPDATE CASCADE ON DELETE CASCADE,\n" +
+                "\tFOREIGN KEY(\"sid\") REFERENCES \"Supplier\"(\"sid\") ON UPDATE CASCADE ON DELETE CASCADE,\n" +
                 "\tPRIMARY KEY(\"sid\",\"amount\")\n" +
                 ");";
         try (
@@ -223,8 +223,8 @@ public class DataHandler {
                 "\t\"pid\"\tINTEGER,\n" +
                 "\t\"amount\"\tINTEGER,\n" +
                 "\tFOREIGN KEY(\"oid\") REFERENCES \"Orders\"(\"oid\") ON DELETE CASCADE ON UPDATE CASCADE,\n" +
-                "\tFOREIGN KEY(\"sid\") REFERENCES \"ProductPerSupplier\"(\"sid\") ON DELETE CASCADE ON UPDATE CASCADE,\n" +
-                "\tFOREIGN KEY(\"pid\") REFERENCES \"ProductPerSupplier\"(\"pid\") ON DELETE CASCADE ON UPDATE CASCADE,\n" +
+                "\tFOREIGN KEY(\"sid\") REFERENCES \"Supplier\"(\"sid\") ON DELETE CASCADE ON UPDATE CASCADE,\n" +
+                "\tFOREIGN KEY(\"pid\") REFERENCES \"Product\"(\"pid\") ON DELETE CASCADE ON UPDATE CASCADE,\n" +
                 "\tPRIMARY KEY(\"sid\",\"pid\",\"oid\")\n" +
                 ");";
         try (
@@ -234,6 +234,18 @@ public class DataHandler {
             System.out.println(e.getMessage());
         }
         sql = "CREATE TABLE IF NOT EXISTS \"Orders\" (\n" +
+                "\t\"oid\"\tINTEGER,\n" +
+                "\t\"date\"\tDATE,\n" +
+                "\t\"totalPrice\"\tNUMERIC,\n" +
+                "\tPRIMARY KEY(\"oid\")\n" +
+                ");";
+        try (
+                Statement stmt = con.createStatement()) {
+            stmt.execute(sql);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        sql = "CREATE TABLE IF NOT EXISTS \"UrgentOrders\" (\n" +
                 "\t\"oid\"\tINTEGER,\n" +
                 "\t\"date\"\tDATE,\n" +
                 "\t\"totalPrice\"\tNUMERIC,\n" +
@@ -274,7 +286,7 @@ public class DataHandler {
             System.out.println(e.getMessage());
         }
 
-
+        sql ="PRAGMA foreign_keys = ON;";
 
         try (
                 Statement stmt = con.createStatement()) {
@@ -282,6 +294,7 @@ public class DataHandler {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+
         return  con;
     }
     //--------------CATEGORIES--------------
