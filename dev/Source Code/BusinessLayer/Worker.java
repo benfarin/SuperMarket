@@ -1,8 +1,8 @@
 package BusinessLayer;
-import java.time.LocalDate;
+import java.sql.Date;
 import java.util.*;
 
-public class Worker
+public class Worker extends BusinessObject
 {
     private String name;
     private int id;
@@ -12,7 +12,7 @@ public class Worker
     private Date joiningDate;
     private Date leavingDate;
     private List<Role> roles;
-	private HashMap<Shift, Constraint> constraints;
+	private HashMap<Integer, Constraint> constraints;
 
 
 	public Worker(String name, int id, int bankAccountNumber, int bankNumber, int salary, Date joiningDate, Date leavingDate)
@@ -24,8 +24,9 @@ public class Worker
         this.salary = salary;
         this.joiningDate = joiningDate;
         this.leavingDate = leavingDate;
-        this.constraints = new HashMap<Shift, Constraint>();
+        this.constraints = new HashMap<Integer, Constraint>();
         this.roles = new LinkedList<Role>();
+        
     }
 
     public String getName()
@@ -98,20 +99,20 @@ public class Worker
     {
         this.leavingDate = leavingDate;
     }
-    public HashMap<Shift, Constraint> getConstraints() {
+    public HashMap<Integer, Constraint> getConstraints() {
 		return constraints;
 	}
 
-	public void setConstraints(HashMap<Shift, Constraint> constraints) {
+	public void setConstraints(HashMap<Integer, Constraint> constraints) {
 		this.constraints = constraints;
 	}
 
     public void addConstraint(Constraint c){
-        constraints.put(c.getShift(), c);
+    	constraints.put(c.getId(), c);
     }
 
-    public<T> void updateConstraint(Shift shift, int desire, T newValue){
-        Constraint toUpdate = constraints.get(shift);
+    public<T> void updateConstraint(int id, int desire, T newValue){
+        Constraint toUpdate = constraints.get(id);
         if (desire == 1)
             toUpdate.setTemp((Boolean)newValue);
         else if (desire == 2){
@@ -120,8 +121,8 @@ public class Worker
         else if (desire == 3){
             toUpdate.setShiftType((Integer) newValue);
         }
-            constraints.remove(shift);
-            constraints.put(shift, toUpdate);
+            constraints.remove(id);
+            constraints.put(id, toUpdate);
 
     }
 

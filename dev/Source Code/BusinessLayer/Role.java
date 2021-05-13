@@ -1,5 +1,5 @@
 package BusinessLayer;
-public class Role {
+public class Role extends BusinessObject {
 
     private int roleID;
     private String roleName;
@@ -20,4 +20,8 @@ public class Role {
     public void setRoleName(String roleName) {
         this.roleName = roleName;
     }
+
+	public int getId() {
+		return roleID;
+	}
 }

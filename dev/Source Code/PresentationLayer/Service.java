@@ -1,11 +1,11 @@
 package PresentationLayer;
 import BusinessLayer.*;
-import javafx.util.Pair;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.Date;
+import java.sql.Date;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static Enum.ShiftField.ManagerID;
@@ -15,57 +15,28 @@ public class Service {
     public static Scanner s;
     ShiftController ShiftCntrl;
     WorkersController WorkersCntrl;
-
+    static Controller conn= new Controller();
     public Service(){
-        s = new Scanner(System.in);//.useDelimiter("\n");
+        s = new Scanner(System.in);
         this.ShiftCntrl = new ShiftController();
         this.WorkersCntrl = new WorkersController();
     }
 
+
     public void startMenu() {
-        while (true) {
-            System.out.println("Super-Li's Workers department\n\n" +
-            "1)\tInitialize data\n" +
-            "2)\tLogin\n" +
-            "3)\tExit"
-            );
-
-            int choice = Integer.parseInt(s.next());
-            switch (choice) {
-                case 1:
-                    Initialize();
-                    break;
-                case 2:
-                    LoginMenu();
-                    break;
-                case 3:
-                    return;
-                default:
-                    System.out.println("Not a valid option, please try again.\n");
-                    break;
-            }
-        }
-    }
-
-    public void LoginMenu() {
     	System.out.println("Please enter your ID:\n");
     	int ID=Integer.parseInt(s.next());
         int op = 1;
     	while (!WorkersCntrl.isWorker(ID)) {
              System.out.println("Wrong Id Number\n" +
             "1)\tTry Again\n" +
-            "2)\tReturn to Previous Menu\n" +
-            "3)\tExit");
+            "2)\tExit");
     	    op = Integer.parseInt(s.next());
             if (op == 1){
-                System.out.println("Please enter your ID:\n");
-    	        ID = Integer.parseInt(s.next());
-			}
-            if (op == 2){
                 startMenu();
                 break;
 			}
-            if (op == 3){
+            if (op == 2){
                 Exit();
 			}
             else
@@ -73,10 +44,11 @@ public class Service {
     	}
     	if (op == 1) {
             Worker w = WorkersCntrl.getWorker(ID);
-            System.out.println("Please choose you role:\n" +
-            "1)\tManager\n" +
-            "2)\tCashier \n" +
-            "3)\t StorageWorker");
+            HashMap<Integer,Role> roles=WorkersCntrl.getRoles();
+            System.out.println("Please choose you role:\n");
+            for(Role r:roles.values()) {
+                System.out.println("Role id:"+r.getId()+" RoleName: "+r.getRoleName());
+            }
     	    int role=Integer.parseInt(s.next());
             // the roles Id is the number to choose
     	    while(!WorkersCntrl.workerHasRole(w, role)){
@@ -85,11 +57,7 @@ public class Service {
                 "2)\tExit\n");
                 op = Integer.parseInt(s.next());
                 if (op == 1){
-                    System.out.println("Please choose you role:\n" +
-                    "1)\tManager\n" +
-                    "2)\tCashier \n" +
-                    "3)\t StorageWorker");
-    	            role=Integer.parseInt(s.next());
+                	startMenu();
 			    }
                 else if (op ==2){
                     Exit();
@@ -107,22 +75,8 @@ public class Service {
     }
 
     public void Initialize() {
-        WorkersCntrl.createRole(1, "Manager");
-        WorkersCntrl.createRole(2, "Cashier");
-        WorkersCntrl.createRole(3, "StorageWorker");
-
-        WorkersCntrl.createWorker("Nahum Yaakobi", 123, 234423, 12, 32324);
-        Worker w1 = WorkersCntrl.getWorker(123);
-        WorkersCntrl.addRoleToWorker(w1, 1);
-        WorkersCntrl.createWorker("Shalom Shlomi", 456, 325, 12, 3242);
-        Worker w2 = WorkersCntrl.getWorker(456);
-        WorkersCntrl.addRoleToWorker(w2, 2);
-        WorkersCntrl.createWorker("ron levy", 789, 234423, 12, 32324);
-        Worker w3 = WorkersCntrl.getWorker(789);
-        WorkersCntrl.addRoleToWorker(w3, 3);
-
-        System.out.println("Done initialize");
-
+    	WorkersCntrl.init();
+    	ShiftCntrl.init();
     }
 
     // START WORKER MENU 
@@ -162,7 +116,7 @@ public class Service {
     }
 
     public void printWorkerShifts(Worker w){
-        Date today = new Date();
+        Date today = new Date(System.currentTimeMillis());
         List<Shift> workerShifts = ShiftCntrl.getWorkerShifts(w);
         for (Shift s: workerShifts){
             ShiftCntrl.printShift(s);
@@ -188,10 +142,8 @@ public class Service {
         boolean isTemp = true;
         if (op == 2)
             isTemp = false;
-
-        Shift s = ShiftCntrl.getShift(date, shiftType);
-
-        WorkersCntrl.addConstraintToWorker(w, new Constraint(isTemp, date, shiftType,w, s));
+        
+        WorkersCntrl.addConstraintToWorker(w, new Constraint(isTemp, date, shiftType,w.getId()));
 	}
 
     public void EditConstrint(Worker w){
@@ -208,7 +160,7 @@ public class Service {
     	int shiftType = Integer.parseInt(s.next());
 
         Shift shift = ShiftCntrl.getShift(date, shiftType);
-        Constraint c = WorkersCntrl.getConstraint(w,shift);
+        Constraint c = WorkersCntrl.getConstraintByShift(w,shift);
 
         while(true){
             System.out.println("Choose what to edit\n" +
@@ -285,23 +237,66 @@ public class Service {
             System.out.println("Manager Menu - Choose option\n" +
             "1)\tWorkers Menu\n" +
             "2)\tShifts Menu\n" +
-            "3)\tExit\n");
+            "3)\tDeliveries Menu\n" +
+            "4)\tExit\n");
             int op = Integer.parseInt(s.next());
             if (op == 1) {
-                System.out.println("Enter worker id:");
-                int id = Integer.parseInt(s.next());
-                ManagerWorkerMenu(WorkersCntrl.getWorker(id));
+                ManagerWorkerFirstMenu(w);
             }
             else if (op == 2)
                 ShiftsMenu();
             else if (op == 3)
+                DeliveriesMenu();
+            else if (op == 4)
                 Exit();
             else
                 System.out.println("Not a valid option, please try again.");
         }
 	}
 
-    private void ManagerWorkerMenu(Worker w) {
+    private void ManagerWorkerFirstMenu(Worker w) {
+    	while (true) {
+	        System.out.println("Worker Menu - Choose option\n" +
+	        "1)\tAdd Worker\n" +
+	        "2)\tChoose Worker\n" +
+	        "3)\tReturn\n");
+	        
+	        int op = Integer.parseInt(s.next());
+	        if(op == 1)
+	        	addWorker();
+	        else if (op == 2) {
+	            System.out.println("Enter worker id");
+	            int Id = Integer.parseInt(s.next());
+	            Worker Cw = WorkersCntrl.getWorker(Id);
+	            if(Cw==null) {
+		            System.out.println("Wrong ID ,try again");
+		            ManagerWorkerFirstMenu(w);
+	            }
+	            ManagerWorkerMenu(Cw);
+	        }
+	        else if(op == 3) {
+	        	break;
+	        }
+    	}
+    }
+    private void addWorker() {
+        System.out.println("Enter worker id");
+        int id = Integer.parseInt(s.next());
+        System.out.println("Enter worker first name");
+        String name ="";
+        name=s.next();
+        System.out.println("Enter worker last name");
+        name+=" "+s.next();
+        System.out.println("Enter worker bank acoount number");
+        int bankAccountNumber = Integer.parseInt(s.next());
+        System.out.println("Enter worker bank number");
+        int bankNumber = Integer.parseInt(s.next());
+        System.out.println("Enter worker salary");
+        int salary = Integer.parseInt(s.next());
+        WorkersCntrl.createWorker(name, id, bankAccountNumber, bankNumber, salary);
+	}
+
+	private void ManagerWorkerMenu(Worker w) {
         while(true) {
             System.out.println("Worker Menu - Choose option\n" +
             "1)\tWorker Shifts\n" +
@@ -404,7 +399,7 @@ public class Service {
     }
 
     private void printWorkerConstraints (Worker w) {
-        HashMap<Shift, Constraint> constraints = WorkersCntrl.getWorkerConstraints(w);
+        HashMap<Integer, Constraint> constraints = WorkersCntrl.getWorkerConstraints(w);
         for (Constraint c: constraints.values()) {
             WorkersCntrl.printConstrint(c);
             System.out.println("");
@@ -416,9 +411,8 @@ public class Service {
             System.out.println("Shift Menu - Choose option\n" +
             "1)\tCreate Shift\n" +
             "2)\tEdit Shift\n" +
-            "3)\tAdd Shift\n" +
-            "4)\tReturn\n" +
-            "5)\tExit\n");
+            "3)\tReturn\n" +
+            "4)\tExit\n");
             int op = Integer.parseInt(s.next());
 
             if (op == 1) {
@@ -427,10 +421,8 @@ public class Service {
             else if (op == 2)
                 EditShift();
             else if (op == 3)
-                Exit();
+                break;
             else if (op == 4)
-                Exit();
-            else if (op == 5)
                 Exit();
             else {
                 System.out.println("Not a valid option, please try again.");
@@ -496,7 +488,13 @@ public class Service {
                     HashMap<Integer, Integer> workers = new HashMap<>();
                     System.out.println("Add workers to the shift:");
                     while (true) {
-                        System.out.println("Enter worker id");
+                        System.out.println("Worker available for this shift: ");
+                        HashMap<Worker, String> availableWorkers = workersRec(date,shiftType,roles, workers);
+                        
+                        for (String s :availableWorkers.values()) {
+                        	System.out.println(s);
+                        }
+                        System.out.println("Enter Worker id to Add");
                         int workerId = Integer.parseInt(s.next());
                         Worker w = WorkersCntrl.getWorker(id);
                         System.out.println("Enter role id");
@@ -519,14 +517,41 @@ public class Service {
                                 break;
                         }
                     }
-                    Shift sh = new Shift(date, manager.getId(), shiftType, workers, roles);
-                    ShiftCntrl.addShift(sh);
+                    ShiftCntrl.createShift(date, manager.getId(), shiftType, workers, roles);
                 }
             }
         }
     }
 
-    private void EditShift() {
+    private HashMap<Worker, String> workersRec(Date date, int shiftType, HashMap<Integer, Integer> roles, HashMap<Integer, Integer> workersInShift) {
+		HashMap<Integer, Worker> workers = WorkersCntrl.getWorkers();
+		HashMap<Worker, String> availableWorkers = new HashMap<Worker, String>();
+		for (Worker w: workers.values()) {
+			boolean available = true;
+			HashMap<Integer, Constraint> constraints = w.getConstraints();
+			for (Constraint c: constraints.values()) {
+				if (c.getShiftType() == shiftType && c.getConstraintDate().equals(date))
+					available = false;
+			}
+			if (available) {
+				String strRoles = "";
+				List<Role> wRoles = w.getRoles();
+				for (Role wr: wRoles) {
+					for(Integer r: roles.keySet())
+					if (roles.get(r) > 0 && wr.getId() == r && !workersInShift.containsKey(w.getId()))
+						strRoles += ", Role: "+wr.getId()+" - "+wr.getRoleName();
+				}
+				if (!strRoles.equals("")) {
+					strRoles = strRoles.substring(1);
+					strRoles = "Worker id: " + w.getId() + " Worker's name: "+ w.getName() + ": " + strRoles;
+					availableWorkers.put(w, strRoles);
+				}
+			}
+		}
+		return availableWorkers;
+	}
+
+	private void EditShift() {
         System.out.println("Enter shift date in DD/MM/YYYY format");
         String d = s.next();
         int day = Integer.parseInt(d.substring(0,1));
@@ -637,7 +662,7 @@ public class Service {
                 System.out.println("Enter worker id to add");
                 int id = Integer.parseInt(s.next());
 
-                ShiftCntrl.removeWorkerFrom(sh, id);
+                ShiftCntrl.removeWorkerFromShift(sh, id);
             } else if (op == 3) {
                 break;
             } else{
@@ -651,6 +676,306 @@ public class Service {
         for(Integer id: workers.keySet()){
             Worker w = WorkersCntrl.getWorker(id);
             WorkersCntrl.printWorker(w);
+        }
+    }
+    public static void DeliveriesMenu(){
+        System.out.println("Choose Unit : ");
+        System.out.println("1- Driver\n 2- Truck\n 3- Delivery \n 4-Location");
+        Scanner scanner = new Scanner(System.in);
+        int option = scanner.nextInt();
+//        scanner.nextLine();
+        switch(option){
+            case 1:
+                DriverMenu();
+                break;
+            case 2:
+                TruckMenu();
+                break;
+            case 3:
+                DeliveryMenu();
+                break;
+            case 4:
+                LocationMenu();
+                break;
+            default:
+                System.out.println("not in options");
+                DeliveriesMenu();
+                break;
+
+
+        }
+    }
+
+    private static void LocationMenu(){
+        System.out.println("Choose option : ");
+        System.out.println("1- add Location\n 2- get Location\n 3- get All Locations \n");
+        Scanner scanner = new Scanner(System.in);
+        int option = scanner.nextInt();
+//        scanner.nextLine();
+        switch(option){
+            case 1:
+                System.out.println("Enter location's address: ");
+                String address = scanner.next();
+                System.out.println("Enter phone Number: ");
+                String phoneNum = scanner.next();
+                System.out.println("Enter contact name: ");
+                String name = scanner.next();
+//                System.out.println("Enter truck's capacity");
+//                int capacity = scanner.nextInt();
+//                Truck truck = new Truck(license,model,weight,capacity);
+//                conn.addTruck(truck);
+                Location loc = new Location(address,phoneNum,name);
+                conn.addLocation(loc);
+                break;
+            case 2:
+                System.out.println("Enter location's address: ");
+                String address1 = scanner.next();
+                Location l = conn.getLocation(address1);
+                printLocation(l);
+                break;
+            case 3:
+                List<Location> locations= conn.getAllLocations();
+                for(Location l1:locations){printLocation(l1);}
+                break;
+            default:
+                System.out.println("not in options");
+                System.out.println("Choose option : ");
+                System.out.println("1- back to MainMenu\n ");
+                int num = scanner.nextInt();
+                switch (num){
+                    case 1:
+                        DeliveriesMenu();
+                        break;
+                    default:
+                        LocationMenu();
+                        break;
+                }
+        }
+
+    }
+
+    private static void printLocation(Location l) {
+        System.out.println(l.toString());
+    }
+
+    private static void DeliveryMenu() {
+        System.out.println("Choose option : ");
+        System.out.println("1- create Delivery\n 2- get Delivery\n 3-  \n 4-  \n 5- ");
+        Scanner scanner = new Scanner(System.in);
+        int option = scanner.nextInt();
+        switch(option){
+            case 1:
+                System.out.println("Enter Delivery weight : ");
+                int weight = scanner.nextInt();
+                System.out.println("Enter documents : ");
+                List<Document> ldoc = new LinkedList<>();
+                ldoc =addDocument(ldoc);
+                BusinessLayer.DeliveryController.getInstance().addDelivery(weight,ldoc);
+                break;
+            case 2:
+                System.out.println("Enter deliver's id");
+                int id = scanner.nextInt();
+                Delivery delivery = conn.getDelivery(id);
+                System.out.println(delivery.toString());
+                break;
+//            case 3:
+//                List<Truck> truckList= conn.getAllTrucks();
+//                printTruck(truckList);
+//            case 4:
+//                truckList= conn.getAllTrucksA();
+//                printTruck(truckList);
+//            case 5 :
+//                truckList= conn.getAllTrucksB();
+//                printTruck(truckList);
+            default:
+                System.out.println("not in options");
+                System.out.println("Choose option : ");
+                System.out.println("1- back to MainMenu\n ");
+                int num = scanner.nextInt();
+                switch (num){
+                    case 1:
+                        DeliveriesMenu();
+                        break;
+                    default:
+                        DeliveryMenu();
+                        break;
+                }
+        }
+    }
+
+//    private void printDelivery(Delivery delivery) {
+//
+//    }
+
+    private static List<Document> addDocument(List<Document> ldoc) {
+        Scanner input = new Scanner(System.in);
+        System.out.println("choose option:");
+        System.out.println("1- add Document:");System.out.println("2- Exit:");
+       int  option = input.nextInt();
+       if(option==1) {
+           System.out.println("Enter document id:");
+           int id = input.nextInt();
+           System.out.println("Enter location fields: ");
+           Location l = addLocation();
+           System.out.println("Enter items: ");
+           List<String> items = addItems();
+           Document doc = new Document(id, items, l);
+           ldoc.add(doc);
+           return addDocument(ldoc);
+       }
+       else{
+           return ldoc;
+       }
+
+    }
+
+    private static List<String> addItems() {
+        List<String> itemsList = new LinkedList<>();
+        Scanner items = new Scanner(System.in);
+        System.out.println("Enter items: ");
+        while(true){
+            String s = items.next();
+            itemsList.add(s);
+            if(s=="quit"){break;}
+        }
+        return itemsList;
+    }
+
+    private static Location addLocation() {
+        Scanner input = new Scanner(System.in);
+        System.out.println("Enter location's address: ");
+        String address = input.next();
+        System.out.println("Enter phone number: ");
+        String phoneNum = input.next();
+        System.out.println("Enter contact name: ");
+        String name = input.next();
+        return new Location(address,phoneNum,name);
+    }
+
+    private static void TruckMenu() {
+        System.out.println("Choose option : ");
+        System.out.println("1- add Truck\n 2- get Truck\n 3- get All Trucks \n 4- get all available Trucks \n 5- get all busy Trucks");
+        Scanner scanner = new Scanner(System.in);
+        int option = scanner.nextInt();
+//        scanner.nextLine();
+        switch(option){
+            case 1:
+                System.out.println("Enter Truck license");
+                int license = scanner.nextInt();
+                System.out.println("Enter Truck model");
+                String model = scanner.next();
+                System.out.println("Enter truck's weight");
+                int weight = scanner.nextInt();
+                System.out.println("Enter truck's capacity");
+                int capacity = scanner.nextInt();
+                Truck truck = new Truck(license,model,weight,capacity);
+                conn.addTruck(truck);
+                break;
+            case 2:
+                System.out.println("Enter truck's license ");
+                int lice = scanner.nextInt();
+                Truck tr = conn.getTruck(lice);
+                printTruck(tr);
+                break;
+            case 3:
+                List<Truck> truckList= conn.getAllTrucks();
+                printTruck(truckList);
+                break;
+            case 4:
+                truckList= conn.getAllTrucksA();
+                printTruck(truckList);
+                break;
+            case 5 :
+                truckList= conn.getAllTrucksB();
+                printTruck(truckList);
+                break;
+            default:
+                System.out.println("not in options");
+                System.out.println("Choose option : ");
+                System.out.println("1- back to MainMenu\n ");
+                int num = scanner.nextInt();
+                switch (num){
+                    case 1:
+                        DeliveriesMenu();
+                        break;
+                    default:
+                        TruckMenu();
+                        break;
+                }
+        }
+    }
+
+    private static void printTruck(Truck tr) {
+        System.out.println("License Number :"+tr.getLicenseNum());
+        System.out.println("Model :"+tr.getModel());
+        System.out.println("Weight :"+tr.getWeight());
+        System.out.println("Capacity :"+tr.getCapacity());
+        if(tr.getDriver()!= null)
+            System.out.println("driver Id :"+tr.getDriver().getId());
+        if(!tr.isBusy()){
+            System.out.println("Truck's Availability: TRUE!");
+        }
+        else{System.out.println("Truck's Availability: FALSE!");}
+    }
+    private static void printTruck(List<Truck> tr) {
+        for(Truck tr1:tr){printTruck(tr1);}
+    }
+    private static void DriverMenu() {
+        System.out.println("Choose option : ");
+        System.out.println("1- add Driver\n 2- get Driver\n 3- get All Drivers \n 4- get all available drivers \n 5- get all busy drivers");
+        Scanner scanner = new Scanner(System.in);
+        int option = scanner.nextInt();
+//        scanner.nextLine();
+        switch(option){
+            case 1:
+                System.out.println("Enter driver's id");
+                int id = scanner.nextInt();
+                System.out.println("Enter driver's name");
+                String name = scanner.next();
+                System.out.println("Enter driver's license");
+                int license = scanner.nextInt();
+                Driver d=new Driver(id,name,license);
+                conn.addDriver(d);
+            case 2:
+                System.out.println("Enter driver's id: ");
+                int driverId = scanner.nextInt();
+                Driver driver = conn.getDriver(driverId);
+                printDriver(driver);
+//                TruckMenu();
+            case 3:
+                List<Driver> driverList= conn.getAllDrivers();
+                printDriver(driverList);
+
+            case 4:
+                 driverList= conn.getAllDriversA();
+                printDriver(driverList);
+            case 5 :
+                driverList= conn.getAllDriversB();
+                printDriver(driverList);
+            default:
+                System.out.println("not in options");
+                System.out.println("Choose option : ");
+                System.out.println("1- back to MainMenu\n ");
+                int num = scanner.nextInt();
+                switch (num){
+                    case 1:
+                        DeliveriesMenu();
+                    default:
+                        DriverMenu();
+                }
+        }
+    }
+
+    private static void printDriver(Driver driver) {
+        System.out.println("ID: "+ driver.getId());
+        System.out.println("NAME: "+ driver.getName());
+        System.out.println("license Allowed: "+ driver.getLicense());
+        if(driver.isBusy()){System.out.println("Driver's Availability: FALSE!");}
+        else{System.out.println("Driver's Availability: TRUE!");}
+    }
+    private static void printDriver(List<Driver> driverList) {
+        for(Driver d:driverList){
+            printDriver(d);
         }
     }
 

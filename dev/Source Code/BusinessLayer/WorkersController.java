@@ -1,24 +1,30 @@
 package BusinessLayer;
 import Enum.WorkerField;
-
-import java.time.LocalDate;
-import java.util.Date;
-import java.util.Dictionary;
+import java.sql.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+
+import DataAccessLayer.DALController;
+import DataAccessLayer.MapperData;
 
 public class WorkersController {
 
     private HashMap<Integer, Worker> workers;
     private HashMap<Integer,Role> roles;
-
+    private DALController DAL;
+    private MapperData MD;
     public WorkersController(){
+    	MD=new MapperData();
+    	DAL=new DALController();
         workers = new HashMap<Integer, Worker>();
         roles = new HashMap<Integer,Role>();
     }
 
     public void createWorker(String name, int id, int bankAccountNumber, int bankNumber, int salary){ //TODO: no need to put JD and LD as parameters
-        workers.put(id, new Worker(name, id, bankAccountNumber, bankNumber, salary, new Date(), null));
+        DAL.insert(id, name, bankAccountNumber, bankNumber, salary);
+    	workers.put(id, new Worker(name, id, bankAccountNumber, bankNumber, salary, new Date(System.currentTimeMillis()), null));
     }
 
     public <T> void updateWorker(int id, WorkerField field, T newValue){
@@ -26,21 +32,27 @@ public class WorkersController {
         switch (field) {
             case name:
                 toUpdate.setName((String)newValue);
+                DAL.update(toUpdate,field.toString(),(String)newValue);
                 break;
             case id:
                 toUpdate.setId((Integer) newValue);
+                DAL.update(toUpdate,field.toString(),(Integer)newValue);
                 break;
             case bankNumber:
                 toUpdate.setBankNumber((Integer) newValue);
+                DAL.update(toUpdate,field.toString(),(Integer)newValue);
                 break;
             case bankAccountNumber:
                 toUpdate.setBankAccount((Integer) newValue);
+                DAL.update(toUpdate,field.toString(),(Integer)newValue);
                 break;
             case joiningDate:
                 toUpdate.setJoiningDate((Date)newValue);
+                DAL.update(toUpdate,field.toString(),(java.sql.Date)newValue);
                 break;
             case leavingDate:
                 toUpdate.setLeavingDate((Date)newValue);
+                DAL.update(toUpdate,field.toString(),(java.sql.Date)newValue);
                 break;
         }
             workers.remove(id);
@@ -55,6 +67,7 @@ public class WorkersController {
     }
     public void createRole(int id, String name ) {
     	roles.put(id, new Role(id,name));
+    	DAL.insert(id, name);
     }
     public Role getRole(int id) {
     	return roles.get(id);
@@ -67,6 +80,7 @@ public class WorkersController {
     }
     public void printWorker(Worker w) {
         System.out.println("\t\tWorker's Info:\n\n" +
+                "\tName:"+w.getName()+"\n"+   
                 "\tID:"+w.getId()+"\n"+
                 "\tBank account Number:" +w.getBankAccount()+"\n"+
                 "\tBank number:"+w.getBankNumber()+"\n"+
@@ -75,13 +89,26 @@ public class WorkersController {
                 "\tLeaving date:"+w.getLeavingDate()+"\n"
         );
     }
-    public Constraint getConstraint(Worker w,Shift s) {
-    	return(w.getConstraints().get(s));
+    public Constraint getConstraintByShift(Worker w,Shift s) {
+    	HashMap<Integer,Constraint> constraints = w.getConstraints();
+    	for (Constraint c : constraints.values()) {
+    		if (c.getShiftType() == s.getShiftType() && c.getConstraintDate().equals(s.getShiftDate()))
+    			return c;
+    	}
+    	return null;
     }
     public void removeConstraint(Worker w,Shift s) {
-    	w.getConstraints().remove(s);
+    	HashMap<Integer,Constraint> constraints = w.getConstraints();
+    	for (Constraint c : constraints.values()) {
+    		if (c.getShiftType() == s.getShiftType() && c.getConstraintDate().equals(s.getShiftDate())) {
+    	    	DAL.delete(c);
+        		w.getConstraints().remove(c.getId());
+    		}
+    	}
+
+    	
     }
-    public HashMap<Shift,Constraint> getWorkerConstraints(Worker w){
+    public HashMap<Integer,Constraint> getWorkerConstraints(Worker w){
     	return(w.getConstraints());
     }
 
@@ -94,7 +121,7 @@ public class WorkersController {
                 "\tConstraint Date:"+c.getConstraintDate()+"\n"+
                 "\tIs Temp constraint:" +c.isTemp()+"\n"+
                 "\tShift type:"+c.getShiftType()+"\n"+
-                "\tWorker's Name:" +c.getWorker().getName()+"\n"
+                "\tWorker's Name:" +workers.get(c.getWorker()).getName()+"\n"
         );
     }
     public String getWorkerName(Worker w) {
@@ -102,20 +129,27 @@ public class WorkersController {
     }
     
     public void deleteWorker(int id){
+    	Worker w=workers.get(id);
+    	DAL.delete(w);
         workers.remove(id);
-        //TODO: delete him from shifts and so.
     }
 
-    public void addConstraintToWorker (Worker w, Constraint c){
+    public void addConstraintToWorker(Worker w, Constraint c){
+    	int istemp=0;
+    	if(c.isTemp())
+    		istemp=1;
+    	DAL.insert(istemp,(java.sql.Date)c.getConstraintDate(),c.getShiftType(),w.getId());
         w.addConstraint(c);
     }
 
     public void addRoleToWorker(Worker w, int roleid) {
+    	DAL.insertWR(w.getId(), roleid);
         List<Role> s = w.getRoles();
         s.add(roles.get(roleid));
         w.setRoles(s);
     }
     public void removeRoleFromWorker(Worker w,int roleid) {
+    	DAL.deleteWR(w.getId(), roleid);
         List<Role> s=w.getRoles();
         s.remove(roles.get(roleid));
         w.setRoles(s);
@@ -124,4 +158,30 @@ public class WorkersController {
     public boolean isRole(int roleId) {
         return roles.containsKey(roleId);
     }
-}
+
+	public HashMap<Integer, Worker> getWorkers() {
+		return workers;
+	}
+
+	public void init() {
+        List<Role> r = new LinkedList<Role>();
+		MD.initialize();
+		workers = DAL.initWorkers();
+	    roles = DAL.initRoles();
+	    for(Worker w:workers.values()) {
+	    w.setConstraints(DAL.initWorkersConstraints(w.getId()));
+	    for(int roleid:DAL.initWorkersRoles(w.getId())) {
+	    	r.add(roles.get(roleid));
+	    }
+	    w.setRoles(r);
+	    }
+	    }
+
+	public HashMap<Integer, Role> getRoles() {
+		return roles;
+	}
+	}
+
+    
+   
+

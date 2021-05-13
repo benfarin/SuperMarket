@@ -1,14 +1,16 @@
 package BusinessLayer;
-import java.util.Date;
+import java.sql.Date;
 import java.util.HashMap;
-import java.util.List;
 
-public class Shift {
+
+public class Shift extends BusinessObject {
 private Date ShiftDate;
 private int ManagerID;
 private int ShiftType;
 private HashMap<Integer,Integer> Workers;
 private HashMap<Integer,Integer> Roles;
+int shiftID;
+int nextID=0;
 
 public Shift(Date shiftDate, int managerID, int shiftType, HashMap<Integer, Integer> workers, HashMap<Integer, Integer> roles) {
 	this.ShiftDate = shiftDate;
@@ -16,6 +18,18 @@ public Shift(Date shiftDate, int managerID, int shiftType, HashMap<Integer, Inte
 	this.ShiftType = shiftType;
 	this.Workers = workers;
 	this.Roles = roles;
+	this.shiftID=nextID;
+	nextID++;
+}
+
+public Shift(Date shiftDate, int managerID, int shiftType,int ID) {
+	this.ShiftDate = shiftDate;
+	this.ManagerID = managerID;
+	this.ShiftType = shiftType;
+	this.shiftID = ID;
+	if(ID>=nextID) {
+		nextID=ID+1;
+	}
 }
 
 public void addRole(int roleid,int amount) {
@@ -91,5 +105,9 @@ public HashMap<Integer, Integer> getRoles() {
 }
 public void setRoles(HashMap<Integer, Integer> roles) {
 	Roles = roles;
+}
+
+public int getId() {
+	return shiftID;
 }
 }

@@ -1,21 +1,32 @@
 package BusinessLayer;
 import java.util.Date;
 
-public class Constraint {
+public class Constraint extends BusinessObject {
 private boolean isTemp;
 private Date constraintDate;
 private int shiftType;
-private Worker worker;
-private Shift shift;
+private int workerID;
+private int constraintID;
+private int nextID=0;
 
-public Constraint(boolean temp,Date date,int shifttype,Worker emp,Shift shf) {
+public Constraint(boolean temp,Date date,int shifttype,int emp) {
 	this.isTemp=temp;
 	this.constraintDate=date;
 	this.shiftType=shifttype;
-	this.worker=emp;
-	this.shift=shf;
+	this.workerID=emp;
+	this.constraintID=nextID;
+	nextID++;
 }
-
+public Constraint(boolean temp,Date date,int shifttype,int emp,int id) {
+	this.isTemp=temp;
+	this.constraintDate=date;
+	this.shiftType=shifttype;
+	this.workerID=emp;
+	this.constraintID=id;
+	if(id>=nextID) {
+		nextID=id+1;
+	}
+}
 public boolean isTemp() {
 	return isTemp;
 }
@@ -40,20 +51,17 @@ public void setShiftType(int shiftType) {
 	this.shiftType = shiftType;
 }
 
-public Worker getWorker() {
-	return worker;
+public int getWorker() {
+	return workerID;
 }
 
-public void setWorker(Worker worker) {
-	this.worker = worker;
+public void setWorker(int worker) {
+	this.workerID = worker;
 }
 
-public Shift getShift() {
-	return shift;
-}
-
-public void setShift(Shift shift) {
-	this.shift = shift;
+@Override
+public int getId() {
+	return constraintID;
 }
 
 }
