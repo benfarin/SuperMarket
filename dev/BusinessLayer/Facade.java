@@ -19,6 +19,51 @@ public class Facade {
         initialize();
         this.dataHandler = new DataHandler(this);
     }
+    public String acceptDelivery(int orderId,Map<Long,Integer> missingProds, Map<Long,Integer> defctiveProds){
+        OutgoingOrder order = incoming_order_controller.getOrder(orderId);
+        int quantityToAdd;
+        if(order == null){
+            return "No such order\n";
+        }
+        for(Long prodId : order.getItemsInOrder()){
+            Product p = invCnt.getProdByID((prodId.intValue()));
+            if(missingProds.containsKey(prodId)){
+                int missing =missingProds.get(prodId);
+                quantityToAdd = order.getItemsQuanityInOrder(prodId) - missing;
+                addStorageQuantity(p.getName(),quantityToAdd);
+                AddNewOrder((long) p.getId(),missing);//send order to supplier
+            }
+            if(defctiveProds.containsKey(prodId)){
+                int defective=defctiveProds.get(prodId) ;
+                quantityToAdd = order.getItemsQuanityInOrder(prodId) - defective;
+               addStorageQuantity(p.getName(),quantityToAdd);
+               setDefectiveItems(p.getName(),defctiveProds.get(prodId));
+                AddNewOrder((long) p.getId(),defective);//send order to supplier
+            }
+            else{
+                quantityToAdd = order.getItemsQuanityInOrder(prodId);
+                addStorageQuantity(p.getName(),quantityToAdd);
+            }
+        }
+        return "Order received, all quantities are up to date\n";
+    }
+    public int getProdIdByName(String name){
+        Product p =invCnt.getProduct(name);
+        if(p==null){
+            return -1;
+        }
+        return p.getId();
+    }
+    public List<String> getProdFromOrder(int orderId){
+        List<String> prodNames = new LinkedList<>();
+        if(incoming_order_controller.getOrder(orderId)==null){
+            return null;
+        }
+        for(Long idProd : incoming_order_controller.getOrder(orderId).getItemsInOrder()){
+            prodNames.add(invCnt.getProdByID(idProd.intValue()).getName());
+        }
+        return prodNames;
+    }
     public String addCategory (String name){
         Category c = invCnt.addCategory(name);
         if(c !=null){ // ADD TO DATABASE
@@ -133,23 +178,26 @@ public class Facade {
 
     }
     public String addStorageQuantity(String prodName, int add){
-        if(invCnt.getProduct(prodName) == null){
+        Product p = invCnt.getProduct(prodName);
+        if( p== null){
             return "Can't add storage quantity because the product "+prodName+" does not exist\n";
         }
         invCnt.addStorageQuantity(prodName,add);
+        dataHandler.updateStorageQuantity(invCnt.getProduct(prodName).getId(),p.getStorageQuantity());
         return "added "+ add+" from " + prodName+" storage quantity\n";
     }
     public String reduceStorageQuantity(String prodName, int reduce){
-        if(invCnt.getProduct(prodName) == null){
+        Product p = invCnt.getProduct(prodName);
+        if(p == null){
             return "Can't reduce storage quantity because the product "+prodName+" does not exist\n";
         }
         String s = "";
         if(invCnt.reduceStorageQuantity(prodName,reduce)){
-            Product p = invCnt.getProduct(prodName);
+
             AddNewOrder((long) p.getId(),4*p.getMinimum());
             s = "*** WARNING!!! "+ prodName+"'s storage quantity is under the minimum ***\nsend order to supplier\n";
         }
-
+        dataHandler.updateStorageQuantity(invCnt.getProduct(prodName).getId(),p.getStorageQuantity());
         return "Reduced "+ reduce+" from " + prodName+" storage quantity\n"+s;
     }
     public String setStoreQuantity(String prodName, int storeQuantity){

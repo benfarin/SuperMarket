@@ -32,8 +32,15 @@ public class IncomingOrderController {
 //            products.get(currStoreCode).add(prod);
 //
 
+    public OutgoingOrder getOrder(int idOrder) {
+        if(!orders.containsKey(idOrder)){
+            return null;
+        }
+        return orders.get(idOrder);
+    }
 
-        //TODO: Fill all the previous orders.
+
+    //TODO: Fill all the previous orders.
 
 
     public String printProductsSerialNumbers(Integer supplier_id){

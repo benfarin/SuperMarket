@@ -2,6 +2,7 @@ package BusinessLayer.Suppliers;
 
 import java.util.HashMap;
 import java.time.*;
+import java.util.Set;
 
 public class OutgoingOrder {
     private  static  Long static_id= new Long(0);
@@ -24,6 +25,15 @@ public class OutgoingOrder {
     }
 
     public HashMap<Long, Integer> getItems() { return items; }
+    public int getItemsQuanityInOrder(Long idProd){
+        if(!items.containsKey(idProd)){
+            return 0;
+        }
+        return items.get((long)idProd);
+    }
+    public Set<Long> getItemsInOrder(){
+        return items.keySet();
+    }
 
     public Long getId() {return id;}
 

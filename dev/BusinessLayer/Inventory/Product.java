@@ -125,11 +125,9 @@ public class Product {
     }
 
     public void setDefectiveItem(int defectiveItem) {
-        if(defectiveItem > 0) {
-            this.defectiveItem = defectiveItem;
-        }
-    }
 
+            this.defectiveItem += defectiveItem;
+    }
     public int getId() {
         return id;
     }

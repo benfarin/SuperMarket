@@ -22,7 +22,8 @@ public class InvService {
                     "2)\tCategory menu\n" +
                     "3)\tStock report menu\n" +
                     "4)\tDefective report\n" +
-                    "5)\tExit"
+                    "5)\tReceive order\n"+
+                    "6)\tExit"
             );
             int choice = s.nextInt();
             switch (choice) {
@@ -39,6 +40,9 @@ public class InvService {
                     defectiveReport();
                     break;
                 case 5:
+                    acceptDelivery();
+                    break;
+                case 6:
                     return;
                 default:
                     System.out.println("Not a valid option, please try again.\n");
@@ -141,7 +145,40 @@ public class InvService {
         System.out.println(facade.setProdDiscount(product,discount,disDate));
         // String result = facade.
     }
-
+    private void acceptDelivery() {
+        Map<Long, Integer> missingProds = new HashMap<>();
+        Map<Long, Integer> defectiveProds = new HashMap<>();
+        ;
+        System.out.print("\nEnter order's ID- ");
+        int orderId = s.nextInt();
+        List<String> prodNames = facade.getProdFromOrder(orderId);
+        if (prodNames == null) {
+            System.out.print("\nNo such order \n");
+            return;
+        }
+        for (String prodName : prodNames) {
+            System.out.print("\nIs there missing products from " + prodName + " write y/n- ");
+            String missing = s.next();
+            if (missing == "y") {
+                System.out.print("\nHow many product are missing from " + prodName + "- ");
+                int quantityMissing = s.nextInt();
+                int prodId = facade.getProdIdByName(prodName);
+                if (prodId != -1)
+                    missingProds.put((long) prodId, quantityMissing);
+            } else {
+                System.out.print("\nIs there defective products from " + prodName + " write y/n- ");
+                String defective = s.next();
+                if (missing == "y") {
+                    System.out.print("\nHow many product are defective from " + prodName + "- ");
+                    int quantityDef = s.nextInt();
+                    int prodId = facade.getProdIdByName(prodName);
+                    if (prodId != -1)
+                        defectiveProds.put((long) prodId, quantityDef);
+                }
+            }
+        }
+        System.out.println(facade.acceptDelivery(orderId,missingProds,defectiveProds));
+    }
     private void updateMinimumQuantity() {
         System.out.print("\nProduct's name- ");
         String product = s.next();
