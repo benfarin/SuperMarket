@@ -1,5 +1,7 @@
 package BusinessLayer.Suppliers;
 
+import DataLayer.ContractMapper;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
@@ -25,11 +27,25 @@ public class Supplier {
         this.contacts = contacts;
         this.paymentMethod = paymentMethod;
         this.bankAccount = bankAccount;
-        this.contract= new Contract(null,false,new HashMap<Integer,Integer>()); //addContract();
+        this.contract= null;//new Contract(null,false,new HashMap<Integer,Integer>()); //addContract();
         this.products=new HashMap<Long, ProductPerSup>();
     }
+    public Supplier(Integer id_supplier, Long id_company, String name, List<String> contacts, String paymentMethod, String bankAccount, Contract contract) {
+        this.id_supplier = id_supplier;
+        this.id_company = id_company;
+        this.name = name;
+        this.contacts = contacts;
+        this.paymentMethod = paymentMethod;
+        this.bankAccount = bankAccount;
+        this.contract= contract;
+        this.products=new HashMap<Long, ProductPerSup>();
+    }
+
     public HashMap<Long, ProductPerSup> getProducts() {
         return products;
+    }
+    public void addProductFromDB(ProductPerSup prod){
+        products.put(prod.getStoreCode(), prod);
     }
 
 
@@ -147,6 +163,8 @@ public class Supplier {
                 System.out.println("enter the discount percent for amount: "+ amount);
                 precent=io.nextInt();
                 totalPriceDiscount.put(amount,precent);
+
+
                 System.out.println("Do you want enter more discounts?");
                 System.out.println("y/n");
                 y_discount = io.next();
@@ -154,6 +172,8 @@ public class Supplier {
             }
             new_contract = new Contract(days, NeedDelivery, totalPriceDiscount);
             setContract(new_contract);
+
+           ContractMapper.addContract(this.id_supplier, days, NeedDelivery? 1 : 0, totalPriceDiscount);
             return new_contract;
         }
 

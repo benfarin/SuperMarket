@@ -18,6 +18,8 @@ public class Facade {
 
         initialize();
         this.dataHandler = new DataHandler(this);
+        supplierController = new SupplierController(dataHandler.supplierMapper.getSuppliers());
+        incoming_order_controller = new IncomingOrderController(dataHandler.productPerSupMapper.getMapOfAllProducts(), dataHandler.orderMapper.orders, dataHandler.orderMapper.urgentOrders);
     }
     public String acceptDelivery(int orderId,Map<Long,Integer> missingProds, Map<Long,Integer> defctiveProds){
         OutgoingOrder order = incoming_order_controller.getOrder(orderId);
@@ -178,26 +180,23 @@ public class Facade {
 
     }
     public String addStorageQuantity(String prodName, int add){
-        Product p = invCnt.getProduct(prodName);
-        if( p== null){
+        if(invCnt.getProduct(prodName) == null){
             return "Can't add storage quantity because the product "+prodName+" does not exist\n";
         }
         invCnt.addStorageQuantity(prodName,add);
-        dataHandler.updateStorageQuantity(invCnt.getProduct(prodName).getId(),p.getStorageQuantity());
         return "added "+ add+" from " + prodName+" storage quantity\n";
     }
     public String reduceStorageQuantity(String prodName, int reduce){
-        Product p = invCnt.getProduct(prodName);
-        if(p == null){
+        if(invCnt.getProduct(prodName) == null){
             return "Can't reduce storage quantity because the product "+prodName+" does not exist\n";
         }
         String s = "";
         if(invCnt.reduceStorageQuantity(prodName,reduce)){
-
+            Product p = invCnt.getProduct(prodName);
             AddNewOrder((long) p.getId(),4*p.getMinimum());
             s = "*** WARNING!!! "+ prodName+"'s storage quantity is under the minimum ***\nsend order to supplier\n";
         }
-        dataHandler.updateStorageQuantity(invCnt.getProduct(prodName).getId(),p.getStorageQuantity());
+
         return "Reduced "+ reduce+" from " + prodName+" storage quantity\n"+s;
     }
     public String setStoreQuantity(String prodName, int storeQuantity){

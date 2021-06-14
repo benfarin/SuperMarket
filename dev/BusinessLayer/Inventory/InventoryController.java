@@ -53,6 +53,11 @@ public class InventoryController {
         p.getCategory().addProduct(p);
         return p;
     }
+    public void deleteProduct(int id){
+        for(Product p : products){
+            if(p.getId() == id)
+                products.remove(p);
+    }}
 
     //    public void addCategory (String name, List<Category> subCategories) {
 //        Category c = new Category(name,subCategories);

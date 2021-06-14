@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class StockReport extends Report {
-    private static int day = 3;
+    static int day = 3;
     private List<Category> categories;
 
     public StockReport(){
@@ -16,6 +16,15 @@ public class StockReport extends Report {
     public StockReport(int id, Date date){
         super(id, date);
         this.categories = new LinkedList<>();
+    }
+    public StockReport(int id, Date date, int day1){
+        super(id, date);
+        this.categories = new LinkedList<>();
+        setDay(day1);
+    }
+
+    public int getDay(){
+        return day;
     }
 
     public void addCategory(Category category){

@@ -44,6 +44,8 @@ public class InvService {
                     break;
                 case 6:
                     return;
+                case 6:
+                    changeDay();
                 default:
                     System.out.println("Not a valid option, please try again.\n");
                     break;
@@ -66,7 +68,8 @@ public class InvService {
                     "10)\tDisplay product\n" +
                     "11)\tDisplay product price from suppler history\n" +
                     "12)\tDisplay product price to customer history\n" +
-                    "13)\tExit"
+                    "13)\tDelete Product\n" +
+                    "14)\tExit"
             );
 
             int choice = s.nextInt();
@@ -108,12 +111,29 @@ public class InvService {
                     productPTCHistory();
                     break;
                 case 13:
+                    deleteProduct();
+                    break;
+                case 14:
                     return;
                 default:
                     System.out.println("Not a valid option, please try again.\n");
                     break;
             }
         }
+    }
+
+    private void deleteProduct() {
+        System.out.print("\nProduct's name- ");
+        String product = s.next();
+        int id = -1;
+        id = facade.getProdIDByName(product);
+        if(id == -1)
+            System.out.println("Product does not exist");
+        else{
+            facade.deleteProduct(id);
+            System.out.println("Product " + product + " successfully deleted");
+        }
+
     }
 
     private void updateDefectiveQuantity() {
@@ -474,6 +494,17 @@ public class InvService {
         }
 
     }
+    private void changeDay(){
+        System.out.println("On choose the number of the day you would like to send the report on:\n" +
+                "1)\tSunday\n" +
+                "2)\tMonday\n" +
+                "3)\tTuesday\n" +
+                "4)\tWednesday\n" +
+                "5)\tThursday\n" +
+                "6)\tFriday\n" +
+                "7)\tSaturday\n");
+        facade.setOrderDay(s.nextInt());
+    }
     private void addStockRep(){
         System.out.print("\nWhich categories to include in the report- ");
         String catsNames = s.next();
@@ -495,6 +526,7 @@ public class InvService {
         int id = s.nextInt();
         System.out.println(facade.exportStockReport(id));
     }
+
     private void defectiveReport(){
         while (true) {
             System.out.println("\t\tStock report menu:\n\n" +
