@@ -78,7 +78,7 @@ public class OrderMapper
     // The Key is the product ID and the integer is the amount
     private HashMap<Long, Integer> getOrderItems(int orderID) throws SQLException {
         Statement stmt = this.con.createStatement();
-        ResultSet res = stmt.executeQuery("SELECT * FROM Orders INNER JOIN OrderItem ON Orders.oid=OrderItem.oid WHERE Orders.oid=" + orderID + ";");
+        ResultSet res = stmt.executeQuery("SELECT * FROM Orders INNER JOIN ItemOrder ON Orders.oid=ItemOrder.oid WHERE Orders.oid=" + orderID + ";");
 
         HashMap<Long, Integer> itemsToAdd = new HashMap<>();
 
@@ -93,7 +93,7 @@ public class OrderMapper
 
     private HashMap<Long, Integer> getUrgentOrderItems(int orderID) throws SQLException {
         Statement stmt = this.con.createStatement();
-        ResultSet res = stmt.executeQuery("SELECT * FROM UrgentOrders INNER JOIN OrderItem ON UrgentOrders.oid=OrderItem.oid WHERE UrgentOrders.oid=" + orderID + ";");
+        ResultSet res = stmt.executeQuery("SELECT * FROM UrgentOrders INNER JOIN ItemOrder ON UrgentOrders.oid=ItemOrder.oid WHERE UrgentOrders.oid=" + orderID + ";");
 
         HashMap<Long, Integer> itemsToAdd = new HashMap<>();
 
@@ -136,7 +136,10 @@ public class OrderMapper
 
     public static void addNewUrgentOrder(Long oid, java.util.Date date, double totalPrice)  {
         String sql = "INSERT INTO UrgentOrders(oid,date,totalPrice) VALUES(?,?,?)";
-        java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+        java.sql.Date sqlDate;
+        if(date!=null)
+            sqlDate = new java.sql.Date(date.getTime());
+        else sqlDate=null;
         try (PreparedStatement pstmt = con.prepareStatement(sql)) {
             pstmt.setLong(1, oid);
             pstmt.setDate(2, sqlDate);
