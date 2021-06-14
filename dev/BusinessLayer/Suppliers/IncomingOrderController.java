@@ -1,6 +1,7 @@
 package BusinessLayer.Suppliers;
 
 import DataLayer.OrderMapper;
+import org.junit.jupiter.api.Order;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -67,9 +68,23 @@ public class IncomingOrderController {
         return s;
     }
 
+
     public  boolean IsProductExistInSystem(Long id_product){
         return  products.containsKey(id_product);
     }
+
+    public  void PeriodOrderComplete(int oid){
+        OrderMapper.deleteOrder(oid);
+        OrderMapper.deleteItemsOrder(oid);
+        this.orders.remove(oid);
+    }
+
+    public  void UrgentOrderComplete(int oid){
+        OrderMapper.deleteUrgentOrder(oid);
+        OrderMapper.deleteItemsOrder(oid);
+        this.urgentOrders.remove(oid);
+    }
+
 
     /**
      *
@@ -77,77 +92,113 @@ public class IncomingOrderController {
      * @param amount
      * @returns the supplier ID so I can store the order or -1 if it wasn't a new order
      */
-
-
     public void AddNewUrgentOrder(Long id_product, int amount) { // need add arguments to facade
-        double min=0;
-        int id_supplier_min=0;
+        double min = 0;
+        int id_supplier_min = 0;
         int index = 0;
 
 
         LinkedList<ProductPerSup> prod = products.get(id_product);
-        if(prod!=null) {
+        if (prod != null) {
             min = prod.getFirst().getSupplier().getContract().getTotalPriceDiscount(amount, prod.getFirst().GetCheapestPrice(amount));
-            id_supplier_min=prod.getFirst().getSupplier().getId_supplier();
+            id_supplier_min = prod.getFirst().getSupplier().getId_supplier();
             for (int i = 1; i < prod.size(); i++) {
-                double suspect_min = prod.get(i).getSupplier().getContract().getTotalPriceDiscount(amount,prod.get(i).GetCheapestPrice(amount));
+                double suspect_min = prod.get(i).getSupplier().getContract().getTotalPriceDiscount(amount, prod.get(i).GetCheapestPrice(amount));
                 if (min > suspect_min) {
                     id_supplier_min = prod.get(i).getSupplier().getId_supplier();
                     min = suspect_min;
                     index = i;
                 }
             }
-            if (!urgentOrders.containsKey(id_supplier_min)) {
-                OutgoingOrder order = new OutgoingOrder(id_supplier_min, null);
 
+            Supplier chosenSupplier = prod.get(index).getSupplier();
+
+            if (!urgentOrders.containsKey(id_supplier_min)) {
+                OutgoingOrder order = new OutgoingOrder(id_supplier_min, new Date());
                 urgentOrders.put(id_supplier_min, order);
 
-                OrderMapper.addNewUrgentOrder(order.getId(), order.getDeliveryDate() , order.getTotalPrice());
-            }
-            OutgoingOrder existingOrder=urgentOrders.get(id_supplier_min);
 
-            existingOrder.AddItem(prod.get(index).getStoreCode(), amount, min);
-            OrderMapper.addNewItemOrder(existingOrder.getId(), id_supplier_min, prod.get(index).getStoreCode(), amount);
+
+                OutgoingOrder existingOrder = urgentOrders.get(id_supplier_min);
+                existingOrder.AddItem(prod.get(index).getStoreCode(), amount, min);
+                OrderMapper.addNewUrgentOrder(order.getId(), order.getDeliveryDate(), order.getTotalPrice());
+                OrderMapper.addNewItemOrder(existingOrder.getId(), id_supplier_min, prod.get(index).getStoreCode(), amount);
+                if (chosenSupplier.getContract().isNeedsDelivery()) {
+                    NewUrgentDelivery(order.getId(), prod.get(index).getSupplierSerialNum(), amount, prod.get(index).getWeightPerUnit(), chosenSupplier.getContacts(), chosenSupplier.getContract().getLocation(), chosenSupplier.getContract().getDaysOfSupply());
+                }
+            }
+            else {
+
+                OutgoingOrder existingOrder = urgentOrders.get(id_supplier_min);
+                existingOrder.AddItem(prod.get(index).getStoreCode(), amount, min);
+                OrderMapper.addNewItemOrder(existingOrder.getId(), id_supplier_min, prod.get(index).getStoreCode(), amount);
+                OrderMapper.updateUrgentOrder(existingOrder.getId(), existingOrder.getDeliveryDate(), existingOrder.getTotalPrice());
+                if (chosenSupplier.getContract().isNeedsDelivery())
+                    addToExistUregnt(existingOrder.getId(), prod.get(index).getSupplierSerialNum(), amount, prod.get(index).getWeightPerUnit());
+            }
 
 
         }
-
     }
 
-     public void AddNewOrder(Long id_product, int amount) { // need add arguments to facade
-        double min=0;
-        int id_supplier_min=0;
+    public void AddNewOrder(Long id_product, int amount) { // need add arguments to facade
+        double min = 0;
+        int id_supplier_min = 0;
         int index = 0;
 
-
+        //TODO: Add explanation for the logics here
         LinkedList<ProductPerSup> prod = products.get(id_product);
-        if(prod!=null) {
+        if (prod != null) {
             min = prod.getFirst().getSupplier().getContract().getTotalPriceDiscount(amount, prod.getFirst().GetCheapestPrice(amount));
-            id_supplier_min=prod.getFirst().getSupplier().getId_supplier();
+            id_supplier_min = prod.getFirst().getSupplier().getId_supplier();
             for (int i = 1; i < prod.size(); i++) {
-                double suspect_min = prod.get(i).getSupplier().getContract().getTotalPriceDiscount(amount,prod.get(i).GetCheapestPrice(amount));
+                double suspect_min = prod.get(i).getSupplier().getContract().getTotalPriceDiscount(amount, prod.get(i).GetCheapestPrice(amount));
                 if (min > suspect_min) {
                     id_supplier_min = prod.get(i).getSupplier().getId_supplier();
                     min = suspect_min;
                     index = i;
                 }
             }
+
+            Supplier chosenSupplier = prod.get(index).getSupplier();
+
             if (!orders.containsKey(id_supplier_min)) {
                 OutgoingOrder order = new OutgoingOrder(id_supplier_min, new Date());
 
                 orders.put(id_supplier_min, order);
 
-                OrderMapper.addNewOrder(order.getId(), order.getDeliveryDate() , order.getTotalPrice());
-            }
-            OutgoingOrder existingOrder=orders.get(id_supplier_min);
 
-            existingOrder.AddItem(prod.get(index).getStoreCode(), amount, min);
-            OrderMapper.addNewItemOrder(existingOrder.getId(), id_supplier_min, prod.get(index).getStoreCode(), amount);
+                if (chosenSupplier.getContract().isNeedsDelivery()) {
+                    createNewDelivery(order.getId(), prod.get(index).getSupplierSerialNum(), amount, prod.get(index).getWeightPerUnit(), chosenSupplier.getContacts(), chosenSupplier.getContract().getLocation(), chosenSupplier.getContract().getDaysOfSupply());
+                }
+
+
+                OutgoingOrder existingOrder = orders.get(id_supplier_min);
+                existingOrder.AddItem(prod.get(index).getStoreCode(), amount, min);
+                OrderMapper.addNewOrder(existingOrder.getId(), existingOrder.getDeliveryDate(), existingOrder.getTotalPrice());
+                OrderMapper.addNewItemOrder(existingOrder.getId(), id_supplier_min, prod.get(index).getStoreCode(), amount);
+            } else {
+                OutgoingOrder existingOrder = orders.get(id_supplier_min);
+                existingOrder.AddItem(prod.get(index).getStoreCode(), amount, min);
+
+                if (existingOrder.isItemExistInOrder(prod.get(index).getStoreCode()))
+                    OrderMapper.addNewItemOrder(existingOrder.getId(), id_supplier_min, prod.get(index).getStoreCode(), amount);
+                else
+                    OrderMapper.updateItemOrder(existingOrder.getId(), id_supplier_min, prod.get(index).getStoreCode(), amount);
+
+                OrderMapper.updateOrder(existingOrder.getId(), existingOrder.getDeliveryDate(), existingOrder.getTotalPrice());
+
+                if (chosenSupplier.getContract().isNeedsDelivery()) {
+                    addToExist(existingOrder.getId(), prod.get(index).getSupplierSerialNum(), amount, prod.get(index).getWeightPerUnit());
+                }
+            }
+
             //TODO: If order exists we don't have to create a new instance of it
 
         }
-
     }
+
+
 
     public boolean IsOrderExistInSystem(int id_order) {
         return orders.containsKey(id_order);
@@ -171,6 +222,14 @@ public class IncomingOrderController {
 //            }
 //        }
 
+    }
+    public OutgoingOrder ShowUrgentOrder(Long id_order){
+        for (OutgoingOrder order : urgentOrders.values()) {
+            if (order.getId().equals(id_order))
+                return order;
+
+        }
+        return null;
     }
 
     public OutgoingOrder ShowOrderBySupplier(int id_sup) {

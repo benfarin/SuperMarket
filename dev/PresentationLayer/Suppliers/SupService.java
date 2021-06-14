@@ -10,6 +10,7 @@ import java.util.Scanner;
 
     public class SupService {
         public static Scanner io = new Scanner(System.in);
+
         BusinessLayer.Facade facade;
 
         public SupService(Facade facade){
@@ -91,12 +92,16 @@ import java.util.Scanner;
             long id_order = io.nextLong();
             OutgoingOrder order=facade.ShowOrder(id_order);
             if(order==null){
-                System.out.println("Order:\t"+id_order+"\tisn't Exist");
+                System.out.println("Weekly Order #\t"+id_order+"\tDoesn't Exist");
             }
-            else {
+            else
                 System.out.println(order);
 
-            }
+            order=facade.ShowUrgentOrder(id_order);
+            if(order==null)
+                System.out.println("Urgent Order #\t"+id_order+"\tDoesn't Exist");
+            else
+                System.out.println(order);
         }
 
         private void ShowOrderBySupplier() {
@@ -210,7 +215,11 @@ import java.util.Scanner;
 
             System.out.println("Insert Contact:");
             String contact="";
-            contact=io.nextLine();
+            System.out.println("\tContact Name:");
+            contact=io.useDelimiter("\n").next();
+            System.out.println("\tContact Phone Number:");
+            contact+=" "+io.next();
+
 
             List<String> Contacts = new LinkedList<>();
             Contacts.add(contact);
@@ -257,8 +266,10 @@ import java.util.Scanner;
             System.out.println("what is the ID Supplier");
             int id_sup= io.nextInt();
             if (facade.IsSupplierExistInSystem(id_sup)) {
-                System.out.println("write the contact information");
-                String new_contact = io.next();
+                System.out.println("write the contact name:");
+                String new_contact = io.useDelimiter("\n").next();
+                System.out.println("write the contact phone number:");
+                new_contact += " " + io.next();
                 facade.AddContact(id_sup, new_contact);
             }
             else {

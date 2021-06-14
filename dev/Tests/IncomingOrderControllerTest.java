@@ -26,9 +26,9 @@ class IncomingOrderControllerTest {
         map2.put(new Integer(30),new Double(10));// for 10 product there is 10 precent discount
         map2.put(new Integer(40),new Double(12));// for 20 product there is 12 precent discount
 
-        ProductPerSup prod1 = new ProductPerSup("prod1",new Long(1),new Double(10),map1,new Long(1),sup1);
-        ProductPerSup prod2 = new ProductPerSup("prod2",new Long(1),new Double(20),map2,new Long(2),sup2);
-        ProductPerSup prod3 = new ProductPerSup("prod3",new Long(2),new Double(20),map2,new Long(2),sup2);
+        ProductPerSup prod1 = new ProductPerSup("prod1",new Long(1),new Double(10),map1,new Long(1),sup1, 15);
+        ProductPerSup prod2 = new ProductPerSup("prod2",new Long(1),new Double(20),map2,new Long(2),sup2, 15 );
+        ProductPerSup prod3 = new ProductPerSup("prod3",new Long(2),new Double(20),map2,new Long(2),sup2, 15);
 
         products.add(prod1);
         products.add(prod2); // products now with the same product with different suppliers
@@ -61,13 +61,13 @@ class IncomingOrderControllerTest {
         discounts_sup_1.put(new Integer(10),20);
         discounts_sup_1.put(new Integer(30),25);
         discounts_sup_1.put(new Integer(50),30);
-        Contract contract_sup_1 = new Contract(null,true,discounts_sup_1);
+        Contract contract_sup_1 = new Contract(null,true,discounts_sup_1, "Haifa");
         sup1.setContract(contract_sup_1);
         HashMap<Integer,Integer> discounts_sup_2 = new HashMap<>();
         discounts_sup_2.put(new Integer(13),23);
         discounts_sup_2.put(new Integer(31),25);
         discounts_sup_2.put(new Integer(70),30);
-        Contract contract_sup_2 = new Contract(null,true,new HashMap<>());
+        Contract contract_sup_2 = new Contract(null,true,new HashMap<>(), "Haifa");
         sup2.setContract(contract_sup_2);
         controller.AddNewOrder(new Long(1),46);
         OutgoingOrder order = controller.ShowOrder(new Long(0));
@@ -80,13 +80,13 @@ class IncomingOrderControllerTest {
         discounts_sup_1.put(new Integer(10),20);
         discounts_sup_1.put(new Integer(30),25);
         discounts_sup_1.put(new Integer(50),30);
-        Contract contract_sup_1 = new Contract(null,true,discounts_sup_1);
+        Contract contract_sup_1 = new Contract(null,true,discounts_sup_1, "Maabarot");
         sup1.setContract(contract_sup_1);
         HashMap<Integer,Integer> discounts_sup_2 = new HashMap<>();
         discounts_sup_2.put(new Integer(13),23);
         discounts_sup_2.put(new Integer(31),25);
         discounts_sup_2.put(new Integer(70),30);
-        Contract contract_sup_2 = new Contract(null,true,new HashMap<>());
+        Contract contract_sup_2 = new Contract(null,true,new HashMap<>(), "Maabarot");
         sup2.setContract(contract_sup_2);
         controller.AddNewOrder(new Long(1),46);
         OutgoingOrder order = controller.ShowOrderBySupplier(1111);

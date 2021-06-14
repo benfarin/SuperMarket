@@ -25,12 +25,13 @@ public class ContractMapper {
             int supplierID = res.getInt("sid");
             String days = res.getString("days_supply");
             int needsDelivery = res.getInt("need_delivery");
+            String location = res.getString("location");
 
             boolean delivery=false;
             if(needsDelivery==1)
                 delivery=true;
 
-            contracts.put(supplierID, new Contract(days, delivery, getDiscounts(supplierID)));
+            contracts.put(supplierID, new Contract(days, delivery, getDiscounts(supplierID), location));
         }
     }
 
@@ -53,12 +54,13 @@ public class ContractMapper {
     }
 
 
-    public static void addContract(int sid, String days_supply, int need_delivery, HashMap<Integer, Integer> totalPriceDiscount)  {
-        String sql = "INSERT INTO Contract(sid,days_supply,need_delivery) VALUES(?,?,?)";
+    public static void addContract(int sid, String days_supply, int need_delivery, HashMap<Integer, Integer> totalPriceDiscount, String location)  {
+        String sql = "INSERT INTO Contract(sid,days_supply,need_delivery,location) VALUES(?,?,?,?)";
         try (PreparedStatement pstmt = con.prepareStatement(sql)) {
             pstmt.setInt(1, sid);
             pstmt.setString(2, days_supply);
             pstmt.setInt(3, need_delivery);
+            pstmt.setString(4, location);
             pstmt.executeUpdate();
             for (Map.Entry<Integer,Integer> discount : totalPriceDiscount.entrySet()){
                 addDiscountContract(sid,discount.getKey().intValue(),discount.getValue());

@@ -179,6 +179,7 @@ public class DataHandler {
                 "\t\"sid\"\tINTEGER,\n" +
                 "\t\"days_supply\"\tTEXT,\n" +
                 "\t\"need_delivery\"\tINTEGER,\n" +
+                "\t\"location\"\tTEXT,\n" +
                 "\tFOREIGN KEY(\"sid\") REFERENCES \"Supplier\"(\"sid\") ON UPDATE CASCADE ON DELETE CASCADE,\n" +
                 "\tPRIMARY KEY(\"sid\")\n" +
                 ");";
@@ -236,7 +237,7 @@ public class DataHandler {
         sql = "CREATE TABLE IF NOT EXISTS \"Orders\" (\n" +
                 "\t\"oid\"\tINTEGER,\n" +
                 "\t\"date\"\tDATE,\n" +
-                "\t\"totalPrice\"\tNUMERIC,\n" +
+                "\t\"totalPrice\"\tREAL,\n" +
                 "\tPRIMARY KEY(\"oid\")\n" +
                 ");";
         try (
@@ -248,7 +249,7 @@ public class DataHandler {
         sql = "CREATE TABLE IF NOT EXISTS \"UrgentOrders\" (\n" +
                 "\t\"oid\"\tINTEGER,\n" +
                 "\t\"date\"\tDATE,\n" +
-                "\t\"totalPrice\"\tNUMERIC,\n" +
+                "\t\"totalPrice\"\tREAL,\n" +
                 "\tPRIMARY KEY(\"oid\")\n" +
                 ");";
         try (
@@ -259,9 +260,10 @@ public class DataHandler {
         }
         sql =  "CREATE TABLE IF NOT EXISTS \"ProductPerSupplier\" (\n" +
                 "\t\"pid\"\tINTEGER,\n" +
-                "\t\"price\"\tINTEGER NOT NULL,\n" +
+                "\t\"price\"\tREAL NOT NULL,\n" +
                 "\t\"sid\"\tINTEGER,\n" +
                 "\t\"supSerialNum\"\tINTEGER NOT NULL,\n" +
+                "\t\"weightPerUnit\"\tREAL NOT NULL,\n" +
                 "\tFOREIGN KEY(\"pid\") REFERENCES \"Product\"(\"pid\") ON DELETE CASCADE ON UPDATE CASCADE,\n" +
                 "\tPRIMARY KEY(\"pid\",\"sid\"),\n" +
                 "\tFOREIGN KEY(\"sid\") REFERENCES \"Supplier\"(\"sid\") ON DELETE CASCADE ON UPDATE CASCADE\n" +

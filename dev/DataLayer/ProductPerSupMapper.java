@@ -6,7 +6,6 @@ import BusinessLayer.Suppliers.Supplier;
 import java.sql.*;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 
 public class ProductPerSupMapper {
     private Connection con = null;
@@ -39,7 +38,8 @@ public class ProductPerSupMapper {
             Long supplierSerialNum = res.getLong("supSerialNum");
             String name = res.getString("name");
             Long storeCode = res.getLong("pid");
-            ProductPerSup prodToAdd = new ProductPerSup(name, storeCode, price, getHighAmountDiscount(productID, supplierID), supplierSerialNum, getSupplier(supplierID));
+            double weightPerUnit=res.getDouble("weightPerUnit");
+            ProductPerSup prodToAdd = new ProductPerSup(name, storeCode, price, getHighAmountDiscount(productID, supplierID), supplierSerialNum, getSupplier(supplierID), weightPerUnit);
 
             // This line puts the ProductPerSup in the Supplier of BL
             SupplierMapper.getSuppliers().get(supplierID).addProductFromDB(prodToAdd);

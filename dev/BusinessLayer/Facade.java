@@ -486,6 +486,7 @@ public class Facade {
     public List<String> showContacts(int id_sup) { return supplierController.showContacts(id_sup); }
 
     public OutgoingOrder ShowOrder(Long id_order){ return incoming_order_controller.ShowOrder(id_order); }
+    public OutgoingOrder ShowUrgentOrder(Long id_order){ return incoming_order_controller.ShowUrgentOrder(id_order); }
 
     public boolean IsProductExistInSystem(Long id_product){ return incoming_order_controller.IsProductExistInSystem((long) id_product); }
 
@@ -512,6 +513,7 @@ public class Facade {
     public void AddNewSupplier(int id, Long company, String name, List<String> contacts, String payment, String bank) {
         supplierController.AddSupplier(id,company,name,contacts,payment,bank);
         dataHandler.supplierMapper.addSupplier(id, name, payment, bank);
+        dataHandler.supplierMapper.addContactToSupplier(id, contacts.get(0));
     }
 
     public void AddSupplierContract(int supplier_id){
