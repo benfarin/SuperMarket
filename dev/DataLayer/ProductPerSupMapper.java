@@ -69,13 +69,14 @@ public class ProductPerSupMapper {
 
         }
 
-    public void addNewProductPerSupplier(int pid,int price, int sid, int supSerialNum ) throws SQLException {
-        String sql = "INSERT INTO ProductPerSupplier(pid,price,sid,supSerialNum) VALUES(?,?,?,?)";
+    public void addNewProductPerSupplier(int pid,int price, int sid, int supSerialNum,double weight ) throws SQLException {
+        String sql = "INSERT INTO ProductPerSupplier(pid,price,sid,supSerialNum,weightPerUnit) VALUES(?,?,?,?,?)";
         try (PreparedStatement pstmt = con.prepareStatement(sql)) {
             pstmt.setInt(1, pid);
             pstmt.setInt(2, price);
             pstmt.setInt(3, sid);
             pstmt.setInt(4, supSerialNum);
+            pstmt.setDouble(5, weight);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());

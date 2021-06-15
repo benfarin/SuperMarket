@@ -135,6 +135,7 @@ import java.util.Scanner;
                 System.out.println("5) Add New Supplier ");
                 System.out.println("6) Delete Supplier");
                 System.out.println("7) Add a contract to an existing supplier");
+//                System.out.println("8) add product to existing supplier");
                 System.out.println("8) Back to main Menu");
                 int op = io.nextInt();
                 switch (op) {
@@ -230,6 +231,19 @@ import java.util.Scanner;
             System.out.println("Insert  a Bank Account:");
             String bank = io.next();
             facade.AddNewSupplier(id,company,name,Contacts,payment,bank);
+            System.out.println("Insert  products name(example: apple,avocado,...):");
+            String prodsName = io.next();
+            String[] prodsN = prodsName.split(",");
+            for(String prod : prodsN){
+                System.out.println("what is the price for "+ prod+"?" );
+                int price = io.nextInt();
+                System.out.println("what is the weight of "+ prod+"?" );
+                double weight = io.nextDouble();
+                System.out.println("what is the serial number for "+ prod+"?" );
+                int serialNum = io.nextInt();
+                facade.addProductPerSup(prod,id,price,weight,serialNum);
+            }
+
             System.out.println("Supplier was Successfully added , you may add a Contract");
         }
         private void showContacts() { //done

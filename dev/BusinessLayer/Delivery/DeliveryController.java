@@ -1,11 +1,30 @@
 package BusinessLayer.Delivery;
+
+import java.util.List;
+
 //import com.sun.javafx.collections.MappingChange;
 //import javafx.util.Pair;
 //import java.util.*;
 //import java.util.Collections;
 //import java.util.List;
 //
-public class DeliveryController {}
+public class DeliveryController {
+    public DeliveryController() { }
+   public void NewUrgentDelivery(long id , long serialNum, int amount, double weight, List<String> cotacts, String location, String daysOfSup){
+       System.out.println("New urgent delivery accepted\n");
+   }
+   public void addToExistUregnt(long id, long serialNum, int amount, double weight){
+       System.out.println("added new order to existing delivery\n");
+   }
+
+    public void createNewDelivery(Long id, Long supplierSerialNum, int amount, double weightPerUnit, List<String> contacts, String location, String daysOfSupply) {
+        System.out.println("New Delivery created for periodic order");
+    }
+
+    public void addToExist(Long id, Long supplierSerialNum, int amount, double weightPerUnit) {
+        System.out.println("added new order to existing delivery(periodic)\n");
+    }
+}
 //    Controller conn = new Controller();
 //    private Comp getcomp = new Comp();
 //    private static DeliveryController instance = null;

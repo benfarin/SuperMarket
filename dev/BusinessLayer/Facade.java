@@ -1,8 +1,6 @@
 package BusinessLayer;
 
 import BusinessLayer.Inventory.*;
-
-import java.sql.SQLException;
 import java.util.*;
 
 import BusinessLayer.Suppliers.*;
@@ -20,8 +18,8 @@ import BusinessLayer.Delivery.*;
 import BusinessLayer.Workers.Enum.ShiftField;
 import BusinessLayer.Workers.Enum.WorkerField;
 public class Facade {
-    ShiftController ShiftCntrl;
-    WorkersController WorkersCntrl;
+    private ShiftController ShiftCntrl;
+    private WorkersController WorkersCntrl;
     static Controller conn;
     private InventoryController invCnt;
     private ReportController repCnt;
@@ -93,11 +91,17 @@ public class Facade {
         return p.getId();
     }
     public List<String> getProdFromOrder(int orderId){
+        OutgoingOrder order = incoming_order_controller.ShowOrder((long)orderId);;
         List<String> prodNames = new LinkedList<>();
-        if(incoming_order_controller.getOrder(orderId)==null){
-            return null;
+        if(order==null) {
+            if (incoming_order_controller.ShowUrgentOrder((long)orderId) == null) {
+                return null;
+            }
+            else{
+                order = incoming_order_controller.ShowUrgentOrder((long)orderId);
+            }
         }
-        for(Long idProd : incoming_order_controller.getOrder(orderId).getItemsInOrder()){
+        for(Long idProd : order.getItemsInOrder()){
             prodNames.add(invCnt.getProdByID(idProd.intValue()).getName());
         }
         return prodNames;
@@ -497,7 +501,11 @@ public class Facade {
     }
 
 
+    public void addProductPerSup(String prodName,int sid,int price,double weight,int serialNum){
+//        ProductPerSup p = new ProductPerSup(prodName,(long)getProdIdByName(prodName),price,)
+       dataHandler.addNewProductPerSupplier(getProdIdByName(prodName),price,sid,serialNum,weight);
 
+    }
     public void AddContact(int id_sup, String new_contact)  {
         supplierController.AddContact(id_sup,new_contact);
         dataHandler.supplierMapper.addContactToSupplier(id_sup, new_contact);

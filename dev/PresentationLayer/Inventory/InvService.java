@@ -43,10 +43,7 @@ public class InvService {
                     acceptDelivery();
                     break;
                 case 6:
-                    acceptDelivery();
                     return;
-                case 7:
-                    changeDay();
                 default:
                     System.out.println("Not a valid option, please try again.\n");
                     break;

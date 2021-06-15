@@ -1,10 +1,10 @@
 package DataLayer;
 
 import BusinessLayer.Facade;
-import BusinessLayer.Inventory.DefectiveReport;
-import BusinessLayer.Inventory.Product;
-import BusinessLayer.Inventory.StockReport;
-import BusinessLayer.Suppliers.Contract;
+//import BusinessLayer.Inventory.DefectiveReport;
+//import BusinessLayer.Inventory.Product;
+//import BusinessLayer.Inventory.StockReport;
+import BusinessLayer.Inventory.*;
 
 
 import java.sql.Connection;
@@ -709,6 +709,13 @@ public class DataHandler {
             supplierMapper.addContactToSupplier(id_sup, contact);
         } catch (Exception e) {
             System.out.println("failed to addContact\n" + e.getMessage());
+        }
+    }
+    public void addNewProductPerSupplier(int pid,int price, int sid, int supSerialNum,double weight ){
+        try {
+            productPerSupMapper.addNewProductPerSupplier(pid, price, sid, supSerialNum, weight);
+        }catch (Exception e){
+            System.out.println("failed to addNewProductPerSupplier\n" + e.getMessage());
         }
     }
 }

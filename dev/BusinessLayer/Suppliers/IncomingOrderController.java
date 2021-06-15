@@ -6,13 +6,14 @@ import org.junit.jupiter.api.Order;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
-
+import BusinessLayer.Delivery.DeliveryController;
 public class IncomingOrderController {
     // INT is the StoreCode for the product, LIST is for all the products from different suppliers under same code
     private HashMap<Long, LinkedList<ProductPerSup>> products;
     // TODO: We need to add UrgentOrders. this orders will be Weekly Orders
     private HashMap<Integer, OutgoingOrder> orders; // every order is identified by the id (the key) of the supplier
     private HashMap<Integer, OutgoingOrder> urgentOrders;
+    private DeliveryController devCntrl;
 
 
 // We create an instance of this controller when we need to CREATE a new order or CHANGE existing order, then it closes.
@@ -33,6 +34,7 @@ public class IncomingOrderController {
        this.products=allProducts;
         orders = allOrders;
         this.urgentOrders=urgentOrders;
+        this.devCntrl = new DeliveryController();
     }
 //        for (BusinessLayer.Suppliers.OutgoingOrder order: allOrdersList ) {
 //            long currOrderID = order
@@ -47,6 +49,12 @@ public class IncomingOrderController {
             return null;
         }
         return orders.get(idOrder);
+    }
+    public OutgoingOrder getUrgentOrder(int idOrder) {
+        if(!urgentOrders.containsKey(idOrder)){
+            return null;
+        }
+        return urgentOrders.get(idOrder);
     }
 
 
@@ -131,7 +139,7 @@ public class IncomingOrderController {
                 OrderMapper.addNewUrgentOrder(order.getId(), order.getDeliveryDate(), order.getTotalPrice());
                 OrderMapper.addNewItemOrder(existingOrder.getId(), id_supplier_min, prod.get(index).getStoreCode(), amount);
                 if (chosenSupplier.getContract().isNeedsDelivery()) {
-                    NewUrgentDelivery(order.getId(), prod.get(index).getSupplierSerialNum(), amount, prod.get(index).getWeightPerUnit(), chosenSupplier.getContacts(), chosenSupplier.getContract().getLocation(), chosenSupplier.getContract().getDaysOfSupply());
+                    devCntrl.NewUrgentDelivery(order.getId(), prod.get(index).getSupplierSerialNum(), amount, prod.get(index).getWeightPerUnit(), chosenSupplier.getContacts(), chosenSupplier.getContract().getLocation(), chosenSupplier.getContract().getDaysOfSupply());
                 }
             }
             else {
@@ -141,7 +149,7 @@ public class IncomingOrderController {
                 OrderMapper.addNewItemOrder(existingOrder.getId(), id_supplier_min, prod.get(index).getStoreCode(), amount);
                 OrderMapper.updateUrgentOrder(existingOrder.getId(), existingOrder.getDeliveryDate(), existingOrder.getTotalPrice());
                 if (chosenSupplier.getContract().isNeedsDelivery())
-                    addToExistUregnt(existingOrder.getId(), prod.get(index).getSupplierSerialNum(), amount, prod.get(index).getWeightPerUnit());
+                    devCntrl.addToExistUregnt(existingOrder.getId(), prod.get(index).getSupplierSerialNum(), amount, prod.get(index).getWeightPerUnit());
             }
 
 
@@ -176,7 +184,7 @@ public class IncomingOrderController {
 
 
                 if (chosenSupplier.getContract().isNeedsDelivery()) {
-                    createNewDelivery(order.getId(), prod.get(index).getSupplierSerialNum(), amount, prod.get(index).getWeightPerUnit(), chosenSupplier.getContacts(), chosenSupplier.getContract().getLocation(), chosenSupplier.getContract().getDaysOfSupply());
+                    devCntrl.createNewDelivery(order.getId(), prod.get(index).getSupplierSerialNum(), amount, prod.get(index).getWeightPerUnit(), chosenSupplier.getContacts(), chosenSupplier.getContract().getLocation(), chosenSupplier.getContract().getDaysOfSupply());
                 }
 
 
@@ -196,7 +204,7 @@ public class IncomingOrderController {
                 OrderMapper.updateOrder(existingOrder.getId(), existingOrder.getDeliveryDate(), existingOrder.getTotalPrice());
 
                 if (chosenSupplier.getContract().isNeedsDelivery()) {
-                    addToExist(existingOrder.getId(), prod.get(index).getSupplierSerialNum(), amount, prod.get(index).getWeightPerUnit());
+                    devCntrl.addToExist(existingOrder.getId(), prod.get(index).getSupplierSerialNum(), amount, prod.get(index).getWeightPerUnit());
                 }
             }
 
