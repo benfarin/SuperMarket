@@ -1,13 +1,16 @@
 
 # ADSS_Group_I
  ~~~~~~~~~~~~~~~~~~~~~
- Inventory & Suppliers 
+SUPER - LI
  ~~~~~~~~~~~~~~~~~~~~~
- -Hila Klein 205781917
- -Eylon Sade 206174435
- -Rotem Cohen 209014570
- -Niv Ben Farin 312178171
- -Nimrod Burg 206283913
+רותם כהן 209014570              
+הילה קליין 205781917            
+איילון שדה 206174435            
+ניב בן פרין 312178171         
+נמרוד בורג 206283913
+שחר אלון 315570465
+נופר רוזנברג 313294092
+מואמן מוואסי 206604555
+נאדיה ספדי 206469017
 
-[הוראות מערכת ספקים ומלאי.pdf](https://github.com/hilaklein/ADSS_Group_I/files/6454741/default.pdf)
-
+[instructions.pdf](https://github.com/hilaklein/ADSS_Group_I/files/6657718/instructions.pdf)
