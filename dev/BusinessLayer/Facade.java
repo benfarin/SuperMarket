@@ -755,7 +755,7 @@ public class Facade {
         prodsDisc.put(10,  10.0);
         addProductPerSup("apple",123,5,3,(long)3,prodsDisc);
         AddSupplierContract(123,"monday","beer sheva",true,new HashMap<>());
-
+        //addStockReport(new LinkedList<>());
     }
     public void createWorker(String name, int id, int bankAccountNumber, int bankNumber, int salary){
         WorkersCntrl.createWorker(name, id, bankAccountNumber, bankNumber, salary);

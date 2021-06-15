@@ -11,18 +11,18 @@ import java.util.List;
 public class DeliveryController {
     public DeliveryController() { }
    public void NewUrgentDelivery(long id , long serialNum, int amount, double weight, List<String> cotacts, String location, String daysOfSup){
-       System.out.println("New urgent delivery accepted\n");
+       System.out.println("\nNew urgent delivery accepted\n");
    }
    public void addToExistUregnt(long id, long serialNum, int amount, double weight){
-       System.out.println("added new order to existing delivery\n");
+       System.out.println("\nadded new order to existing delivery\n");
    }
 
     public void createNewDelivery(Long id, Long supplierSerialNum, int amount, double weightPerUnit, List<String> contacts, String location, String daysOfSupply) {
-        System.out.println("New Delivery created for periodic order");
+        System.out.println("\nNew Delivery created for periodic order");
     }
 
     public void addToExist(Long id, Long supplierSerialNum, int amount, double weightPerUnit) {
-        System.out.println("added new order to existing delivery(periodic)\n");
+        System.out.println("\nadded new order to existing delivery(periodic)\n");
     }
 }
 //    Controller conn = new Controller();
