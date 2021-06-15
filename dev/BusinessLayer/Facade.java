@@ -55,6 +55,12 @@ public class Facade {
         WorkersCntrl.createWorker("rotem",206,1,1,100);
         WorkersCntrl.addRoleToWorker(WorkersCntrl.getWorker(206),2);
     }
+    public String showAllProds(){
+        return invCnt.showAllProds();
+    }
+    public String showAllCats(){
+        return invCnt.showAllCats();
+    }
 
     public String acceptDelivery(int orderId,Map<Long,Integer> missingProds, Map<Long,Integer> defctiveProds){
         OutgoingOrder order = incoming_order_controller.ShowOrder((long)orderId);
@@ -733,7 +739,12 @@ public class Facade {
     public void init() {
 
         addCategory("fruits");
+        addCategory("tropic");
+        addSub("fruits","tropic");
+        addSup("fruits","tropic");
         addProduct("apple","fruits","maabarot",3.44,4.33,20);
+        addProduct("avocado","tropic","Tnuva",5.6,6.20,10);
+        addProduct("pineapple","tropic","maadanot",5.40,8.9,10);
         List<String> contacts = new LinkedList<>();
         contacts.add("dani");
         AddNewSupplier(123,(long)2,"yossi",contacts,"cash","1");

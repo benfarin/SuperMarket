@@ -137,11 +137,11 @@ public class Category {
         if (discountDate == null)
             s = "-";
         else s = discountDate.toString();
-        return "Category:\n" +
+        return "------------------------------\n"+"Category:\n" +
                 "\nName = '" + name + '\'' +
                 "\nSubCategories = [" + subCats +"]"+
                 "\nProducts = [" + prods +"]"+
                 "\nDiscount = " + discount +
-                "\nDiscount Date = " + s;
+                "\nDiscount Date = " + s+"\n------------------------------\n\n";
     }
 }

@@ -221,7 +221,7 @@ public class Product {
         if (discountDate == null)
             s = "-";
         else s = discountDate.toString();
-        return "Product:" + "\n" +
+        return "------------------------------\n"+"Product ("+id+"):" + "\n" +
                 "Name = '" + name + '\'' + "\n" +
                 "Category = '" + category.getName() + '\'' + "\n" +
                 "Manufacture = '" + manufacture + '\'' + "\n" +
@@ -231,7 +231,7 @@ public class Product {
                 "Discount Date = " + s + "\n" +
                 "Price From Supplier = " + priceFromSupplier + "\n" +
                 "Price To Customer = " + priceToCustomer + "\n" +
-                "Defective Item = " + defectiveItem + "\n";
+                "Defective Item = " + defectiveItem + "\n"+"------------------------------\n\n";
     }
 
     public int getOrderAmount() {

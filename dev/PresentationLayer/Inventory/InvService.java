@@ -22,8 +22,9 @@ public class InvService {
                     "2)\tCategory menu\n" +
                     "3)\tStock report menu\n" +
                     "4)\tDefective report\n" +
-                    "5)\tReceive order\n"+
-                    "6)\tExit"
+                    "5)\tReceive Delivery\n"+
+                    "6)\tSet periodic order day\n"+
+                    "7)\tExit"
             );
             int choice = s.nextInt();
             switch (choice) {
@@ -43,6 +44,9 @@ public class InvService {
                     acceptDelivery();
                     break;
                 case 6:
+                    setDayOfPeriodicOrder();
+                    break;
+                case 7:
                     return;
                 default:
                     System.out.println("Not a valid option, please try again.\n");
@@ -51,6 +55,19 @@ public class InvService {
         }
         while (true) ;
     }
+
+    private void setDayOfPeriodicOrder() {
+        System.out.println("Insert the number of the requested day (1-sunday, 2-monday,...)- ");
+        int day = s.nextInt();
+        if(day < 1 || day > 7){
+            System.out.println("Invalid day, try again");
+        }
+        else{
+            facade.setOrderDay(day);
+            System.out.println("The periodic order's day successfully changed");
+        }
+    }
+
     public void productMenu(){
         while (true) {
             System.out.println("\t\tProduct menu:\n\n" +
@@ -67,7 +84,8 @@ public class InvService {
                     "11)\tDisplay product price from suppler history\n" +
                     "12)\tDisplay product price to customer history\n" +
                     "13)\tDelete Product\n" +
-                    "14)\tExit"
+                    "14)\tDisplay all products\n" +
+                    "15)\tExit"
             );
 
             int choice = s.nextInt();
@@ -112,6 +130,9 @@ public class InvService {
                     deleteProduct();
                     break;
                 case 14:
+                    System.out.println(facade.showAllProds());
+                    break;
+                case 15:
                     return;
                 default:
                     System.out.println("Not a valid option, please try again.\n");
@@ -358,7 +379,8 @@ public class InvService {
                     "5)\tset category discount date\n" +
                     "6)\tDisplay category\n" +
                     "7)\tdelete category\n" +
-                    "8)\tExit"
+                    "8)\tDisplay all categories\n" +
+                    "9)\tExit"
             );
 
             int choice = s.nextInt();
@@ -385,6 +407,9 @@ public class InvService {
                     deleteCategory();
                     break;
                 case 8:
+                    System.out.println(facade.showAllCats());
+                    break;
+                case 9:
                     return;
                 default:
                     System.out.println("Not a valid option, please try again.\n");

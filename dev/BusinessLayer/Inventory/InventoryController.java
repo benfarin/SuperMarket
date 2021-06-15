@@ -24,6 +24,20 @@ public class InventoryController {
     public List<Category> getAllCategories(){
         return categories;
     }
+    public String showAllProds(){
+        String s ="";
+        for (Product p : products){
+            s+=p.printProduct();
+        }
+        return s;
+    }
+    public String showAllCats(){
+        String s ="";
+        for (Category c : categories){
+            s+=c.printCategory();
+        }
+        return s;
+    }
     public Category addCategory(String name){
         Category cat = new Category(name);
         if(!categories.contains(cat))
