@@ -40,10 +40,9 @@ public class Facade {
         this.WorkersCntrl = new WorkersController();
         if(WorkersCntrl.getWorkers().isEmpty())
             initWorkers();
-
-
-
         orderToday();
+        if(invCnt.getAllProd().isEmpty() && invCnt.getAllCategories().isEmpty())
+            init();
 
     }
 
@@ -53,30 +52,36 @@ public class Facade {
         WorkersCntrl.createRole(2,"Storekeeper");
         WorkersCntrl.createRole(3,"logistic");
         WorkersCntrl.addRoleToWorker(WorkersCntrl.getWorker(205),1);
+        WorkersCntrl.createWorker("rotem",206,1,1,100);
+        WorkersCntrl.addRoleToWorker(WorkersCntrl.getWorker(206),2);
     }
 
     public String acceptDelivery(int orderId,Map<Long,Integer> missingProds, Map<Long,Integer> defctiveProds){
-        OutgoingOrder order = incoming_order_controller.getOrder(orderId);
+        OutgoingOrder order = incoming_order_controller.ShowOrder((long)orderId);
         int quantityToAdd;
         if(order == null){
-            return "No such order\n";
+            order = incoming_order_controller.ShowUrgentOrder((long)orderId);
         }
+        if(order == null){
+            System.out.println("No such order");
+        }
+        incoming_order_controller.orderComplete(orderId);
         for(Long prodId : order.getItemsInOrder()){
             Product p = invCnt.getProdByID((prodId.intValue()));
             if(missingProds.containsKey(prodId)){
                 int missing =missingProds.get(prodId);
                 quantityToAdd = order.getItemsQuanityInOrder(prodId) - missing;
                 addStorageQuantity(p.getName(),quantityToAdd);
-                AddNewOrder((long) p.getId(),missing);//send order to supplier
+                AddNewUrgentOrder((long) p.getId(),missing);//send order to supplier
             }
             if(defctiveProds.containsKey(prodId)){
                 int defective=defctiveProds.get(prodId) ;
                 quantityToAdd = order.getItemsQuanityInOrder(prodId) - defective;
                addStorageQuantity(p.getName(),quantityToAdd);
                setDefectiveItems(p.getName(),defctiveProds.get(prodId));
-                AddNewOrder((long) p.getId(),defective);//send order to supplier
+                AddNewUrgentOrder((long) p.getId(),defective);//send order to supplier
             }
-            else{
+            if(!missingProds.containsKey(prodId) && !defctiveProds.containsKey(prodId)){
                 quantityToAdd = order.getItemsQuanityInOrder(prodId);
                 addStorageQuantity(p.getName(),quantityToAdd);
             }
@@ -220,10 +225,12 @@ public class Facade {
 
     }
     public String addStorageQuantity(String prodName, int add){
-        if(invCnt.getProduct(prodName) == null){
+        Product p =invCnt.getProduct(prodName);
+        if(p == null){
             return "Can't add storage quantity because the product "+prodName+" does not exist\n";
         }
         invCnt.addStorageQuantity(prodName,add);
+        dataHandler.updateStorageQuantity(p.getId(),p.getStorageQuantity());
         return "added "+ add+" from " + prodName+" storage quantity\n";
     }
     public String reduceStorageQuantity(String prodName, int reduce){
@@ -501,8 +508,9 @@ public class Facade {
     }
 
 
-    public void addProductPerSup(String prodName,int sid,int price,double weight,int serialNum){
-//        ProductPerSup p = new ProductPerSup(prodName,(long)getProdIdByName(prodName),price,)
+    public void addProductPerSup(String prodName,int sid,double price,double weight,int serialNum,HashMap<Integer,Double> prodsDiscount){
+        ProductPerSup p = new ProductPerSup(prodName,(long)getProdIdByName(prodName),price,prodsDiscount,(long)serialNum,supplierController.ShowSupInformation(sid),weight);
+        supplierController.ShowSupInformation(sid).addProductFromDB(p);
        dataHandler.addNewProductPerSupplier(getProdIdByName(prodName),price,sid,serialNum,weight);
 
     }
@@ -723,8 +731,18 @@ public class Facade {
     }
 
     public void init() {
-        ShiftCntrl.init();
-        WorkersCntrl.init();
+
+        addCategory("fruits");
+        addProduct("apple","fruits","maabarot",3.44,4.33,20);
+        List<String> contacts = new LinkedList<>();
+        contacts.add("dani");
+        AddNewSupplier(123,(long)2,"yossi",contacts,"cash","1");
+        HashMap<Integer,Double> prodsDisc = new HashMap<>();
+        prodsDisc.put(10,  10.0);
+        addProductPerSup("apple",123,5,3,3,prodsDisc);
+//        Contract contract = new Contract("monday",true,new HashMap<>(),"beer sheva");
+//        ShowSupInformation(123).setContract(contract);
+
     }
     public void createWorker(String name, int id, int bankAccountNumber, int bankNumber, int salary){
         WorkersCntrl.createWorker(name, id, bankAccountNumber, bankNumber, salary);

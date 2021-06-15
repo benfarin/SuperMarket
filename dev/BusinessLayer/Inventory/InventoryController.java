@@ -18,6 +18,12 @@ public class InventoryController {
             categories.add(c);
         }
     }
+    public List<Product> getAllProd(){
+        return products;
+    }
+    public List<Category> getAllCategories(){
+        return categories;
+    }
     public Category addCategory(String name){
         Category cat = new Category(name);
         if(!categories.contains(cat))

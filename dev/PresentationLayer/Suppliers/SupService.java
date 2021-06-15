@@ -4,11 +4,9 @@ import BusinessLayer.Facade;
 import BusinessLayer.Suppliers.*;
 import BusinessLayer.Suppliers.OutgoingOrder;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
-    public class SupService {
+public class SupService {
         public static Scanner io = new Scanner(System.in);
 
         BusinessLayer.Facade facade;
@@ -231,6 +229,7 @@ import java.util.Scanner;
             System.out.println("Insert  a Bank Account:");
             String bank = io.next();
             facade.AddNewSupplier(id,company,name,Contacts,payment,bank);
+            HashMap<Integer,Double> prodsDiscount = new HashMap<>();
             System.out.println("Insert  products name(example: apple,avocado,...):");
             String prodsName = io.next();
             String[] prodsN = prodsName.split(",");
@@ -241,7 +240,17 @@ import java.util.Scanner;
                 double weight = io.nextDouble();
                 System.out.println("what is the serial number for "+ prod+"?" );
                 int serialNum = io.nextInt();
-                facade.addProductPerSup(prod,id,price,weight,serialNum);
+                System.out.println("Do you have discount for " + prod + "? (y/n");
+                String yn = io.next();
+                if(yn.equals("y")){
+                    System.out.println("what is the amount needed for discount?");
+                    int amount = io.nextInt();
+                    System.out.println("what is the discount percent?");
+                    double percent = io.nextDouble();
+                    prodsDiscount.put(amount,percent);
+                }
+
+                facade.addProductPerSup(prod,id,price,weight,serialNum,prodsDiscount);
             }
 
             System.out.println("Supplier was Successfully added , you may add a Contract");

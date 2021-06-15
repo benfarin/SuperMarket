@@ -177,19 +177,18 @@ public class InvService {
         for (String prodName : prodNames) {
             System.out.print("\nIs there missing products from " + prodName + " write y/n- ");
             String missing = s.next();
-            if (missing == "y") {
+            if (missing.equals("y")) {
                 System.out.print("\nHow many product are missing from " + prodName + "- ");
                 int quantityMissing = s.nextInt();
                 int prodId = facade.getProdIdByName(prodName);
                 if (prodId != -1)
                     missingProds.put((long) prodId, quantityMissing);
-            } else {
                 System.out.print("\nIs there defective products from " + prodName + " write y/n- ");
                 String defective = s.next();
-                if (missing == "y") {
+                if (defective.equals("y")) {
                     System.out.print("\nHow many product are defective from " + prodName + "- ");
                     int quantityDef = s.nextInt();
-                    int prodId = facade.getProdIdByName(prodName);
+                    prodId = facade.getProdIdByName(prodName);
                     if (prodId != -1)
                         defectiveProds.put((long) prodId, quantityDef);
                 }

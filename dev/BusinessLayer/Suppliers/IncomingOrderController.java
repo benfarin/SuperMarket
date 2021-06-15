@@ -212,7 +212,14 @@ public class IncomingOrderController {
 
         }
     }
-
+    public void orderComplete(int orderID){
+        if(ShowOrder((long)orderID) != null){
+            PeriodOrderComplete(orderID);
+        }
+        else if(ShowUrgentOrder((long)orderID) != null){
+            UrgentOrderComplete(orderID);
+        }
+    }
 
 
     public boolean IsOrderExistInSystem(int id_order) {

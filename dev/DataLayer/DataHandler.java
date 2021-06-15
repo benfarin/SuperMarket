@@ -711,7 +711,7 @@ public class DataHandler {
             System.out.println("failed to addContact\n" + e.getMessage());
         }
     }
-    public void addNewProductPerSupplier(int pid,int price, int sid, int supSerialNum,double weight ){
+    public void addNewProductPerSupplier(int pid,double price, int sid, int supSerialNum,double weight ){
         try {
             productPerSupMapper.addNewProductPerSupplier(pid, price, sid, supSerialNum, weight);
         }catch (Exception e){
