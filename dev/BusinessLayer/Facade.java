@@ -1,8 +1,8 @@
 package BusinessLayer;
 
-import BusinessLayer.Delivery.Controller;
 import BusinessLayer.Inventory.*;
 
+import java.sql.SQLException;
 import java.util.*;
 
 import BusinessLayer.Suppliers.*;
@@ -229,7 +229,7 @@ public class Facade {
         String s = "";
         if(invCnt.reduceStorageQuantity(prodName,reduce)){
             Product p = invCnt.getProduct(prodName);
-            AddNewOrder((long) p.getId(),4*p.getMinimum());
+            AddNewUrgentOrder((long) p.getId(),4*p.getMinimum());
             s = "*** WARNING!!! "+ prodName+"'s storage quantity is under the minimum ***\nsend order to supplier\n";
         }
 
@@ -251,7 +251,7 @@ public class Facade {
         String s ="";
         if(invCnt.setStorageQuantity(prodName,storageQuantity)){
             Product p = invCnt.getProduct(prodName);
-            AddNewOrder((long) p.getId(),4*p.getMinimum());
+            AddNewUrgentOrder((long) p.getId(),4*p.getMinimum());
             s = "*** WARNING!!! "+ prodName+"'s storage quantity is under the minimum ***\n";
         }
         //database
@@ -276,7 +276,10 @@ public class Facade {
         }
         return invCnt.displayPTCHistory(prodName);
     }
-
+    public void deleteProduct(int id){
+        dataHandler.deleteProduct(id);
+        invCnt.deleteProduct(id);
+    }
 
     //-------------------------CATEGORY--------------------------
 
@@ -286,6 +289,8 @@ public class Facade {
         }
         for (Category c: invCnt.getCategory(catName).getSubCategories())
             dataHandler.addSup(null,c.getName());
+        for(Product p :invCnt.getCategory(catName).getProducts())
+            deleteProduct(p.getId());
         invCnt.deleteCat(catName);
         dataHandler.deleteCategory(catName);
         return "The category "+ catName +" was deleted";
@@ -472,6 +477,14 @@ public class Facade {
                 incoming_order_controller.AddNewOrder(Long.valueOf(i),order.get(i));
             }
     }
+    public String setOrderDay(int day){
+        if(day < 8 && day > 0) {
+            repCnt.setDay(day);
+            dataHandler.updateDay(day);
+            return "Day successfully changed";
+        }
+        return "Error changing day";
+    }
     public String exportStockReport(int id){
         if(repCnt.getStoReport(id) == null)
             return "The report "+id+ " does not exist\n";
@@ -485,8 +498,9 @@ public class Facade {
 
 
 
-    public void AddContact(int id_sup, String new_contact) {
+    public void AddContact(int id_sup, String new_contact)  {
         supplierController.AddContact(id_sup,new_contact);
+        dataHandler.supplierMapper.addContactToSupplier(id_sup, new_contact);
     }
 
     public boolean IsSupplierExistInSystem(int id_sup) {
@@ -504,10 +518,20 @@ public class Facade {
     public List<String> showContacts(int id_sup) { return supplierController.showContacts(id_sup); }
 
     public OutgoingOrder ShowOrder(Long id_order){ return incoming_order_controller.ShowOrder(id_order); }
+    public OutgoingOrder ShowUrgentOrder(Long id_order){ return incoming_order_controller.ShowUrgentOrder(id_order); }
 
     public boolean IsProductExistInSystem(Long id_product){ return incoming_order_controller.IsProductExistInSystem((long) id_product); }
+
     public void AddNewOrder(Long id_product, Integer amount) {
+
         incoming_order_controller.AddNewOrder(id_product,amount);
+
+    }
+
+    public void AddNewUrgentOrder(Long id_product, Integer amount) {
+
+        incoming_order_controller.AddNewUrgentOrder(id_product,amount);
+
     }
 
     public boolean IsOrderExistInSystem(int id_order) {
@@ -520,6 +544,8 @@ public class Facade {
 
     public void AddNewSupplier(int id, Long company, String name, List<String> contacts, String payment, String bank) {
         supplierController.AddSupplier(id,company,name,contacts,payment,bank);
+        dataHandler.supplierMapper.addSupplier(id, name, payment, bank);
+        dataHandler.supplierMapper.addContactToSupplier(id, contacts.get(0));
     }
 
     public void AddSupplierContract(int supplier_id){
@@ -532,6 +558,9 @@ public class Facade {
 
     public void DeleteSupplier(int id) {
         supplierController.DeleteSupplier(id);
+        dataHandler.supplierMapper.deleteSupplier(id);
+        //dataHandler.contractMapper.deleteContract(id); This isn't needed because cascade works
+
     }
 
     public Category getCategory(String name) {
@@ -548,6 +577,7 @@ public class Facade {
 
 
     public void addStockReportFromData(StockReport re) {
+        repCnt.setDay(re.getDay());
         repCnt.addStockReport(re);
     }
 
@@ -563,14 +593,14 @@ public class Facade {
         return repCnt.getDay();
     }
 
-    public void deleteProduct(int id) {
-        Product p = invCnt.getProdByID(id);
-        dataHandler.deleteProduct(id);
-    }
-
-    public void setOrderDay(int nextInt) {
-        repCnt.setDay(nextInt);
-    }
+//    public void deleteProduct(int id) {
+//        Product p = invCnt.getProdByID(id);
+//        dataHandler.deleteProduct(id);
+//    }
+//
+//    public void setOrderDay(int nextInt) {
+//        repCnt.setDay(nextInt);
+//    }
     public void addDriver(Driver d){
         conn.addDriver(d);
     }

@@ -144,8 +144,10 @@ public class Supplier {
        else {
             Scanner io = new Scanner(System.in);
             Contract new_contract;
-            System.out.println("Insert Days of Supply:");
+            System.out.println("Insert Day of Supply:");
             String  days = io.next();
+            System.out.println("Insert pickup location:");
+            String location=io.useDelimiter("\n").next();
             System.out.println("Is needed delivery? ");
             System.out.println("y/n");
             String delivery = io.next();
@@ -157,6 +159,7 @@ public class Supplier {
             String y_discount = io.next();
             int amount;
             int precent;
+
             while (y_discount.compareTo("y")==0){
                 System.out.println("enter amount products: ");
                 amount= io.nextInt();
@@ -170,10 +173,11 @@ public class Supplier {
                 y_discount = io.next();
 
             }
-            new_contract = new Contract(days, NeedDelivery, totalPriceDiscount);
+
+            new_contract = new Contract(days, NeedDelivery, totalPriceDiscount, location);
             setContract(new_contract);
 
-           ContractMapper.addContract(this.id_supplier, days, NeedDelivery? 1 : 0, totalPriceDiscount);
+           ContractMapper.addContract(this.id_supplier, days, NeedDelivery? 1 : 0, totalPriceDiscount, location);
             return new_contract;
         }
 

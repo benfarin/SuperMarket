@@ -41,7 +41,7 @@ public class OrderMapper
                 supplierID = res1.getInt("sid");
             }
             if(supplierID!=-1)
-                orders.put(orderID, new OutgoingOrder(supplierID, delivery_Date, getOrderItems(orderID), totalPrice));
+                orders.put(supplierID, new OutgoingOrder(supplierID, delivery_Date, getOrderItems(orderID), totalPrice));
 
 
 
@@ -69,12 +69,14 @@ public class OrderMapper
                 supplierID = res1.getInt("sid");
             }
             if(supplierID!=-1)
-                urgentOrders.put(orderID, new OutgoingOrder(supplierID, delivery_Date, getUrgentOrderItems(orderID), totalPrice));
+                urgentOrders.put(supplierID, new OutgoingOrder(supplierID, delivery_Date, getUrgentOrderItems(orderID), totalPrice));
 
 
 
         }
     }
+
+
     // The Key is the product ID and the integer is the amount
     private HashMap<Long, Integer> getOrderItems(int orderID) throws SQLException {
         Statement stmt = this.con.createStatement();
@@ -151,34 +153,55 @@ public class OrderMapper
     }
 
 
-    public void updateOrder(int oid, Date date, int totalPrice) throws SQLException { //  update  all the  argument for contract of sid = sid
+    public static void updateOrder(Long oid, java.util.Date date, double totalPrice) { //  update  all the  argument for contract of sid = sid
         String sql = "UPDATE Orders SET date = ? , totalPrice = ?  "
                 + "WHERE oid = ?";
+        java.sql.Date sqlDate;
+        if(date!=null)
+            sqlDate = new java.sql.Date(date.getTime());
+        else sqlDate=null;
         try {
             PreparedStatement pstmt = con.prepareStatement(sql);
-            pstmt.setDate(1,date);
-            pstmt.setInt(2, totalPrice);
-            pstmt.setInt(3, oid);
+            pstmt.setDate(1,sqlDate);
+            pstmt.setDouble(2, totalPrice);
+            pstmt.setLong(3, oid);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
-    public void updateItemOrder(int oid, int sid, int pid,int amount) throws SQLException { //  update the amount of item order by the oid = oid ' sid = sid ' pid = pid
+    public static void updateUrgentOrder(Long oid, java.util.Date date, double totalPrice) { //  update  all the  argument for contract of sid = sid
+        String sql = "UPDATE UrgentOrders SET date = ? , totalPrice = ?  "
+                + "WHERE oid = ?";
+        java.sql.Date sqlDate;
+        if(date!=null)
+            sqlDate = new java.sql.Date(date.getTime());
+        else sqlDate=null;
+        try {
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setDate(1,sqlDate);
+            pstmt.setDouble(2, totalPrice);
+            pstmt.setLong(3, oid);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    public static void updateItemOrder(Long oid, int sid, Long pid,int amount) { //  update the amount of item order by the oid = oid ' sid = sid ' pid = pid
         String sql = "UPDATE ItemOrder SET amount = ?  "
                 + "WHERE oid = ? AND sid = ? AND pid = ?";
         try {
             PreparedStatement pstmt = con.prepareStatement(sql);
             pstmt.setInt(1, amount);
-            pstmt.setInt(2, oid);
+            pstmt.setLong(2, oid);
             pstmt.setInt(3, sid);
-            pstmt.setInt(4, pid);
+            pstmt.setLong(4, pid);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
-    public void deleteOrder(int oid)throws SQLException{
+    public static void deleteOrder(int oid){
         String sql = "DELETE FROM Orders WHERE oid=?";
         try{
             PreparedStatement pstmt = con.prepareStatement(sql);
@@ -188,6 +211,17 @@ public class OrderMapper
             System.out.println(e.getMessage());
         }
     }
+    public static void deleteUrgentOrder(int oid){
+        String sql = "DELETE FROM UrgentOrders WHERE oid=?";
+        try{
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, oid);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
     public void deleteItemOrder(int oid,int sid,int pid,int amount  )throws SQLException{
         String sql = "DELETE FROM Orders WHERE oid=? AND sid=? AND pid=?";
         try{
@@ -200,6 +234,17 @@ public class OrderMapper
             System.out.println(e.getMessage());
         }
     }
+    public  static void  deleteItemsOrder(int oid ){
+        String sql = "DELETE FROM Orders WHERE oid=?";
+        try{
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, oid);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
 
 
 }

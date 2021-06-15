@@ -1,18 +1,20 @@
 package BusinessLayer.Suppliers;
 
 import java.util.HashMap;
-import java.util.Scanner;
 
 public class Contract {
 
     private String daysOfSupply;
     private boolean needsDelivery;
+    private String location;
     HashMap<Integer, Integer> totalPriceDiscount;
 
-    public Contract(String days, boolean delivery, HashMap<Integer, Integer> discounts) {
+    public Contract(String days, boolean delivery, HashMap<Integer, Integer> discounts, String location) {
         daysOfSupply = days;
         needsDelivery = delivery;
         totalPriceDiscount = discounts;
+        this.location= location;
+
     }
     public Contract(String days, boolean delivery){
         daysOfSupply = days;
@@ -57,10 +59,22 @@ public class Contract {
     }*/ // old version of getTotalPriceDiscount
 
 
+    public boolean isNeedsDelivery() {
+        return needsDelivery;
+    }
+
+    public String getDaysOfSupply() {
+        return daysOfSupply;
+    }
+
+    public String getLocation() {
+        return location;
+    }
 
     public String toString() {
         String s;
         s="days of supply:\t" + daysOfSupply+"\n";
+        s+="Location of pickup:\t"+location+"\n";
         if (needsDelivery)
             s+="Needs Delivery\n";
         else
