@@ -514,12 +514,14 @@ public class Facade {
     }
 
 
-    public void addProductPerSup(String prodName,int sid,double price,double weight,int serialNum,HashMap<Integer,Double> prodsDiscount){
+    public void addProductPerSup(String prodName,int sid,double price,double weight,Long serialNum,HashMap<Integer,Double> prodsDiscount){
         ProductPerSup p = new ProductPerSup(prodName,(long)getProdIdByName(prodName),price,prodsDiscount,(long)serialNum,supplierController.ShowSupInformation(sid),weight);
         supplierController.ShowSupInformation(sid).addProductFromDB(p);
         incoming_order_controller.addProd(p);
        dataHandler.addNewProductPerSupplier(getProdIdByName(prodName),price,sid,serialNum,weight);
-
+        for(Map.Entry<Integer, Double> entry : prodsDiscount.entrySet()) {
+            dataHandler.addNewHighAmountDiscount(getProdIdByName(prodName), sid, entry.getKey(), entry.getValue());
+        }
     }
     public void AddContact(int id_sup, String new_contact)  {
         supplierController.AddContact(id_sup,new_contact);
@@ -751,7 +753,7 @@ public class Facade {
         AddNewSupplier(123,(long)2,"yossi",contacts,"cash","1");
         HashMap<Integer,Double> prodsDisc = new HashMap<>();
         prodsDisc.put(10,  10.0);
-        addProductPerSup("apple",123,5,3,3,prodsDisc);
+        addProductPerSup("apple",123,5,3,(long)3,prodsDisc);
         AddSupplierContract(123,"monday","beer sheva",true,new HashMap<>());
 
     }

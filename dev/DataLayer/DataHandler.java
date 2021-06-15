@@ -711,11 +711,19 @@ public class DataHandler {
             System.out.println("failed to addContact\n" + e.getMessage());
         }
     }
-    public void addNewProductPerSupplier(int pid,double price, int sid, int supSerialNum,double weight ){
+    public void addNewProductPerSupplier(int pid,double price, int sid, Long supSerialNum,double weight ){
         try {
             productPerSupMapper.addNewProductPerSupplier(pid, price, sid, supSerialNum, weight);
         }catch (Exception e){
             System.out.println("failed to addNewProductPerSupplier\n" + e.getMessage());
+        }
+    }
+
+    public void addNewHighAmountDiscount(int prodIdByName, int sid, Integer key, Double value) {
+        try {
+            productPerSupMapper.addNewHighAmountDiscount(prodIdByName, sid, key, value);
+        }catch (Exception e){
+            System.out.println("failed to addNewHighAmountDiscount\n" + e.getMessage());
         }
     }
 }

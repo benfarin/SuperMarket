@@ -68,14 +68,26 @@ public class ProductPerSupMapper {
             return SupplierMapper.getSuppliers().get(supplierID);
 
         }
+    public void addNewHighAmountDiscount(int pid, int sid, int amount, double discount) throws SQLException {
 
-    public void addNewProductPerSupplier(int pid,double price, int sid, int supSerialNum,double weight ) throws SQLException {
+        String sql = "INSERT INTO DiscountProducts(pid,sid,amount,discount) VALUES(?,?,?,?)";
+        try (PreparedStatement pstmt = con.prepareStatement(sql)) {
+            pstmt.setInt(1, pid);
+            pstmt.setInt(2, sid);
+            pstmt.setInt(3, amount);
+            pstmt.setDouble(4, discount);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    public void addNewProductPerSupplier(int pid,double price, int sid, long supSerialNum,double weight ) throws SQLException {
         String sql = "INSERT INTO ProductPerSupplier(pid,price,sid,supSerialNum,weightPerUnit) VALUES(?,?,?,?,?)";
         try (PreparedStatement pstmt = con.prepareStatement(sql)) {
             pstmt.setInt(1, pid);
             pstmt.setDouble(2, price);
             pstmt.setInt(3, sid);
-            pstmt.setInt(4, supSerialNum);
+            pstmt.setLong(4, supSerialNum);
             pstmt.setDouble(5, weight);
             pstmt.executeUpdate();
         } catch (SQLException e) {

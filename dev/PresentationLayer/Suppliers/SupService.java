@@ -211,6 +211,40 @@ public class SupService {
         }
         facade.AddSupplierContract(supplier_id,days,location,NeedDelivery,totalPriceDiscount);
     }
+    private void addSupContract(int supId) {
+
+        Integer supplier_id=supId;
+        System.out.println("Insert Day of Supply:");
+        String  days = io.next();
+        System.out.println("Insert pickup location:");
+        String location=io.useDelimiter("\n").next();
+        System.out.println("Is needed delivery? ");
+        System.out.println("y/n");
+        String delivery = io.next();
+        boolean NeedDelivery;
+        NeedDelivery=delivery.compareTo("y")==0;
+        HashMap<Integer,Integer> totalPriceDiscount = new HashMap<Integer, Integer>();
+        System.out.println("Do you want enter a PRICE BASED discount?");
+        System.out.println("y/n");
+        String y_discount = io.next();
+        int amount;
+        int precent;
+
+        while (y_discount.compareTo("y")==0){
+            System.out.println("enter amount products: ");
+            amount= io.nextInt();
+            System.out.println("enter the discount percent for amount: "+ amount);
+            precent=io.nextInt();
+            totalPriceDiscount.put(amount,precent);
+
+
+            System.out.println("Do you want enter more discounts?");
+            System.out.println("y/n");
+            y_discount = io.next();
+
+        }
+        facade.AddSupplierContract(supplier_id,days,location,NeedDelivery,totalPriceDiscount);
+    }
 
 //    private void AddSupplierContract(Integer supplier_id,String days,String location,boolean NeedDelivery,HashMap<Integer,Integer> totalPriceDiscount) {
 //            facade.AddSupplierContract(supplier_id,days,location,NeedDelivery,totalPriceDiscount);
@@ -263,31 +297,39 @@ public class SupService {
             System.out.println("Insert  a Bank Account:");
             String bank = io.next();
             facade.AddNewSupplier(id,company,name,Contacts,payment,bank);
+
+            System.out.println("Supplier was Successfully added, please add a Contract");
+            addSupContract(id);
+
+            System.out.println("\nPlease add products for the new supplier "+name+" id #"+id);
+
             HashMap<Integer,Double> prodsDiscount = new HashMap<>();
             System.out.println("Insert  products name(example: apple,avocado,...):");
             String prodsName = io.next();
             String[] prodsN = prodsName.split(",");
             for(String prod : prodsN){
                 System.out.println("what is the price for "+ prod+"?" );
-                int price = io.nextInt();
+                Double price = io.nextDouble();
                 System.out.println("what is the weight of "+ prod+"?" );
                 double weight = io.nextDouble();
                 System.out.println("what is the serial number for "+ prod+"?" );
-                int serialNum = io.nextInt();
+                Long serialNum = io.nextLong();
                 System.out.println("Do you have discount for " + prod + "? (y/n");
                 String yn = io.next();
-                if(yn.equals("y")){
+                while(yn.equals("y")){
                     System.out.println("what is the amount needed for discount?");
                     int amount = io.nextInt();
                     System.out.println("what is the discount percent?");
                     double percent = io.nextDouble();
                     prodsDiscount.put(amount,percent);
+                    System.out.println("Do you want to add another discount for "+ prod+"? (y/n");
+                    yn = io.next();
                 }
 
                 facade.addProductPerSup(prod,id,price,weight,serialNum,prodsDiscount);
             }
 
-            System.out.println("Supplier was Successfully added , you may add a Contract");
+//            System.out.println("Supplier was Successfully added , you may add a Contract");
         }
         private void showContacts() { //done
             System.out.println("what is the ID Supplier");
