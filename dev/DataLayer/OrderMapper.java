@@ -235,7 +235,7 @@ public class OrderMapper
         }
     }
     public  static void  deleteItemsOrder(int oid ){
-        String sql = "DELETE FROM Orders WHERE oid=?";
+        String sql = "DELETE FROM ItemOrder WHERE oid=?";
         try{
             PreparedStatement pstmt = con.prepareStatement(sql);
             pstmt.setInt(1, oid);

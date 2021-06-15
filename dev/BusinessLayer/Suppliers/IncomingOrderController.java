@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Order;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
+
 import BusinessLayer.Delivery.DeliveryController;
 public class IncomingOrderController {
     // INT is the StoreCode for the product, LIST is for all the products from different suppliers under same code
@@ -87,17 +89,26 @@ public class IncomingOrderController {
     public  boolean IsProductExistInSystem(Long id_product){
         return  products.containsKey(id_product);
     }
-
+    public void addProd(ProductPerSup p){
+        if(products.containsKey(p.getStoreCode())){
+            products.get(p.getStoreCode()).add(p);
+        }
+        else{
+            LinkedList<ProductPerSup> prods = new LinkedList<>();
+            prods.add(p);
+            products.put(p.getStoreCode(),prods);
+        }
+    }
     public  void PeriodOrderComplete(int oid){
         OrderMapper.deleteOrder(oid);
         OrderMapper.deleteItemsOrder(oid);
-        this.orders.remove(oid);
+        this.orders.remove(ShowOrder((long)oid).getSupplier_id());
     }
 
     public  void UrgentOrderComplete(int oid){
         OrderMapper.deleteUrgentOrder(oid);
         OrderMapper.deleteItemsOrder(oid);
-        this.urgentOrders.remove(oid);
+        this.urgentOrders.remove(ShowUrgentOrder((long)oid).getSupplier_id());
     }
 
 

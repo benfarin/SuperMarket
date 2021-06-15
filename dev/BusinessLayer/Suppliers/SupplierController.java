@@ -27,8 +27,8 @@ public class SupplierController {
 
 
      }
-    public void AddSupplierContract(int supplier_id){
-        supplier.get(supplier_id).addContract();
+    public void AddSupplierContract(int supplier_id,String days,String location,boolean NeedDelivery,HashMap<Integer,Integer> totalPriceDiscount){
+        supplier.get(supplier_id).addContract(days,location,NeedDelivery,totalPriceDiscount);
     }
 
     public Contract ShowContract(int id_sup) {

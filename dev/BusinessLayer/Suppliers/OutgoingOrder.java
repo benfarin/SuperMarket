@@ -11,6 +11,9 @@ public class OutgoingOrder {
     private Date deliveryDate;
     private double totalPrice;
 
+    public Integer getSupplier_id() {
+        return supplier_id;
+    }
 
     // this constructor is from AddNewOrder
     public OutgoingOrder(Integer sup, Date delivery_Date){

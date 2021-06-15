@@ -164,9 +164,7 @@ public class SupService {
 
                     }
                     case 7:{
-                        System.out.println("Enter supplier ID to add a contract");
-                        Integer supplier_id=io.nextInt();
-                        AddSupplierContract(supplier_id);
+                        addSupContract();
                         break;
                     }
 
@@ -178,9 +176,45 @@ public class SupService {
                 }
             }
 
-        private void AddSupplierContract(Integer supplier_id) {
-            facade.AddSupplierContract(supplier_id);
+    private void addSupContract() {
+        System.out.println("Enter supplier ID to add a contract");
+        Integer supplier_id=io.nextInt();
+        //Scanner io = new Scanner(System.in);
+        System.out.println("Insert Day of Supply:");
+        String  days = io.next();
+        System.out.println("Insert pickup location:");
+        String location=io.useDelimiter("\n").next();
+        System.out.println("Is needed delivery? ");
+        System.out.println("y/n");
+        String delivery = io.next();
+        boolean NeedDelivery;
+        NeedDelivery=delivery.compareTo("y")==0;
+        HashMap<Integer,Integer> totalPriceDiscount = new HashMap<Integer, Integer>();
+        System.out.println("Do you want enter a PRICE BASED discount?");
+        System.out.println("y/n");
+        String y_discount = io.next();
+        int amount;
+        int precent;
+
+        while (y_discount.compareTo("y")==0){
+            System.out.println("enter amount products: ");
+            amount= io.nextInt();
+            System.out.println("enter the discount percent for amount: "+ amount);
+            precent=io.nextInt();
+            totalPriceDiscount.put(amount,precent);
+
+
+            System.out.println("Do you want enter more discounts?");
+            System.out.println("y/n");
+            y_discount = io.next();
+
         }
+        facade.AddSupplierContract(supplier_id,days,location,NeedDelivery,totalPriceDiscount);
+    }
+
+//    private void AddSupplierContract(Integer supplier_id,String days,String location,boolean NeedDelivery,HashMap<Integer,Integer> totalPriceDiscount) {
+//            facade.AddSupplierContract(supplier_id,days,location,NeedDelivery,totalPriceDiscount);
+//        }
 
         private void printProductSerialNumber(Integer supplier_id){
             System.out.println(facade.printProductSerialNumber(supplier_id));

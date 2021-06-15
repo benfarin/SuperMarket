@@ -457,25 +457,25 @@ public class Facade {
             boolean dayIsHere;
             switch (repCnt.getDay()) {
                 case 1:
-                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY;
+                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY;
                     break;
                 case 2:
-                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY;
+                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY;
                     break;
                 case 3:
-                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.TUESDAY;
+                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY;
                     break;
                 case 4:
-                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.WEDNESDAY;
+                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.TUESDAY;
                     break;
                 case 5:
-                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.THURSDAY;
+                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.WEDNESDAY;
                     break;
                 case 6:
-                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY;
+                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.THURSDAY;
                     break;
                 case 7:
-                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY;
+                    dayIsHere = cal.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY;
                     break;
                 default:
                     dayIsHere = false;
@@ -517,6 +517,7 @@ public class Facade {
     public void addProductPerSup(String prodName,int sid,double price,double weight,int serialNum,HashMap<Integer,Double> prodsDiscount){
         ProductPerSup p = new ProductPerSup(prodName,(long)getProdIdByName(prodName),price,prodsDiscount,(long)serialNum,supplierController.ShowSupInformation(sid),weight);
         supplierController.ShowSupInformation(sid).addProductFromDB(p);
+        incoming_order_controller.addProd(p);
        dataHandler.addNewProductPerSupplier(getProdIdByName(prodName),price,sid,serialNum,weight);
 
     }
@@ -570,8 +571,8 @@ public class Facade {
         dataHandler.supplierMapper.addContactToSupplier(id, contacts.get(0));
     }
 
-    public void AddSupplierContract(int supplier_id){
-        supplierController.AddSupplierContract(supplier_id);
+    public void AddSupplierContract(int supplier_id,String days,String location,boolean NeedDelivery,HashMap<Integer,Integer> totalPriceDiscount){
+        supplierController.AddSupplierContract(supplier_id,days,location,NeedDelivery,totalPriceDiscount);
     }
 
     public String printProductSerialNumber(Integer supplier_id){
@@ -751,8 +752,7 @@ public class Facade {
         HashMap<Integer,Double> prodsDisc = new HashMap<>();
         prodsDisc.put(10,  10.0);
         addProductPerSup("apple",123,5,3,3,prodsDisc);
-//        Contract contract = new Contract("monday",true,new HashMap<>(),"beer sheva");
-//        ShowSupInformation(123).setContract(contract);
+        AddSupplierContract(123,"monday","beer sheva",true,new HashMap<>());
 
     }
     public void createWorker(String name, int id, int bankAccountNumber, int bankNumber, int salary){
