@@ -314,7 +314,7 @@ public class SupService {
                 double weight = io.nextDouble();
                 System.out.println("what is the serial number for "+ prod+"?" );
                 Long serialNum = io.nextLong();
-                System.out.println("Do you have discount for " + prod + "? (y/n");
+                System.out.println("Do you have discount for " + prod + "? (y/n)");
                 String yn = io.next();
                 while(yn.equals("y")){
                     System.out.println("what is the amount needed for discount?");
@@ -322,7 +322,7 @@ public class SupService {
                     System.out.println("what is the discount percent?");
                     double percent = io.nextDouble();
                     prodsDiscount.put(amount,percent);
-                    System.out.println("Do you want to add another discount for "+ prod+"? (y/n");
+                    System.out.println("Do you want to add another discount for "+ prod+"? (y/n)");
                     yn = io.next();
                 }
 

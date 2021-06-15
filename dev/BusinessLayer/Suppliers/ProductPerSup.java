@@ -83,8 +83,8 @@ public class ProductPerSup {
         if (highAmountDiscount != null) {
             for (Integer key : highAmountDiscount.keySet()) {
                 if (key <= amount) {
-                    if ( highAmountDiscount.get(key) * 0.01 * price < min) // 1 - discount(0.1) * price
-                        min = highAmountDiscount.get(key) * 0.01* price;
+                    if (((1-(highAmountDiscount.get(key) * 0.01)) * price) < min) // 1 - discount(0.1) * price
+                        min = ((1-(highAmountDiscount.get(key) * 0.01)) * price);
                 }
             }
         }

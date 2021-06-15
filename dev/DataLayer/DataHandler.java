@@ -7,14 +7,9 @@ import BusinessLayer.Facade;
 import BusinessLayer.Inventory.*;
 
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.*;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.sql.Statement;
 
 public class DataHandler {
     private CategoryMapper catMapper;
@@ -685,8 +680,31 @@ public class DataHandler {
         }
     }
     public  void updateDay(int day){
-        repMapper.updateDay(day);
-    }
+            try {
+                Statement stmt1 = this.con.createStatement();
+                ResultSet res1 = stmt1.executeQuery("SELECT COUNT(*) FROM StockReport");
+                res1.next();
+                if(res1.getInt(1) != 0) {
+                    String sql = "UPDATE StockReport SET day = ? WHERE rid > 0";
+
+                    PreparedStatement pstmt = con.prepareStatement(sql);
+                    pstmt.setInt(1, day);
+                    // update
+                    pstmt.executeUpdate();
+                }
+                else {
+                    List<String> cats = new LinkedList<>();
+                    cats.add("fruits");
+                    addStock(-1, new java.util.Date(System.currentTimeMillis()),cats);
+
+                }
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+
+
+        }
+
     public HashMap<Integer, StockReport> getStockReports(){
         return repMapper.getStockReports();
     }
