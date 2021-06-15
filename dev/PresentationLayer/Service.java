@@ -3,6 +3,7 @@ package PresentationLayer;
 import BusinessLayer.Facade;
 import PresentationLayer.Inventory.InvService;
 import PresentationLayer.Suppliers.SupService;
+import PresentationLayer.Workers.MainService;
 
 import java.util.Scanner;
 
@@ -10,12 +11,14 @@ public class Service {
     private InvService invService;
     private SupService supService;
     private Facade facade;
+    private MainService mainService;
     public static Scanner s = new Scanner(System.in);
 
-    public Service() {
-        this.facade = new Facade();
+    public Service(Facade facade,MainService mainService) {
+        this.facade = facade;
         this.invService = new InvService(facade);
         this.supService = new SupService(facade);
+        this.mainService = mainService;
     }
     public void startMenu() {
         
@@ -23,7 +26,7 @@ public class Service {
             System.out.println("\t\tSuper-Li :)\n\n" +
                     "1)\tInventory menu\n" +
                     "2)\tSupplier menu\n" +
-                    "3)\tExit"
+                    "3)\tLogout"
             );
             int choice = s.nextInt();
             switch (choice) {
@@ -34,7 +37,8 @@ public class Service {
                     supService.startMenu();
                     break;
                 case 3:
-                    return;
+                    mainService.startMenu();
+                    break;
                 default:
                     System.out.println("Not a valid option, please try again.\n");
                     break;

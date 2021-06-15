@@ -1,8 +1,6 @@
 package BusinessLayer.Suppliers;
 
-import java.util.HashMap;
-import java.time.*;
-import java.util.Set;
+import java.util.*;
 
 public class OutgoingOrder {
     private  static  Long static_id= new Long(0);
@@ -10,12 +8,12 @@ public class OutgoingOrder {
     private Integer supplier_id;
     private HashMap<Long,Integer> items; //  the key is the id_tem ,  the value is the amount.
     //TODO: nim: I think Key needs to be the supplierSerialNum (because this order goes to them). Or maybe the product object and value=amount
-    private LocalDate deliveryDate;
+    private Date deliveryDate;
     private double totalPrice;
 
 
 
-    public OutgoingOrder(Integer sup,LocalDate delivery_Date){
+    public OutgoingOrder(Integer sup, Date delivery_Date){
         id=static_id;
         static_id++;
         supplier_id = sup;
@@ -23,17 +21,20 @@ public class OutgoingOrder {
         deliveryDate = delivery_Date;
         totalPrice = 0;
     }
+    public OutgoingOrder(Integer sup, Date delivery_Date, HashMap<Long, Integer> items, double totalPrice){
+        id=static_id; //TODO: Make the IDs count properly from 0 as they are loaded
+        static_id++;
+        this.supplier_id = sup;
+        this.items=items;
+        this.deliveryDate = delivery_Date;
+        this.totalPrice=totalPrice;
+    }
+
+    public Date getDeliveryDate() {
+        return deliveryDate;
+    }
 
     public HashMap<Long, Integer> getItems() { return items; }
-    public int getItemsQuanityInOrder(Long idProd){
-        if(!items.containsKey(idProd)){
-            return 0;
-        }
-        return items.get((long)idProd);
-    }
-    public Set<Long> getItemsInOrder(){
-        return items.keySet();
-    }
 
     public Long getId() {return id;}
 
@@ -64,5 +65,13 @@ public class OutgoingOrder {
 
     public double getTotalPrice() {
         return totalPrice;
+    }
+
+    public Set<Long> getItemsInOrder() {
+        return items.keySet();
+    }
+
+    public int getItemsQuanityInOrder(Long prodId) {
+        return items.get(prodId);
     }
 }

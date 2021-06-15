@@ -1,13 +1,28 @@
 package BusinessLayer;
 
+import BusinessLayer.Delivery.Controller;
 import BusinessLayer.Inventory.*;
 
 import java.util.*;
 
 import BusinessLayer.Suppliers.*;
+import BusinessLayer.Workers.ShiftController;
+import BusinessLayer.Workers.WorkersController;
 import DataLayer.DataHandler;
-
+import java.sql.Date;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+import  BusinessLayer.Workers.*;
+import BusinessLayer.Delivery.*;
+import BusinessLayer.Workers.Enum.ShiftField;
+import BusinessLayer.Workers.Enum.WorkerField;
 public class Facade {
+    ShiftController ShiftCntrl;
+    WorkersController WorkersCntrl;
+    static Controller conn;
     private InventoryController invCnt;
     private ReportController repCnt;
     private IncomingOrderController incoming_order_controller;
@@ -16,11 +31,32 @@ public class Facade {
 
     public Facade() {
 
-        initialize();
+        //initialize();
+        this.repCnt = new ReportController();
+        this.invCnt = new InventoryController();
         this.dataHandler = new DataHandler(this);
         supplierController = new SupplierController(dataHandler.supplierMapper.getSuppliers());
         incoming_order_controller = new IncomingOrderController(dataHandler.productPerSupMapper.getMapOfAllProducts(), dataHandler.orderMapper.orders, dataHandler.orderMapper.urgentOrders);
+        this.conn= new Controller();
+        this.ShiftCntrl = new ShiftController();
+        this.WorkersCntrl = new WorkersController();
+        if(WorkersCntrl.getWorkers().isEmpty())
+            initWorkers();
+
+
+
+        orderToday();
+
     }
+
+    private void initWorkers() {
+        WorkersCntrl.createWorker("hila",205,123,1,100);
+        WorkersCntrl.createRole(1,"Manager");
+        WorkersCntrl.createRole(2,"Storekeeper");
+        WorkersCntrl.createRole(3,"logistic");
+        WorkersCntrl.addRoleToWorker(WorkersCntrl.getWorker(205),1);
+    }
+
     public String acceptDelivery(int orderId,Map<Long,Integer> missingProds, Map<Long,Integer> defctiveProds){
         OutgoingOrder order = incoming_order_controller.getOrder(orderId);
         int quantityToAdd;
@@ -100,7 +136,7 @@ public class Facade {
         dataHandler.addProduct(p.getId(),p.getName(),p.getManufacture(),p.getCategory().getName(),p.getStoreQuantity(),p.getStorageQuantity(),p.getDiscount(),p.getDiscountDate(),p.getPriceFromSupplier(),p.getPriceToCustomer(),p.getDefectiveItem(),p.getMinimum(),p.getOrderAmount(),p.getPriceToCusHistory(),p.getPriceFromSupHistory());
         return "the product " + name + " successfully added\n";
     }
-    public Product addProductFromData (int id, String name, String manufacture, Category category, int storeQuantity, int storageQuantity, int discount, Date discountDate, double priceFromSupplier, double priceToCustomer, int defectiveItem, int minimum, Map<Double, Date> priceToCusHistory, Map<Double, Date> priceFromSupHistory){
+    public Product addProductFromData (int id, String name, String manufacture, Category category, int storeQuantity, int storageQuantity, int discount, java.util.Date discountDate, double priceFromSupplier, double priceToCustomer, int defectiveItem, int minimum, Map<Double, java.util.Date> priceToCusHistory, Map<Double, java.util.Date> priceFromSupHistory){
         return  invCnt.addProductFromData(id,name, manufacture, category,storeQuantity, storageQuantity, discount, discountDate, priceFromSupplier, priceToCustomer,defectiveItem, minimum, priceToCusHistory, priceFromSupHistory);
     }
     //-------------------------PRODUCT--------------------------
@@ -138,7 +174,7 @@ public class Facade {
         dataHandler.updatePriceToCustomer(invCnt.getProduct(prodName).getId(),priceToCustomer);
         return "set "+ prodName+"'s price to costumer to " + priceToCustomer+"\n";
     }
-    public String setProdDiscount(String prodName,int discount, Date discountDate){
+    public String setProdDiscount(String prodName,int discount, java.util.Date discountDate){
         if(invCnt.getProduct(prodName) == null){
             return "The product "+prodName+" does not exist\n";
         }
@@ -289,7 +325,7 @@ public class Facade {
         invCnt.deleteProd(catName,invCnt.getProduct(prodName));
         return  prodName + " successfully deleted from " + catName+"\n";
     }
-    public String setCatDiscount(String catName, int discount, Date discountDate){
+    public String setCatDiscount(String catName, int discount, java.util.Date discountDate){
         if(invCnt.getCategory(catName)==null){
             return "the category "+catName+" does not exist\n";
         }
@@ -299,7 +335,7 @@ public class Facade {
         return "set " +catName+ "'s discount to "+ discount + " until "+ discountDate.toString()+"\n";
     }
 
-    public String setCatDisDate(String catName,Date disDate){
+    public String setCatDisDate(String catName,java.util.Date disDate){
         if(invCnt.getCategory(catName)==null){
             return "the category "+catName+" does not exist\n";
         }
@@ -448,51 +484,6 @@ public class Facade {
     }
 
 
-    private void initialize(){
-
-        ProductPerSup one = new ProductPerSup("milk 3%", new Long(123123), 5.9, null, new Long(82723), null);
-        ProductPerSup two = new ProductPerSup("Honey", new Long(34622), 5.9, null, new Long(34644), null);
-        ProductPerSup three = new ProductPerSup("Chocolate", new Long(67933), 5.0, null, new Long(122352), null);
-        ProductPerSup four = new ProductPerSup("Chocolate", new Long(67933), 7.5, null, new Long(2623643), null);
-        ProductPerSup five = new ProductPerSup("Banana", new Long(57423), 10.3, null, new Long(234), null);
-        ProductPerSup six = new ProductPerSup("Eggs L", new Long(52321), 22.0, null, new Long(2311), null);
-
-        Supplier moshe = new Supplier(12, new Long(13524), "Moshe Inc", new LinkedList<>(), "Cash", "" );
-        Supplier itzik = new Supplier(5, new Long(124), "Itzik & Sons", new LinkedList<>(), "Shotef+60", "1358223" );
-
-        //HashMap<Integer, Supplier>initialSupplierMap, LinkedList<OutgoingOrder> allOrdersList
-
-        HashMap<Integer, Supplier> initialSupplierMap = new HashMap<>();
-        LinkedList<OutgoingOrder> allOrdersList = new LinkedList<>();
-        initialSupplierMap.put(12, moshe);
-        initialSupplierMap.put(5, itzik);
-
-        moshe.getProducts().put(new Long(123123), one);
-        moshe.getProducts().put(new Long(67933), three);
-        itzik.getProducts().put(new Long(67933), four);
-        itzik.getProducts().put(new Long(34622), two);
-        itzik.getProducts().put(new Long(57423), five);
-        itzik.getProducts().put(new Long(52321), six);
-        one.setSupplier(moshe);
-        two.setSupplier(itzik);
-        three.setSupplier(moshe);
-        four.setSupplier(itzik);
-        five.setSupplier(itzik);
-        six.setSupplier(itzik);
-
-        Contract contractMoshe= new Contract("Friday", false, new HashMap<>());
-        contractMoshe.AddPriceDiscount(50, 5);
-        Contract contractItzik= new Contract("Sunday", false, new HashMap<>());
-        contractItzik.AddPriceDiscount(40, 10);
-        itzik.setContract(contractItzik);
-        moshe.setContract(contractMoshe);
-        supplierController = new SupplierController(initialSupplierMap);
-        incoming_order_controller = new IncomingOrderController(supplierController.getAllProducts(), allOrdersList);
-//..............INV..............
-        this.repCnt = new ReportController();
-        this.invCnt = new InventoryController();
-        orderToday();
-    }
 
     public void AddContact(int id_sup, String new_contact) {
         supplierController.AddContact(id_sup,new_contact);
@@ -579,5 +570,197 @@ public class Facade {
 
     public void setOrderDay(int nextInt) {
         repCnt.setDay(nextInt);
+    }
+    public void addDriver(Driver d){
+        conn.addDriver(d);
+    }
+    public void addTruck(Truck tr){
+        conn.addTruck(tr);
+    }
+    public void addDelivery(Delivery dl){
+        conn.addDelivery(dl);
+    }
+    public void addLocation(Location loc){
+        conn.addLocation(loc);
+    }
+
+    public void addDocument(Document doc){
+        conn.addDocument(doc);
+    }
+
+    public Driver getDriver(int id){
+        return conn.getDriver(id);
+    }
+    public Truck getTruck(int license){
+        return conn.getTruck(license);
+    }
+    public Delivery getDelivery(int id){
+        return conn.getDelivery(id);
+    }
+    public Location getLocation(String address){
+        return conn.getLocation(address);
+    }
+    public Document getDocument(int id){
+        return conn.getDocument(id);
+    }
+    public List<Driver> getAllDrivers(){
+        return conn.getAllDrivers();
+    }
+    public List<Truck> getAllTrucks(){
+        return conn.getAllTrucks();
+    }
+    public List<Delivery> getAllDeliveries(){
+        return conn.getAllDeliveries();
+    }
+
+    public List<Driver> getAllDriversA() {
+        return conn.getAllDriversA();
+    }
+
+    public List<Driver> getAllDriversB() {
+        return conn.getAllDriversB();
+    }
+
+    public List<Truck> getAllTrucksA() {
+        return conn.getAllTrucksA();
+
+    }
+
+    public List<Truck> getAllTrucksB() {
+        return conn.getAllTrucksB();
+    }
+
+    public List<Location> getAllLocations() {
+        return conn.getAllLocations();
+    }
+    public void createShift(Date shiftDate, int managerID, int shiftType, HashMap<Integer, Integer> workers, HashMap<Integer, Integer> roles){
+        ShiftCntrl.createShift(shiftDate, managerID, shiftType, workers, roles);
+    }
+
+    public <T> void updateShift(Shift shift, ShiftField field, T newValue){
+        ShiftCntrl.updateShift(shift, field, newValue);
+    }
+    public List<Shift> getWorkerShifts(Worker w){
+
+        return ShiftCntrl.getWorkerShifts(w);
+    }
+
+    public Shift getShift(Date date,int shiftType) {
+        return ShiftCntrl.getShift(date, shiftType);
+    }
+    public void printShift(Shift s) {
+        ShiftCntrl.printShift(s);
+    }
+
+    public void deleteShift(Shift shift){
+        ShiftCntrl.deleteShift(shift);
+    }
+
+    public HashMap<Integer, Integer> getShiftWorkers(Shift sh) {
+        return ShiftCntrl.getShiftWorkers(sh);
+    }
+
+    public void addWorkerToShift(Shift sh, int workerId, int roleId) {
+        ShiftCntrl.addWorkerToShift(sh, workerId, roleId);
+    }
+
+    public void removeWorkerFromShift(Shift sh, int id) {
+        ShiftCntrl.removeWorkerFromShift(sh, id);
+    }
+
+    public HashMap<Integer, Integer> getShiftRoles(Shift sh) {
+        return ShiftCntrl.getShiftRoles(sh);
+    }
+
+    public void addRoleToShift(Shift sh, int id, int amount) {
+        ShiftCntrl.addRoleToShift(sh, id, amount);
+    }
+
+    public void removeRoleToShift(Shift sh, int id, int amount) {
+        ShiftCntrl.removeRoleToShift(sh, id, amount);
+    }
+
+    public boolean checkIfshiftExist(Date date, int shiftType) {
+        return ShiftCntrl.checkIfshiftExist(date, shiftType);
+    }
+
+    public void init() {
+        ShiftCntrl.init();
+        WorkersCntrl.init();
+    }
+    public void createWorker(String name, int id, int bankAccountNumber, int bankNumber, int salary){
+        WorkersCntrl.createWorker(name, id, bankAccountNumber, bankNumber, salary);
+    }
+
+    public <T> void updateWorker(int id, WorkerField field, T newValue){
+        WorkersCntrl.updateWorker(id, field, newValue);
+    }
+    public boolean isWorker(int id) {
+        return WorkersCntrl.isWorker(id);
+    }
+    public Worker getWorker(int id) {
+        return WorkersCntrl.getWorker(id);
+    }
+    public void createRole(int id, String name ) {
+        WorkersCntrl.createRole(id, name);
+    }
+    public Role getRole(int id) {
+        return WorkersCntrl.getRole(id);
+    }
+    public void printRole(Role role) {
+        WorkersCntrl.printRole(role);
+    }
+    public boolean workerHasRole(Worker w,int roleid) {
+        return WorkersCntrl.workerHasRole(w, roleid);
+    }
+    public void printWorker(Worker w) {
+        WorkersCntrl.printWorker(w);
+    }
+    public Constraint getConstraintByShift(Worker w,Shift s) {
+        return WorkersCntrl.getConstraintByShift(w, s);
+    }
+    public void removeConstraint(Worker w,Shift s) {
+        WorkersCntrl.removeConstraint(w, s);
+
+    }
+    public HashMap<Integer,Constraint> getWorkerConstraints(Worker w){
+        return WorkersCntrl.getWorkerConstraints(w);
+    }
+
+    public List<Role> getWorkerRoles(Worker w){
+        return WorkersCntrl.getWorkerRoles(w);
+    }
+    public void printConstrint(Constraint c) {
+        WorkersCntrl.printConstrint(c);
+    }
+    public String getWorkerName(Worker w) {
+        return WorkersCntrl.getWorkerName(w);
+    }
+
+    public void deleteWorker(int id){
+        WorkersCntrl.deleteWorker(id);
+    }
+
+    public void addConstraintToWorker(Worker w, Constraint c){
+        WorkersCntrl.addConstraintToWorker(w, c);
+    }
+
+    public void addRoleToWorker(Worker w, int roleid) {
+        WorkersCntrl.addRoleToWorker(w, roleid);
+    }
+    public void removeRoleFromWorker(Worker w,int roleid) {
+        WorkersCntrl.removeRoleFromWorker(w, roleid);
+    }
+
+    public boolean isRole(int roleId) {
+        return WorkersCntrl.isRole(roleId);
+    }
+
+    public HashMap<Integer, Worker> getWorkers() {
+        return WorkersCntrl.getWorkers();
+    }
+
+    public HashMap<Integer, Role> getRoles() {
+        return WorkersCntrl.getRoles();
     }
 }
